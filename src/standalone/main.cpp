@@ -158,6 +158,7 @@ class HelmApplication : public juce::JUCEApplication {
 
     void initialise(const juce::String& command_line) override {
       juce::String command = " " + command_line + " ";
+      // TODO: command management is error-prone now that I added the -c flag (current logic relies on flag "-c name" preceding the patch name)
       if (command.contains(" --version ") || command.contains(" -v ")) {
         std::cout << getApplicationName() << " " << getApplicationVersion() << juce::newLine;
         quit();
@@ -170,21 +171,32 @@ class HelmApplication : public juce::JUCEApplication {
         std::cout << "  -h, --help                          Show help options" << juce::newLine << juce::newLine;
         std::cout << "Application Options:" << juce::newLine;
         std::cout << "  -v, --version                       Show version information and exit" << juce::newLine;
-        std::cout << "  --headless                          Run without graphical interface." << juce::newLine << juce::newLine;
+        std::cout << "  --headless                          Run without graphical interface." << juce::newLine;
+        std::cout << "  -c [SUFFIX]                         Runs using a the config file which has suffix [SUFFIX]" << juce::newLine << juce::newLine;
         quit();
       }
       else {
         bool visible = !command.contains(" --headless ");
-        main_window_ = new MainWindow(getApplicationName(), visible);
+        juce::String suffix = "default";
 
         juce::StringArray args = getCommandLineParameterArray();
-        juce::File file;
 
         for (int i = 0; i < args.size(); ++i) {
-          if (args[i] != "" && args[i][0] != '-' && loadFromCommandLine(args[i]))
-            return;
+          if (args[i] == "-c" && args.size()>i+1) {
+            suffix = args[i+1];
+          } else {
+            setConfigFileSuffixPrefix(suffix);
+            if (args[i] != "" && args[i][0] != '-' && loadFromCommandLine(args[i]))
+              return;
+          }
         }
+        setConfigFileSuffixPrefix(suffix);
+        main_window_ = new MainWindow(getApplicationName() + " (" + suffix + ")", visible);
       }
+    }
+
+    void setConfigFileSuffixPrefix(const juce::String& configFileSuffixPrefix) {
+      LoadSave::setConfigSuffixPrefix( configFileSuffixPrefix );
     }
 
     bool loadFromCommandLine(const juce::String& command_line) {

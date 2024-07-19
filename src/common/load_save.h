@@ -67,6 +67,7 @@ class LoadSave {
     static juce::String getAuthor(juce::var state);
     static juce::String getLicense(juce::var state);
 
+    static void setConfigSuffixPrefix(juce::String suffixPrefix);
     static juce::File getConfigFile();
     static juce::var getConfigVar();
     static bool isInstalled();
@@ -106,6 +107,9 @@ class LoadSave {
                           SynthBase* synth, std::map<std::string, juce::String>& gui_state);
     static void loadPatchFile(juce::File file, SynthBase* synth,
                               std::map<std::string, juce::String>& gui_state);
+
+  private:
+    static juce::String configSuffixPrefix;
 };
 
 #endif  // LOAD_SAVE_H

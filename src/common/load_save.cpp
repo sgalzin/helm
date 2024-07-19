@@ -47,6 +47,8 @@ namespace {
   }
 } // namespace
 
+juce::String LoadSave::configSuffixPrefix = "default";
+
 juce::var LoadSave::stateToVar(SynthBase* synth,
                          std::map<std::string, juce::String>& save_info,
                          const juce::CriticalSection& critical_section) {
@@ -351,11 +353,15 @@ juce::String LoadSave::getLicense(juce::var state) {
   return "";
 }
 
+void LoadSave::setConfigSuffixPrefix(juce::String suffixPrefix) {
+  configSuffixPrefix = suffixPrefix;
+}
+
 juce::File LoadSave::getConfigFile() {
   juce::PropertiesFile::Options config_options;
   config_options.applicationName = "Helm";
   config_options.osxLibrarySubFolder = "Application Support";
-  config_options.filenameSuffix = "config";
+  config_options.filenameSuffix = configSuffixPrefix + ".config";
 
 #ifdef LINUX
   config_options.folderName = "." + juce::String(ProjectInfo::projectName).toLowerCase();

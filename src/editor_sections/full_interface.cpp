@@ -125,6 +125,10 @@ FullInterface::~FullInterface() {
   volume_section_ = nullptr;
 }
 
+void FullInterface::closeModal() {
+  if( about_section_->isVisible() ) about_section_->setVisible(false);
+}
+
 void FullInterface::paint(juce::Graphics& g) { }
 
 void FullInterface::paintBackground(juce::Graphics& g) {

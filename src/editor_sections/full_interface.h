@@ -52,6 +52,8 @@ class FullInterface : public SynthSection, public juce::OpenGLRenderer {
 
     void setToolTipText(juce::String parameter, juce::String value);
 
+    void closeModal();
+
     void paint(juce::Graphics& g) override;
     void paintBackground(juce::Graphics& g) override;
     void resized() override;

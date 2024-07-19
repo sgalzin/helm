@@ -29,6 +29,7 @@ class HelmApplication : public juce::JUCEApplication {
         kSave = 0x5001,
         kSaveAs,
         kOpen,
+        kEscape,
       };
 
       MainWindow(juce::String name, bool visible = true) :
@@ -76,6 +77,7 @@ class HelmApplication : public juce::JUCEApplication {
         commands.add(kSave);
         commands.add(kSaveAs);
         commands.add(kOpen);
+        commands.add(kEscape);        
       }
 
       void getCommandInfo(const juce::CommandID commandID, juce::ApplicationCommandInfo& result) override {
@@ -91,6 +93,10 @@ class HelmApplication : public juce::JUCEApplication {
         else if (commandID == kOpen) {
           result.setInfo(TRANS("Open"), TRANS("Opens a patch"), "Application", 0);
           result.defaultKeypresses.add(juce::KeyPress('o', juce::ModifierKeys::commandModifier, 0));
+        }
+        else if (commandID == kEscape) {
+          result.setInfo(TRANS("Escape"), TRANS("Escape modal"), "Application", 0);
+          result.defaultKeypresses.add(juce::KeyPress(27, juce::ModifierKeys::noModifiers, 0));
         }
       }
 
@@ -121,6 +127,10 @@ class HelmApplication : public juce::JUCEApplication {
           open();
           grabKeyboardFocus();
           editor_->setFocus();
+          return true;
+        }
+        if (info.commandID == kEscape) {
+          editor_->closeModal();
           return true;
         }
 

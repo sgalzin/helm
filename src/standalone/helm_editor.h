@@ -34,6 +34,8 @@ class HelmEditor : public juce::AudioAppComponent,
     HelmEditor(bool use_gui = true);
     ~HelmEditor();
 
+    void closeModal();
+
     // AudioAppComponent
     void prepareToPlay(int buffer_size, double sample_rate) override;
     void getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer) override;

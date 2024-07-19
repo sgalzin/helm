@@ -74,6 +74,11 @@ HelmEditor::~HelmEditor() {
   keyboard_state_ = nullptr;
 }
 
+void HelmEditor::closeModal() {
+  if (gui_)
+    gui_->closeModal();
+}
+
 void HelmEditor::prepareToPlay(int buffer_size, double sample_rate) {
   engine_.setSampleRate(sample_rate);
   engine_.setBufferSize(std::min(buffer_size, MAX_BUFFER_PROCESS));

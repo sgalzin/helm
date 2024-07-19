@@ -37,26 +37,26 @@
 #define STYLE_LABEL_PADDING_X 5
 #define STYLE_LABEL_PADDING_Y 3
 
-FilterSection::FilterSection(String name) : SynthSection(name) {
+FilterSection::FilterSection(juce::String name) : SynthSection(name) {
   addSlider(filter_shelf_ = new FilterSelector("filter_shelf"));
-  filter_shelf_->setSliderStyle(Slider::LinearBar);
+  filter_shelf_->setSliderStyle(juce::Slider::LinearBar);
   filter_shelf_->setStringLookup(mopo::strings::filter_shelves);
   filter_shelf_->setVisible(false);
-  filter_shelf_->setPopupPlacement(BubbleComponent::above);
+  filter_shelf_->setPopupPlacement(juce::BubbleComponent::above);
 
   addSlider(cutoff_ = new SynthSlider("cutoff"));
-  cutoff_->setSliderStyle(Slider::LinearBar);
-  cutoff_->setPopupPlacement(BubbleComponent::below, 0);
+  cutoff_->setSliderStyle(juce::Slider::LinearBar);
+  cutoff_->setPopupPlacement(juce::BubbleComponent::below, 0);
 
   addSlider(blend_ = new SynthSlider("filter_blend"));
   blend_->snapToValue(true, 1.0);
   blend_->setBipolar(true);
-  blend_->setSliderStyle(Slider::LinearBar);
-  blend_->setPopupPlacement(BubbleComponent::above);
+  blend_->setSliderStyle(juce::Slider::LinearBar);
+  blend_->setPopupPlacement(juce::BubbleComponent::above);
 
   addSlider(resonance_ = new SynthSlider("resonance"));
-  resonance_->setSliderStyle(Slider::LinearBarVertical);
-  resonance_->setPopupPlacement(BubbleComponent::right, 0);
+  resonance_->setSliderStyle(juce::Slider::LinearBarVertical);
+  resonance_->setPopupPlacement(juce::BubbleComponent::right, 0);
 
   addAndMakeVisible(filter_response_ = new FilterResponse(300));
   filter_response_->setCutoffSlider(cutoff_);
@@ -65,23 +65,23 @@ FilterSection::FilterSection(String name) : SynthSection(name) {
   filter_response_->setFilterShelfSlider(filter_shelf_);
 
   addSlider(drive_ = new SynthSlider("filter_drive"));
-  drive_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  drive_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
 
   addSlider(fil_env_depth_ = new SynthSlider("fil_env_depth"));
-  fil_env_depth_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  fil_env_depth_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   fil_env_depth_->setBipolar();
 
   addSlider(keytrack_ = new SynthSlider("keytrack"));
-  keytrack_->setSliderStyle(Slider::LinearBar);
+  keytrack_->setSliderStyle(juce::Slider::LinearBar);
   keytrack_->snapToValue(true, 0.0);
   keytrack_->setBipolar();
 
   TextSlider* style = new TextSlider("filter_style");
   addSlider(filter_style_ = style);
-  filter_style_->setSliderStyle(Slider::LinearBar);
+  filter_style_->setSliderStyle(juce::Slider::LinearBar);
   filter_style_->setStringLookup(mopo::strings::filter_style);
   style->setShortStringLookup(mopo::strings::filter_style_short);
-  style->setPopupPlacement(BubbleComponent::above);
+  style->setPopupPlacement(juce::BubbleComponent::above);
 
   addButton(filter_on_ = new SynthButton("filter_on"));
   setActivator(filter_on_);
@@ -99,9 +99,9 @@ FilterSection::~FilterSection() {
   drive_ = nullptr;
 }
 
-void FilterSection::paintBackground(Graphics& g) {
-  static const PathStrokeType stroke(1.000f, PathStrokeType::curved, PathStrokeType::rounded);
-  static const DropShadow component_shadow(Colour(0xbb000000), size_ratio_ * 4, Point<int>(0, 0));
+void FilterSection::paintBackground(juce::Graphics& g) {
+  static const juce::PathStrokeType stroke(1.000f, juce::PathStrokeType::curved, juce::PathStrokeType::rounded);
+  static const juce::DropShadow component_shadow(juce::Colour(0xbb000000), size_ratio_ * 4, juce::Point<int>(0, 0));
   SynthSection::paintBackground(g);
 
   g.setColour(Colors::control_label_text);
@@ -111,7 +111,7 @@ void FilterSection::paintBackground(Graphics& g) {
   drawTextForComponent(g, TRANS("KEY TRACK"), keytrack_);
   drawTextForComponent(g, TRANS("DRIVE"), drive_);
 
-  g.setColour(Colour(0xffaaaaaa));
+  g.setColour(juce::Colour(0xffaaaaaa));
   g.strokePath(low_pass_, stroke);
   g.strokePath(high_pass_, stroke);
 
@@ -183,7 +183,7 @@ void FilterSection::reset() {
   SynthSection::reset();
 }
 
-void FilterSection::sliderValueChanged(Slider* changed_slider) {
+void FilterSection::sliderValueChanged(juce::Slider* changed_slider) {
   SynthSection::sliderValueChanged(changed_slider);
   if (changed_slider == filter_style_)
     resetResponse();

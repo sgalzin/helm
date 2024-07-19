@@ -25,8 +25,8 @@
 #define FOLDER_SELECT_NUMBER 32
 #define MOD_WHEEL_CONTROL_NUMBER 1
 
-MidiManager::MidiManager(SynthBase* synth, MidiKeyboardState* keyboard_state,
-                         std::map<std::string, String>* gui_state, Listener* listener) :
+MidiManager::MidiManager(SynthBase* synth, juce::MidiKeyboardState* keyboard_state,
+                         std::map<std::string, juce::String>* gui_state, Listener* listener) :
     synth_(synth), keyboard_state_(keyboard_state), gui_state_(gui_state),
     listener_(listener), armed_value_(nullptr) {
   engine_ = synth_->getEngine();
@@ -91,14 +91,14 @@ void MidiManager::setSampleRate(double sample_rate) {
   midi_collector_.reset(sample_rate);
 }
 
-void MidiManager::removeNextBlockOfMessages(MidiBuffer& buffer, int num_samples) {
+void MidiManager::removeNextBlockOfMessages(juce::MidiBuffer& buffer, int num_samples) {
   midi_collector_.removeNextBlockOfMessages(buffer, num_samples);
 }
 
-void MidiManager::processMidiMessage(const MidiMessage& midi_message, int sample_position) {
+void MidiManager::processMidiMessage(const juce::MidiMessage& midi_message, int sample_position) {
   if (midi_message.isProgramChange()) {
     current_patch_ = midi_message.getProgramChangeNumber();
-    File patch = LoadSave::loadPatch(current_bank_, current_folder_, current_patch_,
+    juce::File patch = LoadSave::loadPatch(current_bank_, current_folder_, current_patch_,
                                      synth_, *gui_state_);
     PatchLoadedCallback* callback = new PatchLoadedCallback(listener_, patch);
     callback->post();
@@ -147,12 +147,12 @@ void MidiManager::processMidiMessage(const MidiMessage& midi_message, int sample
   }
 }
 
-void MidiManager::handleIncomingMidiMessage(MidiInput *source,
-                                            const MidiMessage &midi_message) {
+void MidiManager::handleIncomingMidiMessage(juce::MidiInput *source,
+                                            const juce::MidiMessage &midi_message) {
   midi_collector_.addMessageToQueue(midi_message);
 }
 
-void MidiManager::replaceKeyboardMessages(MidiBuffer& buffer, int num_samples) {
+void MidiManager::replaceKeyboardMessages(juce::MidiBuffer& buffer, int num_samples) {
   keyboard_state_->processNextMidiBuffer(buffer, 0, num_samples, true);
 }
 

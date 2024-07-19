@@ -24,14 +24,14 @@
 
 class NoiseSection : public SynthSection {
   public:
-    NoiseSection(String name);
+    NoiseSection(juce::String name);
     ~NoiseSection();
 
-    void paintBackground(Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
     void resized() override;
 
   private:
-    ScopedPointer<SynthSlider> volume_;
+    juce::ScopedPointer<SynthSlider> volume_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(NoiseSection)
 };

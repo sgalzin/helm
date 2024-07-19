@@ -21,19 +21,19 @@
 #include "JuceHeader.h"
 #include "delete_section.h"
 
-class BorderBoundsConstrainer : public ComponentBoundsConstrainer {
+class BorderBoundsConstrainer : public juce::ComponentBoundsConstrainer {
   public:
     BorderBoundsConstrainer() : ComponentBoundsConstrainer() { }
 
-    virtual void checkBounds(Rectangle<int>& bounds, const Rectangle<int>& previous,
-                             const Rectangle<int>& limits,
+    virtual void checkBounds(juce::Rectangle<int>& bounds, const juce::Rectangle<int>& previous,
+                             const juce::Rectangle<int>& limits,
                              bool stretching_top, bool stretching_left,
                              bool stretching_bottom, bool stretching_right) override;
 
-    void setBorder(BorderSize<int> border) { border_ = border; }
+    void setBorder(juce::BorderSize<int> border) { border_ = border; }
 
   protected:
-    BorderSize<int> border_;
+    juce::BorderSize<int> border_;
 };
 
 #endif // BORDER_BOUNDS_CONSTRAINER_H

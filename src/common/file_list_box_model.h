@@ -21,7 +21,7 @@
 #include "JuceHeader.h"
 #include "delete_section.h"
 
-class FileListBoxModel : public ListBoxModel {
+class FileListBoxModel : public juce::ListBoxModel {
   public:
     class Listener {
       public:
@@ -33,20 +33,20 @@ class FileListBoxModel : public ListBoxModel {
     FileListBoxModel() : listener_(nullptr), sort_ascending_(true), delete_section_(nullptr) { }
 
     int getNumRows() override;
-    void paintListBoxItem(int row_number, Graphics& g,
+    void paintListBoxItem(int row_number, juce::Graphics& g,
                           int width, int height, bool selected) override;
     void selectedRowsChanged(int last_selected_row) override;
     void deleteKeyPressed(int lastRowSelected) override;
 
-    void rescanFiles(const Array<File>& folders, String search = "*", bool find_files = false);
-    File getFileAtRow(int row) { return files_[row]; }
-    int getIndexOfFile(File file) { return files_.indexOf(file); }
+    void rescanFiles(const juce::Array<juce::File>& folders, juce::String search = "*", bool find_files = false);
+    juce::File getFileAtRow(int row) { return files_[row]; }
+    int getIndexOfFile(juce::File file) { return files_.indexOf(file); }
     void setListener(Listener* listener) { listener_ = listener; }
-    Array<File> getAllFiles() { return files_; }
+    juce::Array<juce::File> getAllFiles() { return files_; }
     void setDeleteSection(DeleteSection* delete_section) { delete_section_ = delete_section; }
 
   private:
-    Array<File> files_;
+    juce::Array<juce::File> files_;
     Listener* listener_;
     bool sort_ascending_;
     DeleteSection* delete_section_;

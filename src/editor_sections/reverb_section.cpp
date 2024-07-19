@@ -20,16 +20,16 @@
 #include "fonts.h"
 #include "synth_button.h"
 
-ReverbSection::ReverbSection(String name) : SynthSection(name) {
+ReverbSection::ReverbSection(juce::String name) : SynthSection(name) {
 
   addSlider(feedback_ = new SynthSlider("reverb_feedback"));
-  feedback_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  feedback_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
 
   addSlider(damping_ = new SynthSlider("reverb_damping"));
-  damping_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  damping_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
 
   addSlider(dry_wet_ = new SynthSlider("reverb_dry_wet"));
-  dry_wet_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  dry_wet_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
 
   addButton(on_ = new SynthButton("reverb_on"));
   setActivator(on_);
@@ -42,7 +42,7 @@ ReverbSection::~ReverbSection() {
   dry_wet_ = nullptr;
 }
 
-void ReverbSection::paintBackground(Graphics& g) {
+void ReverbSection::paintBackground(juce::Graphics& g) {
   SynthSection::paintBackground(g);
 
   g.setColour(Colors::control_label_text);

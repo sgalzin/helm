@@ -37,11 +37,11 @@
 #include "synth_section.h"
 #include "update_check_section.h"
 
-class FullInterface : public SynthSection, public OpenGLRenderer {
+class FullInterface : public SynthSection, public juce::OpenGLRenderer {
   public:
     FullInterface(mopo::control_map controls, mopo::output_map modulation_sources,
                   mopo::output_map mono_modulations, mopo::output_map poly_modulations,
-                  MidiKeyboardState* keyboard_state);
+                  juce::MidiKeyboardState* keyboard_state);
     ~FullInterface();
 
     void setOutputMemory(const float* output_memory);
@@ -50,12 +50,12 @@ class FullInterface : public SynthSection, public OpenGLRenderer {
                                  mopo::output_map mono_modulations,
                                  mopo::output_map poly_modulations);
 
-    void setToolTipText(String parameter, String value);
+    void setToolTipText(juce::String parameter, juce::String value);
 
-    void paint(Graphics& g) override;
-    void paintBackground(Graphics& g) override;
+    void paint(juce::Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
     void resized() override;
-    void buttonClicked(Button* clicked_button) override;
+    void buttonClicked(juce::Button* clicked_button) override;
     void animate(bool animate = true) override;
     void checkBackground();
 
@@ -67,33 +67,33 @@ class FullInterface : public SynthSection, public OpenGLRenderer {
     void setFocus() { synthesis_interface_->setFocus(); }
     void notifyChange() { patch_selector_->setModified(true); }
     void notifyFresh();
-    void externalPatchLoaded(File patch) { patch_browser_->externalPatchLoaded(patch); }
+    void externalPatchLoaded(juce::File patch) { patch_browser_->externalPatchLoaded(patch); }
 
   private:
     std::map<std::string, SynthSlider*> slider_lookup_;
-    std::map<std::string, Button*> button_lookup_;
-    ScopedPointer<OpenGLModulationManager> modulation_manager_;
-    ScopedPointer<SynthSlider> arp_tempo_;
+    std::map<std::string, juce::Button*> button_lookup_;
+    juce::ScopedPointer<OpenGLModulationManager> modulation_manager_;
+    juce::ScopedPointer<SynthSlider> arp_tempo_;
 
-    ScopedPointer<AboutSection> about_section_;
-    ScopedPointer<ContributeSection> contribute_section_;
-    ScopedPointer<UpdateCheckSection> update_check_section_;
-    ScopedPointer<Component> standalone_settings_section_;
-    ScopedPointer<ImageButton> logo_button_;
-    ScopedPointer<ArpSection> arp_section_;
-    ScopedPointer<SynthesisInterface> synthesis_interface_;
-    ScopedPointer<OpenGLOscilloscope> oscilloscope_;
-    ScopedPointer<BpmSection> bpm_section_;
-    ScopedPointer<GlobalToolTip> global_tool_tip_;
-    ScopedPointer<PatchSelector> patch_selector_;
-    ScopedPointer<PatchBrowser> patch_browser_;
-    ScopedPointer<SaveSection> save_section_;
-    ScopedPointer<DeleteSection> delete_section_;
-    ScopedPointer<VolumeSection> volume_section_;
+    juce::ScopedPointer<AboutSection> about_section_;
+    juce::ScopedPointer<ContributeSection> contribute_section_;
+    juce::ScopedPointer<UpdateCheckSection> update_check_section_;
+    juce::ScopedPointer<Component> standalone_settings_section_;
+    juce::ScopedPointer<juce::ImageButton> logo_button_;
+    juce::ScopedPointer<ArpSection> arp_section_;
+    juce::ScopedPointer<SynthesisInterface> synthesis_interface_;
+    juce::ScopedPointer<OpenGLOscilloscope> oscilloscope_;
+    juce::ScopedPointer<BpmSection> bpm_section_;
+    juce::ScopedPointer<GlobalToolTip> global_tool_tip_;
+    juce::ScopedPointer<PatchSelector> patch_selector_;
+    juce::ScopedPointer<PatchBrowser> patch_browser_;
+    juce::ScopedPointer<SaveSection> save_section_;
+    juce::ScopedPointer<DeleteSection> delete_section_;
+    juce::ScopedPointer<VolumeSection> volume_section_;
 
     bool animate_;
-    OpenGLContext open_gl_context;
-    Image background_image_;
+    juce::OpenGLContext open_gl_context;
+    juce::Image background_image_;
     OpenGLBackground background_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FullInterface)

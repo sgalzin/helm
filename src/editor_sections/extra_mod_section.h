@@ -24,20 +24,20 @@
 
 class ExtraModSection : public SynthSection {
   public:
-    ExtraModSection(String name);
+    ExtraModSection(juce::String name);
     ~ExtraModSection();
 
-    void paintBackground(Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
     void resized() override;
-    void drawTextToRightOfComponent(Graphics& g, Component* component, String text);
+    void drawTextToRightOfComponent(juce::Graphics& g, Component* component, juce::String text);
 
   private:
-    ScopedPointer<ModulationButton> aftertouch_mod_;
-    ScopedPointer<ModulationButton> note_mod_;
-    ScopedPointer<ModulationButton> velocity_mod_;
-    ScopedPointer<ModulationButton> mod_wheel_mod_;
-    ScopedPointer<ModulationButton> pitch_wheel_mod_;
-    ScopedPointer<ModulationButton> random_mod_;
+    juce::ScopedPointer<ModulationButton> aftertouch_mod_;
+    juce::ScopedPointer<ModulationButton> note_mod_;
+    juce::ScopedPointer<ModulationButton> velocity_mod_;
+    juce::ScopedPointer<ModulationButton> mod_wheel_mod_;
+    juce::ScopedPointer<ModulationButton> pitch_wheel_mod_;
+    juce::ScopedPointer<ModulationButton> random_mod_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ExtraModSection)
 };

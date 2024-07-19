@@ -27,53 +27,53 @@
 #define PADDING_Y 20
 #define BUTTON_HEIGHT 30
 
-DeleteSection::DeleteSection(String name) : Overlay(name) {
-  delete_button_ = new TextButton(TRANS("Delete"));
+DeleteSection::DeleteSection(juce::String name) : Overlay(name) {
+  delete_button_ = new juce::TextButton(TRANS("Delete"));
   delete_button_->addListener(this);
   addAndMakeVisible(delete_button_);
 
-  cancel_button_ = new TextButton(TRANS("Cancel"));
+  cancel_button_ = new juce::TextButton(TRANS("Cancel"));
   cancel_button_->addListener(this);
   addAndMakeVisible(cancel_button_);
 }
 
-void DeleteSection::paint(Graphics& g) {
-  static const DropShadow shadow(Colour(0xff000000), 5, Point<int>(0, 0));
+void DeleteSection::paint(juce::Graphics& g) {
+  static const juce::DropShadow shadow(juce::Colour(0xff000000), 5, juce::Point<int>(0, 0));
 
   g.setColour(Colors::overlay_screen);
   g.fillAll();
 
-  Rectangle<int> delete_rect = getDeleteRect();
+  juce::Rectangle<int> delete_rect = getDeleteRect();
   shadow.drawForRectangle(g, delete_rect);
-  g.setColour(Colour(0xff303030));
+  g.setColour(juce::Colour(0xff303030));
   g.fillRect(delete_rect);
 
   g.saveState();
   g.setOrigin(delete_rect.getX() + PADDING_X, delete_rect.getY() + PADDING_Y);
 
   g.setFont(Fonts::instance()->proportional_light().withPointHeight(14.0f));
-  g.setColour(Colour(0xffaaaaaa));
+  g.setColour(juce::Colour(0xffaaaaaa));
 
-  String text;
+  juce::String text;
   if (file_.isDirectory())
     text = TRANS("Are you sure you want to delte this folder?");
   else
   text = TRANS("Are you sure you want to delte this patch?");
   g.drawText(text,
              0, 0.0f, delete_rect.getWidth() - 2 * PADDING_X, 22.0f,
-             Justification::centred, false);
+             juce::Justification::centred, false);
 
   g.setFont(Fonts::instance()->monospace().withPointHeight(16.0f));
   g.setColour(Colors::audio);
   g.drawText(file_.getFileNameWithoutExtension(),
              0, 20.0f, delete_rect.getWidth() - 2 * PADDING_X, 22.0f,
-             Justification::centred, false);
+             juce::Justification::centred, false);
 
   g.restoreState();
 }
 
 void DeleteSection::resized() {
-  Rectangle<int> delete_rect = getDeleteRect();
+  juce::Rectangle<int> delete_rect = getDeleteRect();
 
   float button_width = (delete_rect.getWidth() - 3 * PADDING_X) / 2.0f;
   delete_button_->setBounds(delete_rect.getX() + PADDING_X,
@@ -84,12 +84,12 @@ void DeleteSection::resized() {
                             button_width, BUTTON_HEIGHT);
 }
 
-void DeleteSection::mouseUp(const MouseEvent &e) {
+void DeleteSection::mouseUp(const juce::MouseEvent &e) {
   if (!getDeleteRect().contains(e.getPosition()))
     setVisible(false);
 }
 
-void DeleteSection::buttonClicked(Button* clicked_button) {
+void DeleteSection::buttonClicked(juce::Button* clicked_button) {
   if (clicked_button == delete_button_) {
     file_.deleteRecursively();
     setVisible(false);
@@ -100,8 +100,8 @@ void DeleteSection::buttonClicked(Button* clicked_button) {
     setVisible(false);
 }
 
-Rectangle<int> DeleteSection::getDeleteRect() {
+juce::Rectangle<int> DeleteSection::getDeleteRect() {
   int x = (getWidth() - DELETE_WIDTH) / 2;
   int y = (getHeight() - DELETE_HEIGHT) / 2;
-  return Rectangle<int>(x, y, DELETE_WIDTH, DELETE_HEIGHT);
+  return juce::Rectangle<int>(x, y, DELETE_WIDTH, DELETE_HEIGHT);
 }

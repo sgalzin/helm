@@ -38,12 +38,12 @@ UpdateMemory::~UpdateMemory() {
 
 JUCE_IMPLEMENT_SINGLETON(UpdateMemory)
 
-UpdateCheckSection::UpdateCheckSection(String name) : Component(name) {
-  download_button_ = new TextButton(TRANS("Download"));
+UpdateCheckSection::UpdateCheckSection(juce::String name) : Component(name) {
+  download_button_ = new juce::TextButton(TRANS("Download"));
   download_button_->addListener(this);
   addAndMakeVisible(download_button_);
 
-  nope_button_ = new TextButton(TRANS("Nope"));
+  nope_button_ = new juce::TextButton(TRANS("Nope"));
   nope_button_->addListener(this);
   addAndMakeVisible(nope_button_);
 
@@ -53,38 +53,38 @@ UpdateCheckSection::UpdateCheckSection(String name) : Component(name) {
   }
 }
 
-void UpdateCheckSection::paint(Graphics& g) {
-  static const DropShadow shadow(Colour(0xff000000), 5, Point<int>(0, 0));
+void UpdateCheckSection::paint(juce::Graphics& g) {
+  static const juce::DropShadow shadow(juce::Colour(0xff000000), 5, juce::Point<int>(0, 0));
 
-  g.setColour(Colour(0xbb212121));
+  g.setColour(juce::Colour(0xbb212121));
   g.fillAll();
 
-  Rectangle<int> delete_rect = getUpdateCheckRect();
+  juce::Rectangle<int> delete_rect = getUpdateCheckRect();
   shadow.drawForRectangle(g, delete_rect);
-  g.setColour(Colour(0xff303030));
+  g.setColour(juce::Colour(0xff303030));
   g.fillRect(delete_rect);
 
   g.saveState();
   g.setOrigin(delete_rect.getX() + PADDING_X, delete_rect.getY() + PADDING_Y);
 
   g.setFont(Fonts::instance()->proportional_light().withPointHeight(14.0f));
-  g.setColour(Colour(0xffaaaaaa));
+  g.setColour(juce::Colour(0xffaaaaaa));
 
   g.drawText(TRANS("There is a new version of Helm!"),
              0, 0.0f, delete_rect.getWidth() - 2 * PADDING_X, 22.0f,
-             Justification::centred, false);
+             juce::Justification::centred, false);
   g.drawText(TRANS("Version: ") + version_,
              0, 22.0f, delete_rect.getWidth() - 2 * PADDING_X, 22.0f,
-             Justification::centred, false);
+             juce::Justification::centred, false);
   g.drawText(TRANS("Would you like to download it?"),
              0, 54.0f, delete_rect.getWidth() - 2 * PADDING_X, 22.0f,
-             Justification::centred, false);
+             juce::Justification::centred, false);
 
   g.restoreState();
 }
 
 void UpdateCheckSection::resized() {
-  Rectangle<int> update_rect = getUpdateCheckRect();
+  juce::Rectangle<int> update_rect = getUpdateCheckRect();
 
   float button_width = (update_rect.getWidth() - 3 * PADDING_X) / 2.0f;
   download_button_->setBounds(update_rect.getX() + PADDING_X,
@@ -95,22 +95,22 @@ void UpdateCheckSection::resized() {
                           button_width, BUTTON_HEIGHT);
 }
 
-void UpdateCheckSection::buttonClicked(Button *clicked_button) {
+void UpdateCheckSection::buttonClicked(juce::Button *clicked_button) {
   if (clicked_button == download_button_)
-    URL("http://tytel.org/helm").launchInDefaultBrowser();
+    juce::URL("http://tytel.org/helm").launchInDefaultBrowser();
   setVisible(false);
 }
 
-void UpdateCheckSection::mouseUp(const MouseEvent &e) {
+void UpdateCheckSection::mouseUp(const juce::MouseEvent &e) {
   if (!getUpdateCheckRect().contains(e.getPosition()))
     setVisible(false);
 }
 
 void UpdateCheckSection::checkUpdate() {
   static const int TIMEOUT = 200;
-  URL version_url("http://tytel.org/static/dist/helm_version.txt");
-  const ScopedPointer<InputStream> in(version_url.createInputStream(false, nullptr, nullptr,
-                                                                    "", TIMEOUT));
+  juce::URL version_url("http://tytel.org/static/dist/helm_version.txt");
+  const std::unique_ptr<juce::InputStream> in(version_url.createInputStream(false, nullptr, nullptr,
+                                                                                "", TIMEOUT));
 
   if (in == nullptr)
     return;
@@ -124,8 +124,8 @@ void UpdateCheckSection::checkUpdate() {
   }
 }
 
-Rectangle<int> UpdateCheckSection::getUpdateCheckRect() {
+juce::Rectangle<int> UpdateCheckSection::getUpdateCheckRect() {
   int x = (getWidth() - UPDATE_CHECK_WIDTH) / 2;
   int y = (getHeight() - UPDATE_CHECK_HEIGHT) / 2;
-  return Rectangle<int>(x, y, UPDATE_CHECK_WIDTH, UPDATE_CHECK_HEIGHT);
+  return juce::Rectangle<int>(x, y, UPDATE_CHECK_WIDTH, UPDATE_CHECK_HEIGHT);
 }

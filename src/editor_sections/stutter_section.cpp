@@ -26,43 +26,43 @@
 #define TEXT_WIDTH 42
 #define SLIDER_HEIGHT 15
 
-StutterSection::StutterSection(String name) : SynthSection(name) {
+StutterSection::StutterSection(juce::String name) : SynthSection(name) {
   static const int TEMPO_DRAG_SENSITIVITY = 150;
 
   addSlider(stutter_frequency_ = new SynthSlider("stutter_frequency"));
-  stutter_frequency_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  stutter_frequency_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   stutter_frequency_->setLookAndFeel(TextLookAndFeel::instance());
 
   addSlider(stutter_tempo_ = new SynthSlider("stutter_tempo"));
-  stutter_tempo_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  stutter_tempo_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   stutter_tempo_->setStringLookup(mopo::strings::synced_frequencies);
   stutter_tempo_->setLookAndFeel(TextLookAndFeel::instance());
   stutter_tempo_->setMouseDragSensitivity(TEMPO_DRAG_SENSITIVITY);
 
   addSlider(stutter_sync_ = new TempoSelector("stutter_sync"));
-  stutter_sync_->setSliderStyle(Slider::LinearBar);
+  stutter_sync_->setSliderStyle(juce::Slider::LinearBar);
   stutter_sync_->setTempoSlider(stutter_tempo_);
   stutter_sync_->setFreeSlider(stutter_frequency_);
   stutter_sync_->setStringLookup(mopo::strings::freq_sync_styles);
 
   addSlider(resample_frequency_ = new SynthSlider("stutter_resample_frequency"));
-  resample_frequency_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  resample_frequency_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   resample_frequency_->setLookAndFeel(TextLookAndFeel::instance());
 
   addSlider(resample_tempo_ = new SynthSlider("stutter_resample_tempo"));
-  resample_tempo_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  resample_tempo_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   resample_tempo_->setStringLookup(mopo::strings::synced_frequencies);
   resample_tempo_->setLookAndFeel(TextLookAndFeel::instance());
   resample_tempo_->setMouseDragSensitivity(TEMPO_DRAG_SENSITIVITY);
 
   addSlider(resample_sync_ = new TempoSelector("stutter_resample_sync"));
-  resample_sync_->setSliderStyle(Slider::LinearBar);
+  resample_sync_->setSliderStyle(juce::Slider::LinearBar);
   resample_sync_->setTempoSlider(resample_tempo_);
   resample_sync_->setFreeSlider(resample_frequency_);
   resample_sync_->setStringLookup(mopo::strings::freq_sync_styles);
 
   addSlider(stutter_softness_ = new SynthSlider("stutter_softness"));
-  stutter_softness_->setSliderStyle(Slider::LinearBar);
+  stutter_softness_->setSliderStyle(juce::Slider::LinearBar);
 
   addButton(on_ = new SynthButton("stutter_on"));
   setActivator(on_);
@@ -82,7 +82,7 @@ StutterSection::~StutterSection() {
   stutter_softness_ = nullptr;
 }
 
-void StutterSection::paintBackground(Graphics& g) {
+void StutterSection::paintBackground(juce::Graphics& g) {
   SynthSection::paintBackground(g);
 
   g.setColour(Colors::control_label_text);
@@ -97,12 +97,12 @@ void StutterSection::paintBackground(Graphics& g) {
              stutter_frequency_->getBounds().getX() - extra_bump,
              stutter_frequency_->getBounds().getBottom() + text_buffer,
              stutter_frequency_->getBounds().getWidth() + text_height + 2 * extra_bump,
-             font_size + 1, Justification::centred, false);
+             font_size + 1, juce::Justification::centred, false);
   g.drawText(TRANS("RESAMPLE"),
              resample_frequency_->getBounds().getX() - extra_bump,
              resample_frequency_->getBounds().getBottom() + text_buffer,
              resample_frequency_->getBounds().getWidth() + text_height + 2 * extra_bump,
-             font_size + 1, Justification::centred, false);
+             font_size + 1, juce::Justification::centred, false);
   drawTextForComponent(g, TRANS("SOFTNESS"), stutter_softness_);
 }
 

@@ -30,18 +30,18 @@ class OpenGLPeakMeter : public OpenGLComponent {
 
     void resized() override;
 
-    void init(OpenGLContext& open_gl_context) override;
-    void render(OpenGLContext& open_gl_context, bool animate = true) override;
-    void destroy(OpenGLContext& open_gl_context) override;
-    void paintBackground(Graphics& g) override;
+    void init(juce::OpenGLContext& open_gl_context) override;
+    void render(juce::OpenGLContext& open_gl_context, bool animate = true) override;
+    void destroy(juce::OpenGLContext& open_gl_context) override;
+    void paintBackground(juce::Graphics& g) override;
 
   private:
     void updateVertices();
 
     mopo::Output* peak_output_;
 
-    ScopedPointer<OpenGLShaderProgram> shader_;
-    ScopedPointer<OpenGLShaderProgram::Attribute> position_;
+    juce::ScopedPointer<juce::OpenGLShaderProgram> shader_;
+    juce::ScopedPointer<juce::OpenGLShaderProgram::Attribute> position_;
 
     float* position_vertices_;
     int* position_triangles_;

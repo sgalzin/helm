@@ -25,18 +25,18 @@
 
 class SubSection : public SynthSection {
   public:
-    SubSection(String name);
+    SubSection(juce::String name);
     ~SubSection();
 
-    void paintBackground(Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
     void resized() override;
     void reset() override;
 
   private:
-    ScopedPointer<WaveViewer> wave_viewer_;
-    ScopedPointer<WaveSelector> wave_selector_;
-    ScopedPointer<SynthSlider> shuffle_;
-    ScopedPointer<ToggleButton> sub_octave_;
+    juce::ScopedPointer<WaveViewer> wave_viewer_;
+    juce::ScopedPointer<WaveSelector> wave_selector_;
+    juce::ScopedPointer<SynthSlider> shuffle_;
+    juce::ScopedPointer<juce::ToggleButton> sub_octave_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SubSection)
 };

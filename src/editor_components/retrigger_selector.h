@@ -22,15 +22,15 @@
 
 class RetriggerSelector : public SynthSlider {
   public:
-    RetriggerSelector(String name);
+    RetriggerSelector(juce::String name);
 
-    void mouseDown(const MouseEvent& e) override;
-    void paint(Graphics& g) override;
+    void mouseDown(const juce::MouseEvent& e) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
     void selectType(int type);
 
   private:
-    Path arrow_;
+    juce::Path arrow_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(RetriggerSelector)
 };

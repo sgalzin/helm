@@ -35,7 +35,7 @@ namespace {
   }
 } // namespace
 
-SynthButton::SynthButton(String name) : ToggleButton(name), active_(true),
+SynthButton::SynthButton(juce::String name) : ToggleButton(name), active_(true),
                                         string_lookup_(nullptr), parent_(nullptr) {
   if (!mopo::Parameters::isParameter(name.toStdString()))
     return;
@@ -50,7 +50,7 @@ void SynthButton::buttonStateChanged() {
   notifyTooltip();
 }
 
-String SynthButton::getTextFromValue(bool on) {
+juce::String SynthButton::getTextFromValue(bool on) {
   int lookup = on ? 1 : 0;
 
   if (string_lookup_)
@@ -77,22 +77,22 @@ void SynthButton::handlePopupResult(int result) {
     synth->clearMidiLearn(getName().toStdString());
 }
 
-void SynthButton::mouseDown(const MouseEvent& e) {
+void SynthButton::mouseDown(const juce::MouseEvent& e) {
   SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
   if (parent == nullptr)
     return;
   SynthBase* synth = parent->getSynth();
 
   if (e.mods.isPopupMenu()) {
-    PopupMenu m;
+    juce::PopupMenu m;
     m.setLookAndFeel(DefaultLookAndFeel::instance());
 
     m.addItem(kArmMidiLearn, "Learn MIDI Assignment");
     if (parent->getSynth()->isMidiMapped(getName().toStdString()))
       m.addItem(kClearMidiLearn, "Clear MIDI Assignment");
 
-    m.showMenuAsync(PopupMenu::Options(),
-                    ModalCallbackFunction::forComponent(sliderPopupCallback, this));
+    m.showMenuAsync(juce::PopupMenu::Options(),
+                    juce::ModalCallbackFunction::forComponent(sliderPopupCallback, this));
   }
   else {
     ToggleButton::mouseDown(e);
@@ -102,7 +102,7 @@ void SynthButton::mouseDown(const MouseEvent& e) {
   }
 }
 
-void SynthButton::mouseUp(const MouseEvent& e) {
+void SynthButton::mouseUp(const juce::MouseEvent& e) {
   if (!e.mods.isPopupMenu()) {
     ToggleButton::mouseUp(e);
 
@@ -112,7 +112,7 @@ void SynthButton::mouseUp(const MouseEvent& e) {
   }
 }
 
-void SynthButton::mouseEnter(const MouseEvent &e) {
+void SynthButton::mouseEnter(const juce::MouseEvent &e) {
   ToggleButton::mouseEnter(e);
   notifyTooltip();
 }

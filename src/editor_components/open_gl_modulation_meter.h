@@ -22,7 +22,7 @@
 #include "processor.h"
 #include "synth_slider.h"
 
-class OpenGLModulationMeter : public Component {
+class OpenGLModulationMeter : public juce::Component {
   public:
     OpenGLModulationMeter(const mopo::Output* mono_total,
                           const mopo::Output* poly_total,
@@ -30,7 +30,7 @@ class OpenGLModulationMeter : public Component {
                           float* vertices);
     virtual ~OpenGLModulationMeter();
 
-    void paint(Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
     void setVisible(bool should_be_visible) override;
 

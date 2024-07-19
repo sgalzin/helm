@@ -44,7 +44,7 @@ HelmPlugin::~HelmPlugin() {
 }
 
 SynthGuiInterface* HelmPlugin::getGuiInterface() {
-  AudioProcessorEditor* editor = getActiveEditor();
+  juce::AudioProcessorEditor* editor = getActiveEditor();
   if (editor)
     return dynamic_cast<SynthGuiInterface*>(editor);
   return nullptr;
@@ -63,20 +63,20 @@ void HelmPlugin::setValueNotifyHost(const std::string& name, mopo::mopo_float va
   bridge_lookup_[name]->setValueNotifyHost(plugin_value);
 }
 
-const CriticalSection& HelmPlugin::getCriticalSection() {
+const juce::CriticalSection& HelmPlugin::getCriticalSection() {
   return getCallbackLock();
 }
 
-const String HelmPlugin::getName() const {
+const juce::String HelmPlugin::getName() const {
   return JucePlugin_Name;
 }
 
-const String HelmPlugin::getInputChannelName(int channel_index) const {
-  return String(channel_index + 1);
+const juce::String HelmPlugin::getInputChannelName(int channel_index) const {
+  return juce::String(channel_index + 1);
 }
 
-const String HelmPlugin::getOutputChannelName(int channel_index) const {
-  return String(channel_index + 1);
+const juce::String HelmPlugin::getOutputChannelName(int channel_index) const {
+  return juce::String(channel_index + 1);
 }
 
 bool HelmPlugin::isInputChannelStereoPair(int index) const {
@@ -121,7 +121,7 @@ int HelmPlugin::getCurrentProgram() {
 
 void HelmPlugin::setCurrentProgram(int index) {
   // Hack for some DAWs that set program on load for VSTs.
-  if (Time::getMillisecondCounter() - set_state_time_ < SET_PROGRAM_WAIT_MILLISECONDS)
+  if (juce::Time::getMillisecondCounter() - set_state_time_ < SET_PROGRAM_WAIT_MILLISECONDS)
     return;
 
   if (all_patches_.size() > index) {
@@ -133,18 +133,18 @@ void HelmPlugin::setCurrentProgram(int index) {
   }
 }
 
-const String HelmPlugin::getProgramName(int index) {
+const juce::String HelmPlugin::getProgramName(int index) {
   if (all_patches_.size() <= index)
     return "";
 
   return all_patches_[index].getFileNameWithoutExtension();
 }
 
-void HelmPlugin::changeProgramName(int index, const String& new_name) {
+void HelmPlugin::changeProgramName(int index, const juce::String& new_name) {
   if (all_patches_.size() <= index) {
-    File patch = all_patches_[index];
-    File parent = patch.getParentDirectory();
-    File new_patch_location = parent.getChildFile(new_name + "." + mopo::PATCH_EXTENSION);
+    juce::File patch = all_patches_[index];
+    juce::File parent = patch.getParentDirectory();
+    juce::File new_patch_location = parent.getChildFile(new_name + "." + mopo::PATCH_EXTENSION);
     patch.moveFileTo(new_patch_location);
   }
 }
@@ -160,7 +160,7 @@ void HelmPlugin::releaseResources() {
   // spare memory, etc.
 }
 
-void HelmPlugin::processBlock(AudioSampleBuffer& buffer, MidiBuffer& midi_messages) {
+void HelmPlugin::processBlock(juce::AudioSampleBuffer& buffer, juce::MidiBuffer& midi_messages) {
   int total_samples = buffer.getNumSamples();
   int num_channels = getTotalNumOutputChannels();
   getPlayHead()->getCurrentPosition(position_info_);
@@ -173,7 +173,7 @@ void HelmPlugin::processBlock(AudioSampleBuffer& buffer, MidiBuffer& midi_messag
   processControlChanges();
   processModulationChanges();
 
-  MidiBuffer keyboard_messages = midi_messages;
+  juce::MidiBuffer keyboard_messages = midi_messages;
   processKeyboardEvents(keyboard_messages, total_samples);
 
   for (int sample_offset = 0; sample_offset < total_samples;) {
@@ -190,7 +190,7 @@ bool HelmPlugin::hasEditor() const {
   return true;
 }
 
-AudioProcessorEditor* HelmPlugin::createEditor() {
+juce::AudioProcessorEditor* HelmPlugin::createEditor() {
   return new HelmEditor(*this);
 }
 
@@ -202,21 +202,21 @@ void HelmPlugin::loadPatches() {
   all_patches_ = LoadSave::getAllPatches();
 }
 
-void HelmPlugin::getStateInformation(MemoryBlock& dest_data) {
-  var state = LoadSave::stateToVar(this, save_info_, getCallbackLock());
-  String data_string = JSON::toString(state);
-  MemoryOutputStream stream;
+void HelmPlugin::getStateInformation(juce::MemoryBlock& dest_data) {
+  juce::var state = LoadSave::stateToVar(this, save_info_, getCallbackLock());
+  juce::String data_string = juce::JSON::toString(state);
+  juce::MemoryOutputStream stream;
   stream.writeString(data_string);
   dest_data.append(stream.getData(), stream.getDataSize());
 }
 
 void HelmPlugin::setStateInformation(const void* data, int size_in_bytes) {
-  set_state_time_ = Time::getMillisecondCounter();
+  set_state_time_ = juce::Time::getMillisecondCounter();
 
-  MemoryInputStream stream(data, size_in_bytes, false);
-  String data_string = stream.readEntireStreamAsString();
-  var state;
-  if (JSON::parse(data_string, state).wasOk())
+  juce::MemoryInputStream stream(data, size_in_bytes, false);
+  juce::String data_string = stream.readEntireStreamAsString();
+  juce::var state;
+  if (juce::JSON::parse(data_string, state).wasOk())
     LoadSave::varToState(this, save_info_, state);
 
   SynthGuiInterface* editor = getGuiInterface();
@@ -224,6 +224,6 @@ void HelmPlugin::setStateInformation(const void* data, int size_in_bytes) {
     editor->updateFullGui();
 }
 
-AudioProcessor* JUCE_CALLTYPE createPluginFilter() {
+juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter() {
   return new HelmPlugin();
 }

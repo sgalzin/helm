@@ -26,9 +26,9 @@
 
 class PatchBrowser : public Overlay,
                      public FileListBoxModel::Listener,
-                     public TextEditor::Listener,
-                     public KeyListener,
-                     public Button::Listener,
+                     public juce::TextEditor::Listener,
+                     public juce::KeyListener,
+                     public juce::Button::Listener,
                      public SaveSection::Listener,
                      public DeleteSection::Listener {
   public:
@@ -36,42 +36,42 @@ class PatchBrowser : public Overlay,
       public:
         virtual ~PatchSelectedListener() { }
 
-        virtual void newPatchSelected(File patch) = 0;
+        virtual void newPatchSelected(juce::File patch) = 0;
     };
 
     PatchBrowser();
     ~PatchBrowser();
 
-    void paint(Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
-    void mouseUp(const MouseEvent& e) override;
-    bool keyPressed(const KeyPress &key, Component *origin) override;
+    void mouseUp(const juce::MouseEvent& e) override;
+    bool keyPressed(const juce::KeyPress &key, Component *origin) override;
     bool keyStateChanged(bool is_key_down, Component *origin) override;
     void visibilityChanged() override;
 
     void selectedFilesChanged(FileListBoxModel* model) override;
-    void textEditorTextChanged(TextEditor& editor) override;
-    void textEditorEscapeKeyPressed(TextEditor& editor) override;
+    void textEditorTextChanged(juce::TextEditor& editor) override;
+    void textEditorEscapeKeyPressed(juce::TextEditor& editor) override;
 
-    void fileSaved(File saved_file) override;
-    void fileDeleted(File deleted_file) override;
+    void fileSaved(juce::File saved_file) override;
+    void fileDeleted(juce::File deleted_file) override;
 
-    void buttonClicked(Button* clicked_button) override;
+    void buttonClicked(juce::Button* clicked_button) override;
 
     bool isPatchSelected();
-    File getSelectedPatch();
+    juce::File getSelectedPatch();
     void jumpToPatch(int indices);
     void loadNextPatch();
     void loadPrevPatch();
-    void externalPatchLoaded(File file);
+    void externalPatchLoaded(juce::File file);
 
     void setListener(PatchSelectedListener* listener) { listener_ = listener; }
     void setSaveSection(SaveSection* save_section);
     void setDeleteSection(DeleteSection* delete_section);
 
   private:
-    bool loadFromFile(File& patch);
-    void setPatchInfo(File& patch);
+    bool loadFromFile(juce::File& patch);
+    void setPatchInfo(juce::File& patch);
     void scanBanks();
     void scanFolders();
     void scanPatches();
@@ -81,34 +81,34 @@ class PatchBrowser : public Overlay,
     float getPatchesWidth();
     float getPatchInfoWidth();
 
-    ScopedPointer<ListBox> banks_view_;
-    ScopedPointer<FileListBoxModel> banks_model_;
+    juce::ScopedPointer<juce::ListBox> banks_view_;
+    juce::ScopedPointer<FileListBoxModel> banks_model_;
 
-    ScopedPointer<ListBox> folders_view_;
-    ScopedPointer<FileListBoxModel> folders_model_;
+    juce::ScopedPointer<juce::ListBox> folders_view_;
+    juce::ScopedPointer<FileListBoxModel> folders_model_;
 
-    ScopedPointer<ListBox> patches_view_;
-    ScopedPointer<FileListBoxModel> patches_model_;
+    juce::ScopedPointer<juce::ListBox> patches_view_;
+    juce::ScopedPointer<FileListBoxModel> patches_model_;
 
-    ScopedPointer<TextEditor> search_box_;
+    juce::ScopedPointer<juce::TextEditor> search_box_;
 
     PatchSelectedListener* listener_;
-    ScopedPointer<HyperlinkButton> cc_license_link_;
-    ScopedPointer<HyperlinkButton> gpl_license_link_;
+    juce::ScopedPointer<juce::HyperlinkButton> cc_license_link_;
+    juce::ScopedPointer<juce::HyperlinkButton> gpl_license_link_;
 
     SaveSection* save_section_;
     DeleteSection* delete_section_;
-    ScopedPointer<TextButton> save_as_button_;
-    ScopedPointer<TextButton> delete_patch_button_;
-    ScopedPointer<TextButton> import_bank_button_;
-    ScopedPointer<TextButton> export_bank_button_;
+    juce::ScopedPointer<juce::TextButton> save_as_button_;
+    juce::ScopedPointer<juce::TextButton> delete_patch_button_;
+    juce::ScopedPointer<juce::TextButton> import_bank_button_;
+    juce::ScopedPointer<juce::TextButton> export_bank_button_;
 
-    ScopedPointer<TextButton> hide_button_;
-    ScopedPointer<TextButton> done_button_;
+    juce::ScopedPointer<juce::TextButton> hide_button_;
+    juce::ScopedPointer<juce::TextButton> done_button_;
 
-    File external_patch_;
-    String author_;
-    String license_;
+    juce::File external_patch_;
+    juce::String author_;
+    juce::String license_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PatchBrowser)
 };

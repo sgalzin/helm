@@ -22,14 +22,14 @@
 
 class TextSlider : public SynthSlider {
   public:
-    TextSlider(String name);
+    TextSlider(juce::String name);
 
-    void paint(Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
 
-    void mouseEvent(const MouseEvent& e);
-    void mouseDown(const MouseEvent& e) override;
-    void mouseDrag(const MouseEvent& e) override;
+    void mouseEvent(const juce::MouseEvent& e);
+    void mouseDown(const juce::MouseEvent& e) override;
+    void mouseDrag(const juce::MouseEvent& e) override;
 
     void setShortStringLookup(const std::string* lookup) { short_lookup_ = lookup; }
 

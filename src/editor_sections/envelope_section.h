@@ -24,20 +24,20 @@
 
 class EnvelopeSection : public SynthSection {
   public:
-    EnvelopeSection(String name, std::string value_preprend);
+    EnvelopeSection(juce::String name, std::string value_preprend);
     ~EnvelopeSection();
 
-    void paintBackground(Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
     void resized() override;
     void reset() override;
 
   private:
-    ScopedPointer<OpenGLEnvelope> envelope_;
-    ScopedPointer<SynthSlider> attack_;
-    ScopedPointer<SynthSlider> decay_;
-    ScopedPointer<SynthSlider> sustain_;
-    ScopedPointer<SynthSlider> release_;
-    ScopedPointer<ModulationButton> modulation_button_;
+    juce::ScopedPointer<OpenGLEnvelope> envelope_;
+    juce::ScopedPointer<SynthSlider> attack_;
+    juce::ScopedPointer<SynthSlider> decay_;
+    juce::ScopedPointer<SynthSlider> sustain_;
+    juce::ScopedPointer<SynthSlider> release_;
+    juce::ScopedPointer<ModulationButton> modulation_button_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(EnvelopeSection)
 };

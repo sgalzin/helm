@@ -23,9 +23,9 @@ class Fonts {
   public:
     virtual ~Fonts() { }
 
-    Font& proportional_regular() { return proportional_regular_; }
-    Font& proportional_light() { return proportional_light_; }
-    Font& monospace() { return monospace_; }
+    juce::Font& proportional_regular() { return proportional_regular_; }
+    juce::Font& proportional_light() { return proportional_light_; }
+    juce::Font& monospace() { return monospace_; }
 
     static Fonts* instance() {
       static Fonts instance;
@@ -35,11 +35,11 @@ class Fonts {
   private:
     Fonts();
 
-    static ScopedPointer<Fonts> instance_;
+    static juce::ScopedPointer<Fonts> instance_;
 
-    Font proportional_regular_;
-    Font proportional_light_;
-    Font monospace_;
+    juce::Font proportional_regular_;
+    juce::Font proportional_light_;
+    juce::Font monospace_;
 };
 
 #endif // FONTS_H

@@ -20,7 +20,7 @@
 
 #include "JuceHeader.h"
 
-class UpdateMemory : public DeletedAtShutdown {
+class UpdateMemory : public juce::DeletedAtShutdown {
   public:
     UpdateMemory();
     virtual ~UpdateMemory();
@@ -34,25 +34,25 @@ class UpdateMemory : public DeletedAtShutdown {
     bool needs_check_;
 };
 
-class UpdateCheckSection : public Component, public Button::Listener {
+class UpdateCheckSection : public juce::Component, public juce::Button::Listener {
   public:
-    UpdateCheckSection(String name);
+    UpdateCheckSection(juce::String name);
     ~UpdateCheckSection() { }
-    void paint(Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
 
-    void buttonClicked(Button* clicked_button) override;
-    void mouseUp(const MouseEvent& e) override;
+    void buttonClicked(juce::Button* clicked_button) override;
+    void mouseUp(const juce::MouseEvent& e) override;
 
     void checkUpdate();
 
-    Rectangle<int> getUpdateCheckRect();
+    juce::Rectangle<int> getUpdateCheckRect();
 
   private:
-    ScopedPointer<TextButton> download_button_;
-    ScopedPointer<TextButton> nope_button_;
+    juce::ScopedPointer<juce::TextButton> download_button_;
+    juce::ScopedPointer<juce::TextButton> nope_button_;
 
-    String version_;
+    juce::String version_;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(UpdateCheckSection)
 };
 

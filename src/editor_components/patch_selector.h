@@ -27,12 +27,12 @@ class PatchSelector : public SynthSection, public PatchBrowser::PatchSelectedLis
     PatchSelector();
     ~PatchSelector();
 
-    void paint(Graphics& g) override;
-    void paintBackground(Graphics& g) override;
+    void paint(juce::Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
     void resized() override;
-    void mouseUp(const MouseEvent& event) override;
-    void buttonClicked(Button* buttonThatWasClicked) override;
-    void newPatchSelected(File patch) override;
+    void mouseUp(const juce::MouseEvent& event) override;
+    void buttonClicked(juce::Button* buttonThatWasClicked) override;
+    void newPatchSelected(juce::File patch) override;
     void setModified(bool modified);
     void setSaveSection(SaveSection* save_section) { save_section_ = save_section; }
     void setBrowser(PatchBrowser* browser) {
@@ -44,16 +44,16 @@ class PatchSelector : public SynthSection, public PatchBrowser::PatchSelectedLis
     void initPatch();
 
   private:
-    void loadFromFile(File& patch);
+    void loadFromFile(juce::File& patch);
 
-    String folder_text_;
-    String patch_text_;
+    juce::String folder_text_;
+    juce::String patch_text_;
 
-    ScopedPointer<TextButton> prev_patch_;
-    ScopedPointer<TextButton> next_patch_;
-    ScopedPointer<TextButton> save_;
-    ScopedPointer<TextButton> export_;
-    ScopedPointer<TextButton> browse_;
+    juce::ScopedPointer<juce::TextButton> prev_patch_;
+    juce::ScopedPointer<juce::TextButton> next_patch_;
+    juce::ScopedPointer<juce::TextButton> save_;
+    juce::ScopedPointer<juce::TextButton> export_;
+    juce::ScopedPointer<juce::TextButton> browse_;
     PatchBrowser* browser_;
     SaveSection* save_section_;
     bool modified_;

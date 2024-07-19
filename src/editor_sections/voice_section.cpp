@@ -23,22 +23,22 @@
 #define TEXT_WIDTH 40
 #define TEXT_HEIGHT 16
 
-VoiceSection::VoiceSection(String name) : SynthSection(name) {
+VoiceSection::VoiceSection(juce::String name) : SynthSection(name) {
   static const int KNOB_SENSITIVITY = 500;
 
   addSlider(polyphony_ = new SynthSlider("polyphony"));
-  polyphony_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  polyphony_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   polyphony_->setMouseDragSensitivity(KNOB_SENSITIVITY);
-  polyphony_->setPopupPlacement(BubbleComponent::above, 0);
+  polyphony_->setPopupPlacement(juce::BubbleComponent::above, 0);
 
   addSlider(velocity_track_ = new SynthSlider("velocity_track"));
-  velocity_track_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-  velocity_track_->setPopupPlacement(BubbleComponent::above, 0);
+  velocity_track_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
+  velocity_track_->setPopupPlacement(juce::BubbleComponent::above, 0);
 
   addSlider(pitch_bend_ = new SynthSlider("pitch_bend_range"));
-  pitch_bend_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  pitch_bend_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   pitch_bend_->setMouseDragSensitivity(KNOB_SENSITIVITY);
-  pitch_bend_->setPopupPlacement(BubbleComponent::above, 0);
+  pitch_bend_->setPopupPlacement(juce::BubbleComponent::above, 0);
 }
 
 VoiceSection::~VoiceSection() {
@@ -47,7 +47,7 @@ VoiceSection::~VoiceSection() {
   velocity_track_ = nullptr;
 }
 
-void VoiceSection::paintBackground(Graphics& g) {
+void VoiceSection::paintBackground(juce::Graphics& g) {
   paintContainer(g);
   paintKnobShadows(g);
 

@@ -18,10 +18,10 @@
 
 #include "fonts.h"
 
-TextSlider::TextSlider(String name) : SynthSlider(name), short_lookup_(nullptr) { }
+TextSlider::TextSlider(juce::String name) : SynthSlider(name), short_lookup_(nullptr) { }
 
-void TextSlider::paint(Graphics& g) {
-  static const PathStrokeType stroke(1.000f, PathStrokeType::curved, PathStrokeType::rounded);
+void TextSlider::paint(juce::Graphics& g) {
+  static const juce::PathStrokeType stroke(1.000f, juce::PathStrokeType::curved, juce::PathStrokeType::rounded);
   static const float text_percentage = 0.7f;
 
   int num_types = getMaximum() - getMinimum() + 1;
@@ -29,7 +29,7 @@ void TextSlider::paint(Graphics& g) {
   float height = getHeight();
 
   int selected = getValue();
-  g.setColour(Colour(0xff424242));
+  g.setColour(juce::Colour(0xff424242));
   g.fillRect(selected * cell_width, 0.0f, cell_width, height);
 
   g.setFont(Fonts::instance()->proportional_regular().withPointHeight(height * text_percentage));
@@ -40,11 +40,11 @@ void TextSlider::paint(Graphics& g) {
 
   for (int i = 0; i < num_types; ++i) {
     if (selected == i)
-      g.setColour(Colour(0xffffffff));
+      g.setColour(juce::Colour(0xffffffff));
     else
-      g.setColour(Colour(0xffaaaaaa));
+      g.setColour(juce::Colour(0xffaaaaaa));
 
-    g.drawText(lookup[i], i * cell_width, 0.0f, cell_width, height, Justification::centred);
+    g.drawText(lookup[i], i * cell_width, 0.0f, cell_width, height, juce::Justification::centred);
   }
 }
 

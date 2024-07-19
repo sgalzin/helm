@@ -21,7 +21,7 @@
 
 namespace {
   template<size_t steps>
-  void resizeSteps(Path& path, float x, float y, float width, float height) {
+  void resizeSteps(juce::Path& path, float x, float y, float width, float height) {
     path.clear();
     path.startNewSubPath(x, y + height / 2.0f);
 
@@ -36,7 +36,7 @@ namespace {
   }
 
   template<size_t steps>
-  void resizePyramid(Path& path, float x, float y, float width, float height) {
+  void resizePyramid(juce::Path& path, float x, float y, float width, float height) {
     static int parts = 2 * (steps - 1);
 
     path.clear();
@@ -68,15 +68,15 @@ namespace {
   }
 } // namespace
 
-WaveSelector::WaveSelector(String name) : SynthSlider(name) { }
+WaveSelector::WaveSelector(juce::String name) : SynthSlider(name) { }
 
-void WaveSelector::paint(Graphics& g) {
-  static const PathStrokeType stroke(1.000f, PathStrokeType::curved, PathStrokeType::rounded);
+void WaveSelector::paint(juce::Graphics& g) {
+  static const juce::PathStrokeType stroke(1.000f, juce::PathStrokeType::curved, juce::PathStrokeType::rounded);
 
   int selected = getValue();
   int num_types = getMaximum() - getMinimum() + 1;
   float cell_width = float(getWidth()) / num_types;
-  g.setColour(Colour(0xff424242));
+  g.setColour(juce::Colour(0xff424242));
   g.fillRect(selected * cell_width, 0.0f, cell_width, float(getHeight()));
 
   /*

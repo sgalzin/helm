@@ -32,18 +32,18 @@ XYPad::XYPad() {
 
 XYPad::~XYPad() { }
 
-void XYPad::paintBackground(Graphics& g) {
-  g.fillAll(Colour(0xff424242));
+void XYPad::paintBackground(juce::Graphics& g) {
+  g.fillAll(juce::Colour(0xff424242));
 
-  g.setColour(Colour(0xff4a4a4a));
+  g.setColour(juce::Colour(0xff4a4a4a));
   for (int x = 0; x < getWidth(); x += GRID_CELL_WIDTH)
     g.drawLine(x, 0, x, getHeight());
   for (int y = 0; y < getHeight(); y += GRID_CELL_WIDTH)
     g.drawLine(0, y, getWidth(), y);
 }
 
-void XYPad::paint(Graphics& g) {
-  static const DropShadow shadow(Colour(0xbb000000), 5, Point<int>(0, 0));
+void XYPad::paint(juce::Graphics& g) {
+  static const juce::DropShadow shadow(juce::Colour(0xbb000000), 5, juce::Point<int>(0, 0));
 
   g.drawImage(background_,
               0, 0, getWidth(), getHeight(),
@@ -52,7 +52,7 @@ void XYPad::paint(Graphics& g) {
   float x = x_slider_->getValue() * getWidth();
   float y = (1.0f - y_slider_->getValue()) * getHeight();
 
-  Path target;
+  juce::Path target;
   float handle_radius = 0.05f * getWidth();
   target.addEllipse(x - handle_radius, y - handle_radius,
                     2.0f * handle_radius, 2.0f * handle_radius);
@@ -67,44 +67,44 @@ void XYPad::paint(Graphics& g) {
   else
     g.setColour(Colors::graph_disable);
 
-  PathStrokeType stroke(0.01f * getWidth(), PathStrokeType::beveled, PathStrokeType::rounded);
+  juce::PathStrokeType stroke(0.01f * getWidth(), juce::PathStrokeType::beveled, juce::PathStrokeType::rounded);
   g.strokePath(target, stroke);
   float dot_radius = 0.01f * getWidth();
 
   g.fillEllipse(x - dot_radius, y - dot_radius, 2.0f * dot_radius, 2.0f * dot_radius);
 
   if (mouse_down_) {
-    g.setColour(Colour(0x11ffffff));
+    g.setColour(juce::Colour(0x11ffffff));
     float hover_radius = 0.2 * getWidth();
     g.fillEllipse(x - hover_radius, y - hover_radius, 2.0f * hover_radius, 2.0f * hover_radius);
   }
 }
 
 void XYPad::resized() {
-  const Desktop::Displays::Display& display = Desktop::getInstance().getDisplays().getMainDisplay();
+  const juce::Displays::Display& display = juce::Desktop::getInstance().getDisplays().getMainDisplay();
   float scale = display.scale;
-  background_ = Image(Image::RGB, scale * getWidth(), scale * getHeight(), true);
-  Graphics g(background_);
-  g.addTransform(AffineTransform::scale(scale, scale));
+  background_ = juce::Image(juce::Image::RGB, scale * getWidth(), scale * getHeight(), true);
+  juce::Graphics g(background_);
+  g.addTransform(juce::AffineTransform::scale(scale, scale));
   paintBackground(g);
 }
 
-void XYPad::mouseDown(const MouseEvent& e) {
+void XYPad::mouseDown(const juce::MouseEvent& e) {
   setSlidersFromPosition(e.getPosition());
   mouse_down_ = true;
   repaint();
 }
 
-void XYPad::mouseDrag(const MouseEvent& e) {
+void XYPad::mouseDrag(const juce::MouseEvent& e) {
   setSlidersFromPosition(e.getPosition());
 }
 
-void XYPad::mouseUp(const MouseEvent& e) {
+void XYPad::mouseUp(const juce::MouseEvent& e) {
   mouse_down_ = false;
   repaint();
 }
 
-void XYPad::setSlidersFromPosition(Point<int> position) {
+void XYPad::setSlidersFromPosition(juce::Point<int> position) {
   if (x_slider_) {
     double percent = mopo::utils::clamp((1.0 * position.x) / getWidth(), 0.0, 1.0);
     x_slider_->setValue(percent);

@@ -64,22 +64,22 @@ OpenGLEnvelope::~OpenGLEnvelope() {
 }
 
 void OpenGLEnvelope::paintBackground() {
-  static const DropShadow shadow(Colour(0xbb000000), 5, Point<int>(0, 0));
+  static const juce::DropShadow shadow(juce::Colour(0xbb000000), 5, juce::Point<int>(0, 0));
 
   if (getWidth() <= 0 || getHeight() <= 0)
     return;
 
   float ratio = getHeight() / 100.0f;
 
-  const Desktop::Displays::Display& display = Desktop::getInstance().getDisplays().getMainDisplay();
+  const juce::Displays::Display& display = juce::Desktop::getInstance().getDisplays().getMainDisplay();
   float scale = display.scale;
-  background_image_ = Image(Image::ARGB, scale * getWidth(), scale * getHeight(), true);
-  Graphics g(background_image_);
-  g.addTransform(AffineTransform::scale(scale, scale));
+  background_image_ = juce::Image(juce::Image::ARGB, scale * getWidth(), scale * getHeight(), true);
+  juce::Graphics g(background_image_);
+  g.addTransform(juce::AffineTransform::scale(scale, scale));
 
-  g.fillAll(Colour(0xff424242));
+  g.fillAll(juce::Colour(0xff424242));
 
-  g.setColour(Colour(0xff4a4a4a));
+  g.setColour(juce::Colour(0xff4a4a4a));
   for (int x = 0; x < getWidth(); x += GRID_CELL_WIDTH)
     g.drawLine(x, 0, x, getHeight());
   for (int y = 0; y < getHeight(); y += GRID_CELL_WIDTH)
@@ -89,13 +89,13 @@ void OpenGLEnvelope::paintBackground() {
   g.setColour(Colors::graph_fill);
   g.fillPath(envelope_line_);
 
-  g.setColour(Colour(0xff505050));
+  g.setColour(juce::Colour(0xff505050));
   g.drawLine(getAttackX(), 0.0f, getAttackX(), getHeight());
   g.drawLine(getDecayX(), getSustainY(), getDecayX(), getHeight());
 
   g.setColour(Colors::modulation);
   float line_width = 1.5f * ratio;
-  PathStrokeType stroke(line_width, PathStrokeType::beveled, PathStrokeType::rounded);
+  juce::PathStrokeType stroke(line_width, juce::PathStrokeType::beveled, juce::PathStrokeType::rounded);
   g.strokePath(envelope_line_, stroke);
 
   float hover_line_x = -20;
@@ -106,24 +106,24 @@ void OpenGLEnvelope::paintBackground() {
   else if (release_hover_)
     hover_line_x = getReleaseX();
 
-  g.setColour(Colour(0xbbffffff));
+  g.setColour(juce::Colour(0xbbffffff));
   g.fillRect(hover_line_x - 0.5f, 0.0f, 1.0f, 1.0f * getHeight());
 
   float grab_radius = 20.0f * ratio;
   float hover_radius = 7.0f * ratio;
   if (sustain_hover_) {
     if (mouse_down_) {
-      g.setColour(Colour(0x11ffffff));
+      g.setColour(juce::Colour(0x11ffffff));
       g.fillEllipse(getDecayX() - grab_radius, getSustainY() - grab_radius,
                     2.0f * grab_radius, 2.0f * grab_radius);
     }
 
-    g.setColour(Colour(0xbbffffff));
+    g.setColour(juce::Colour(0xbbffffff));
     g.drawEllipse(getDecayX() - hover_radius, getSustainY() - hover_radius,
                   2.0f * hover_radius, 2.0f * hover_radius, 1.0);
   }
   else if (mouse_down_) {
-    g.setColour(Colour(0x11ffffff));
+    g.setColour(juce::Colour(0x11ffffff));
     g.fillRect(hover_line_x - 10.0f, 0.0f, 20.0f, 1.0f * getHeight());
   }
 
@@ -131,7 +131,7 @@ void OpenGLEnvelope::paintBackground() {
   float marker_radius = ratio * MARKER_WIDTH / 2.0f;
   g.fillEllipse(getDecayX() - marker_radius, getSustainY() - marker_radius,
                 2.0f * marker_radius, 2.0f * marker_radius);
-  g.setColour(Colour(0xff000000));
+  g.setColour(juce::Colour(0xff000000));
   g.fillEllipse(getDecayX() - marker_radius / 2.0f, getSustainY() - marker_radius / 2.0f,
                 marker_radius, marker_radius);
 
@@ -139,20 +139,20 @@ void OpenGLEnvelope::paintBackground() {
 }
 
 void OpenGLEnvelope::paintPositionImage() {
-  int min_image_width = roundToInt(4 * MARKER_WIDTH);
+  int min_image_width = juce::roundToInt(4 * MARKER_WIDTH);
   int image_width = mopo::utils::nextPowerOfTwo(min_image_width);
   int marker_width = 2 * MARKER_WIDTH;
-  int image_height = roundToInt(2 * IMAGE_HEIGHT);
-  position_image_ = Image(Image::ARGB, image_width, image_height, true);
-  Graphics g(position_image_);
+  int image_height = juce::roundToInt(2 * IMAGE_HEIGHT);
+  position_image_ = juce::Image(juce::Image::ARGB, image_width, image_height, true);
+  juce::Graphics g(position_image_);
 
-  g.setColour(Colour(0x77ffffff));
+  g.setColour(juce::Colour(0x77ffffff));
   g.fillRect(image_width / 2.0f - 0.5f, 0.0f, 1.0f, 1.0f * image_height);
 
   g.setColour(Colors::modulation);
   g.fillEllipse(image_width / 2 - marker_width / 2, image_height / 2 - marker_width / 2,
                 marker_width, marker_width);
-  g.setColour(Colour(0xff000000));
+  g.setColour(juce::Colour(0xff000000));
   g.fillEllipse(image_width / 2 - marker_width / 4, image_height / 2 - marker_width / 4,
                 marker_width / 2, marker_width / 2);
 }
@@ -168,7 +168,7 @@ void OpenGLEnvelope::resized() {
     envelope_phase_ = parent->getSynth()->getModSource(getName().toStdString() + "_phase");
 }
 
-void OpenGLEnvelope::mouseMove(const MouseEvent& e) {
+void OpenGLEnvelope::mouseMove(const juce::MouseEvent& e) {
   float x = e.getPosition().x;
   float attack_delta = fabs(x - getAttackX());
   float decay_delta = fabs(x - getDecayX());
@@ -191,7 +191,7 @@ void OpenGLEnvelope::mouseMove(const MouseEvent& e) {
   }
 }
 
-void OpenGLEnvelope::mouseExit(const MouseEvent& e) {
+void OpenGLEnvelope::mouseExit(const juce::MouseEvent& e) {
   attack_hover_ = false;
   decay_hover_ = false;
   sustain_hover_ = false;
@@ -199,12 +199,12 @@ void OpenGLEnvelope::mouseExit(const MouseEvent& e) {
   paintBackground();
 }
 
-void OpenGLEnvelope::mouseDown(const MouseEvent& e) {
+void OpenGLEnvelope::mouseDown(const juce::MouseEvent& e) {
   mouse_down_ = true;
   paintBackground();
 }
 
-void OpenGLEnvelope::mouseDrag(const MouseEvent& e) {
+void OpenGLEnvelope::mouseDrag(const juce::MouseEvent& e) {
   if (attack_hover_)
     setAttackX(e.getPosition().x);
   else if (decay_hover_)
@@ -221,7 +221,7 @@ void OpenGLEnvelope::mouseDrag(const MouseEvent& e) {
   }
 }
 
-void OpenGLEnvelope::mouseUp(const MouseEvent& e) {
+void OpenGLEnvelope::mouseUp(const juce::MouseEvent& e) {
   mouse_down_ = false;
   paintBackground();
 }
@@ -332,12 +332,12 @@ void OpenGLEnvelope::resetEnvelopeLine() {
   paintBackground();
 }
 
-Point<float> OpenGLEnvelope::valuesToPosition(float phase, float amp) {
+juce::Point<float> OpenGLEnvelope::valuesToPosition(float phase, float amp) {
   float y = (1.0 - amp) * getHeight();
   float x = 0.0;
 
   if (phase < 0.0 || phase > 2.5)
-    return Point<float>(-2.0, -2.0);
+    return juce::Point<float>(-2.0, -2.0);
 
   float attack_x = getAttackX();
   float decay_x = getDecayX();
@@ -362,8 +362,8 @@ Point<float> OpenGLEnvelope::valuesToPosition(float phase, float amp) {
     x = decay_x + delta - delta * (amp / sustain);
   }
 
-  Point<float> closest;
-  envelope_line_.getNearestPoint(Point<float>(x, y), closest);
+  juce::Point<float> closest;
+  envelope_line_.getNearestPoint(juce::Point<float>(x, y), closest);
   if (phase > 1.5f && phase < 2.5f && closest.x < decay_x) {
     closest.x = decay_x;
     closest.y = (1.0 - amp) * getHeight();
@@ -372,48 +372,48 @@ Point<float> OpenGLEnvelope::valuesToPosition(float phase, float amp) {
     closest.x = decay_x;
     closest.y = (1.0 - amp) * getHeight();
   }
-  return Point<float>(2.0f * closest.x / getWidth() - 1.0f, 1.0f - 2.0f * closest.y / getHeight());
+  return juce::Point<float>(2.0f * closest.x / getWidth() - 1.0f, 1.0f - 2.0f * closest.y / getHeight());
 }
 
-void OpenGLEnvelope::init(OpenGLContext& open_gl_context) {
+void OpenGLEnvelope::init(juce::OpenGLContext& open_gl_context) {
   paintPositionImage();
 
   open_gl_context.extensions.glGenBuffers(1, &vertex_buffer_);
-  open_gl_context.extensions.glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ARRAY_BUFFER, vertex_buffer_);
 
   GLsizeiptr vert_size = static_cast<GLsizeiptr>(static_cast<size_t>(16 * sizeof(float)));
-  open_gl_context.extensions.glBufferData(GL_ARRAY_BUFFER, vert_size,
-                                          position_vertices_, GL_STATIC_DRAW);
+  open_gl_context.extensions.glBufferData(juce::gl::GL_ARRAY_BUFFER, vert_size,
+                                          position_vertices_, juce::gl::GL_STATIC_DRAW);
 
   open_gl_context.extensions.glGenBuffers(1, &triangle_buffer_);
-  open_gl_context.extensions.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangle_buffer_);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ELEMENT_ARRAY_BUFFER, triangle_buffer_);
 
   GLsizeiptr tri_size = static_cast<GLsizeiptr>(static_cast<size_t>(6 * sizeof(float)));
-  open_gl_context.extensions.glBufferData(GL_ELEMENT_ARRAY_BUFFER, tri_size,
-                                          position_triangles_, GL_STATIC_DRAW);
+  open_gl_context.extensions.glBufferData(juce::gl::GL_ELEMENT_ARRAY_BUFFER, tri_size,
+                                          position_triangles_, juce::gl::GL_STATIC_DRAW);
 
   background_.init(open_gl_context);
 }
 
-void OpenGLEnvelope::drawPosition(OpenGLContext& open_gl_context) {
+void OpenGLEnvelope::drawPosition(juce::OpenGLContext& open_gl_context) {
   if (position_texture_.getWidth() != position_image_.getWidth())
     position_texture_.loadImage(position_image_);
 
   if (envelope_phase_ == nullptr || envelope_amp_ == nullptr || envelope_amp_->buffer[0] <= 0.0)
     return;
 
-  Point<float> point = valuesToPosition(envelope_phase_->buffer[0], envelope_amp_->buffer[0]);
+  juce::Point<float> point = valuesToPosition(envelope_phase_->buffer[0], envelope_amp_->buffer[0]);
   float x = point.x;
   float y = point.y;
 
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+  juce::gl::glEnable(juce::gl::GL_BLEND);
+  juce::gl::glBlendFunc(juce::gl::GL_ONE, juce::gl::GL_ONE_MINUS_SRC_ALPHA);
 
   int draw_width = getWidth();
   int draw_height = getHeight();
 
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  juce::gl::glTexParameteri(juce::gl::GL_TEXTURE_2D, juce::gl::GL_TEXTURE_WRAP_S, juce::gl::GL_CLAMP_TO_EDGE);
+  juce::gl::glTexParameteri(juce::gl::GL_TEXTURE_2D, juce::gl::GL_TEXTURE_WRAP_T, juce::gl::GL_CLAMP_TO_EDGE);
 
   float ratio = getHeight() / 100.0f;
 
@@ -428,15 +428,15 @@ void OpenGLEnvelope::drawPosition(OpenGLContext& open_gl_context) {
   position_vertices_[12] = x + position_width;
   position_vertices_[13] = y + position_height;
 
-  open_gl_context.extensions.glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ARRAY_BUFFER, vertex_buffer_);
   GLsizeiptr vert_size = static_cast<GLsizeiptr>(static_cast<size_t>(16 * sizeof(float)));
-  open_gl_context.extensions.glBufferData(GL_ARRAY_BUFFER, vert_size,
-                                          position_vertices_, GL_STATIC_DRAW);
+  open_gl_context.extensions.glBufferData(juce::gl::GL_ARRAY_BUFFER, vert_size,
+                                          position_vertices_, juce::gl::GL_STATIC_DRAW);
 
-  open_gl_context.extensions.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangle_buffer_);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ELEMENT_ARRAY_BUFFER, triangle_buffer_);
   position_texture_.bind();
 
-  open_gl_context.extensions.glActiveTexture(GL_TEXTURE0);
+  open_gl_context.extensions.glActiveTexture(juce::gl::GL_TEXTURE0);
 
   if (background_.texture_uniform() != nullptr)
     background_.texture_uniform()->set(0);
@@ -444,17 +444,17 @@ void OpenGLEnvelope::drawPosition(OpenGLContext& open_gl_context) {
   background_.shader()->use();
 
   background_.enableAttributes(open_gl_context);
-  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+  juce::gl::glDrawElements(juce::gl::GL_TRIANGLES, 6, juce::gl::GL_UNSIGNED_INT, 0);
   background_.disableAttributes(open_gl_context);
 
   position_texture_.unbind();
 
-  open_gl_context.extensions.glBindBuffer(GL_ARRAY_BUFFER, 0);
-  open_gl_context.extensions.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ARRAY_BUFFER, 0);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void OpenGLEnvelope::render(OpenGLContext& open_gl_context, bool animate) {
-  MOPO_ASSERT(glGetError() == GL_NO_ERROR);
+void OpenGLEnvelope::render(juce::OpenGLContext& open_gl_context, bool animate) {
+  MOPO_ASSERT(juce::gl::glGetError() == juce::gl::GL_NO_ERROR);
 
   setViewPort(open_gl_context);
 
@@ -463,10 +463,10 @@ void OpenGLEnvelope::render(OpenGLContext& open_gl_context, bool animate) {
   if (animate)
     drawPosition(open_gl_context);
 
-  MOPO_ASSERT(glGetError() == GL_NO_ERROR);
+  MOPO_ASSERT(juce::gl::glGetError() == juce::gl::GL_NO_ERROR);
 }
 
-void OpenGLEnvelope::destroy(OpenGLContext& open_gl_context) {
+void OpenGLEnvelope::destroy(juce::OpenGLContext& open_gl_context) {
   position_texture_.release();
 
   texture_ = nullptr;

@@ -22,20 +22,20 @@
 #include "helm_common.h"
 #include "helm_engine.h"
 
-class HelmComputerKeyboard : public mopo::StringLayout, public KeyListener {
+class HelmComputerKeyboard : public mopo::StringLayout, public juce::KeyListener {
   public:
-    HelmComputerKeyboard(mopo::HelmEngine* synth, MidiKeyboardState* keyboard_state);
+    HelmComputerKeyboard(mopo::HelmEngine* synth, juce::MidiKeyboardState* keyboard_state);
     ~HelmComputerKeyboard();
 
     void changeKeyboardOffset(int new_offset);
 
     // KeyListener
-    bool keyPressed(const KeyPress &key, Component *origin) override;
-    bool keyStateChanged(bool isKeyDown, Component *origin) override;
+    bool keyPressed(const juce::KeyPress &key, juce::Component *origin) override;
+    bool keyStateChanged(bool isKeyDown, juce::Component *origin) override;
 
   private:
     mopo::HelmEngine* synth_;
-    MidiKeyboardState* keyboard_state_;
+    juce::MidiKeyboardState* keyboard_state_;
     std::set<char> keys_pressed_;
     int computer_keyboard_offset_;
 

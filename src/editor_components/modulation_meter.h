@@ -21,14 +21,14 @@
 #include "processor.h"
 #include "synth_slider.h"
 
-class ModulationMeter : public Component {
+class ModulationMeter : public juce::Component {
   public:
     ModulationMeter(const mopo::Output* mono_total,
                     const mopo::Output* poly_total,
                     const SynthSlider* slider);
     virtual ~ModulationMeter();
 
-    void paint(Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
 
     void updateValue();
@@ -38,12 +38,12 @@ class ModulationMeter : public Component {
     void setModulated(bool modulated) { modulated_ = modulated; }
 
   private:
-    void drawSlider(Graphics& g);
-    void drawTextSlider(Graphics& g);
+    void drawSlider(juce::Graphics& g);
+    void drawTextSlider(juce::Graphics& g);
 
-    void drawKnob(Graphics& g);
-    void fillHorizontalRect(Graphics& g, float x1, float x2, float height);
-    void fillVerticalRect(Graphics& g, float y1, float y2, float width);
+    void drawKnob(juce::Graphics& g);
+    void fillHorizontalRect(juce::Graphics& g, float x1, float x2, float height);
+    void fillVerticalRect(juce::Graphics& g, float y1, float y2, float width);
 
     const mopo::Output* mono_total_;
     const mopo::Output* poly_total_;
@@ -53,7 +53,7 @@ class ModulationMeter : public Component {
     float knob_percent_;
     float mod_percent_;
 
-    PathStrokeType knob_stroke_;
+    juce::PathStrokeType knob_stroke_;
     float full_radius_;
     float outer_radius_;
     bool modulated_;

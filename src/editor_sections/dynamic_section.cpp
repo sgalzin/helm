@@ -26,16 +26,16 @@
 #define SELECTOR_WIDTH 75
 #define TEXT_HEIGHT 16
 
-DynamicSection::DynamicSection(String name) : SynthSection(name) {
+DynamicSection::DynamicSection(juce::String name) : SynthSection(name) {
   addSlider(portamento_ = new SynthSlider("portamento"));
-  portamento_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-  portamento_->setPopupPlacement(BubbleComponent::above, 0);
+  portamento_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
+  portamento_->setPopupPlacement(juce::BubbleComponent::above, 0);
 
   TextSlider* port_type = new TextSlider("portamento_type");
   addSlider(portamento_type_ = port_type);
-  portamento_type_->setSliderStyle(Slider::LinearBar);
+  portamento_type_->setSliderStyle(juce::Slider::LinearBar);
   portamento_type_->setStringLookup(mopo::strings::off_auto_on);
-  portamento_type_->setPopupPlacement(BubbleComponent::above, 0);
+  portamento_type_->setPopupPlacement(juce::BubbleComponent::above, 0);
   port_type->setShortStringLookup(mopo::strings::off_auto_on_slider);
 
   addButton(legato_ = new SynthButton("legato"));
@@ -49,7 +49,7 @@ DynamicSection::~DynamicSection() {
   legato_ = nullptr;
 }
 
-void DynamicSection::paintBackground(Graphics& g) {
+void DynamicSection::paintBackground(juce::Graphics& g) {
   paintContainer(g);
   paintKnobShadows(g);
 

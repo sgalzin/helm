@@ -16,7 +16,7 @@
 
 #include "midi_keyboard.h"
 
-MidiKeyboard::MidiKeyboard(MidiKeyboardState& state, Orientation orientation) :
+MidiKeyboard::MidiKeyboard(juce::MidiKeyboardState& state, Orientation orientation) :
     MidiKeyboardComponent(state, orientation) {
   int num_children = getNumChildComponents();
 
@@ -26,11 +26,11 @@ MidiKeyboard::MidiKeyboard(MidiKeyboardState& state, Orientation orientation) :
   }
 }
 
-void MidiKeyboard::drawBlackNote(int midiNoteNumber, Graphics& g,
-                                 Rectangle<float> area,
+void MidiKeyboard::drawBlackNote(int midiNoteNumber, juce::Graphics& g,
+                                 juce::Rectangle<float> area,
                                  bool isDown, bool isOver,
-                                 Colour noteFillColour) {
-  Colour color(noteFillColour);
+                                 juce::Colour noteFillColour) {
+  juce::Colour color(noteFillColour);
 
   if (isDown)
     color = color.overlaidWith(findColour(keyDownOverlayColourId));

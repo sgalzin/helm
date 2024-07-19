@@ -43,10 +43,10 @@ namespace {
 const float SynthSlider::rotary_angle = 0.8f * static_cast<float>(mopo::PI);
 const float SynthSlider::linear_rail_width = 2.0f;
 
-SynthSlider::SynthSlider(String name) : Slider(name), bipolar_(false), flip_coloring_(false),
+SynthSlider::SynthSlider(juce::String name) : Slider(name), bipolar_(false), flip_coloring_(false),
                                         active_(true), snap_to_value_(false), snap_value_(0.0),
                                         string_lookup_(nullptr), parent_(nullptr) {
-  popup_placement_ = BubbleComponent::below;
+  popup_placement_ = juce::BubbleComponent::below;
   popup_buffer_ = DEFAULT_POPUP_BUFFER;
 
   if (!mopo::Parameters::isParameter(name.toStdString()))
@@ -63,8 +63,8 @@ SynthSlider::SynthSlider(String name) : Slider(name), bipolar_(false), flip_colo
   setTextBoxStyle(Slider::NoTextBox, true, 0, 0);
 
   setBufferedToImage(true);
-  setColour(Slider::backgroundColourId, Colour(0xff303030));
-  setColour(Slider::textBoxOutlineColourId, Colour(0x00000000));
+  setColour(Slider::backgroundColourId, juce::Colour(0xff303030));
+  setColour(Slider::textBoxOutlineColourId, juce::Colour(0x00000000));
 }
 
 void SynthSlider::resized() {
@@ -75,14 +75,14 @@ void SynthSlider::resized() {
   Slider::resized();
 }
 
-void SynthSlider::mouseDown(const MouseEvent& e) {
+void SynthSlider::mouseDown(const juce::MouseEvent& e) {
   SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
   if (parent == nullptr)
     return;
   SynthBase* synth = parent->getSynth();
 
   if (e.mods.isPopupMenu()) {
-    PopupMenu m;
+    juce::PopupMenu m;
     m.setLookAndFeel(DefaultLookAndFeel::instance());
 
     if (isDoubleClickReturnEnabled())
@@ -95,15 +95,15 @@ void SynthSlider::mouseDown(const MouseEvent& e) {
 
     connections = parent->getSynth()->getDestinationConnections(getName().toStdString());
 
-    String disconnect("Disconnect from ");
+    juce::String disconnect("Disconnect from ");
     for (int i = 0; i < connections.size(); ++i)
       m.addItem(kModulationList + i, disconnect + connections[i]->source);
 
     if (connections.size() > 1)
       m.addItem(kClearModulations, "Disconnect all modulations");
 
-    m.showMenuAsync(PopupMenu::Options(),
-                    ModalCallbackFunction::forComponent(sliderPopupCallback, this));
+    m.showMenuAsync(juce::PopupMenu::Options(),
+                    juce::ModalCallbackFunction::forComponent(sliderPopupCallback, this));
   }
   else {
     Slider::mouseDown(e);
@@ -112,12 +112,12 @@ void SynthSlider::mouseDown(const MouseEvent& e) {
       synth->beginChangeGesture(getName().toStdString());
     if (isRotary()) {
       click_position_ = e.getScreenPosition().toFloat();
-      setMouseCursor(MouseCursor::NoCursor);
+      setMouseCursor(juce::MouseCursor::NoCursor);
     }
   }
 }
 
-void SynthSlider::mouseUp(const MouseEvent& e) {
+void SynthSlider::mouseUp(const juce::MouseEvent& e) {
   if (!e.mods.isPopupMenu()) {
     Slider::mouseUp(e);
 
@@ -126,20 +126,20 @@ void SynthSlider::mouseUp(const MouseEvent& e) {
       parent->getSynth()->endChangeGesture(getName().toStdString());
 
     if (isRotary()) {
-      setMouseCursor(MouseCursor::ParentCursor);
-      Desktop::getInstance().getMainMouseSource().setScreenPosition(click_position_);
+      setMouseCursor(juce::MouseCursor::ParentCursor);
+      juce::Desktop::getInstance().getMainMouseSource().setScreenPosition(click_position_);
     }
   }
 }
 
-void SynthSlider::mouseEnter(const MouseEvent &e) {
+void SynthSlider::mouseEnter(const juce::MouseEvent &e) {
   Slider::mouseEnter(e);
   notifyTooltip();
   for (SynthSlider::SliderListener* listener : slider_listeners_)
     listener->hoverStarted(getName().toStdString());
 }
 
-void SynthSlider::mouseExit(const MouseEvent &e) {
+void SynthSlider::mouseExit(const juce::MouseEvent &e) {
   Slider::mouseExit(e);
   for (SynthSlider::SliderListener* listener : slider_listeners_)
     listener->hoverEnded(getName().toStdString());
@@ -150,11 +150,11 @@ void SynthSlider::valueChanged() {
   notifyTooltip();
   notifyGuis();
 
-  if (popup_placement_ == BubbleComponent::below && popup_buffer_) {
+  if (popup_placement_ == juce::BubbleComponent::below && popup_buffer_) {
     Component* popup = getCurrentPopupDisplay();
     if (popup) {
-      Rectangle<int> bounds = popup->getBounds();
-      Rectangle<int> local_bounds = getLocalArea(popup, popup->getLocalBounds());
+      juce::Rectangle<int> bounds = popup->getBounds();
+      juce::Rectangle<int> local_bounds = getLocalArea(popup, popup->getLocalBounds());
 
       int y_diff = getHeight() + popup_buffer_ - local_bounds.getY();
       bounds.setY(bounds.getY() + y_diff);
@@ -163,7 +163,7 @@ void SynthSlider::valueChanged() {
   }
 }
 
-String SynthSlider::getTextFromValue(double value) {
+juce::String SynthSlider::getTextFromValue(double value) {
   if (string_lookup_) {
     int lookup = mopo::utils::iclamp(value, 0, getMaximum());
     return string_lookup_[lookup];
@@ -203,19 +203,19 @@ double SynthSlider::snapValue(double attempted_value, DragMode drag_mode) {
   return attempted_value;
 }
 
-void SynthSlider::drawShadow(Graphics &g) {
+void SynthSlider::drawShadow(juce::Graphics &g) {
   if (&getLookAndFeel() == TextLookAndFeel::instance())
     drawRectangularShadow(g);
   else if (isRotary())
     drawRotaryShadow(g);
   else {
-    g.setColour(Colour(0xff222222));
+    g.setColour(juce::Colour(0xff222222));
     g.fillRect(getBounds());
   }
 }
 
-void SynthSlider::drawRotaryShadow(Graphics &g) {
-  static const DropShadow shadow(Colour(0xee000000), 3, Point<int>(0, 0));
+void SynthSlider::drawRotaryShadow(juce::Graphics &g) {
+  static const juce::DropShadow shadow(juce::Colour(0xee000000), 3, juce::Point<int>(0, 0));
   static const float stroke_percent = 0.12f;
 
   g.saveState();
@@ -223,33 +223,33 @@ void SynthSlider::drawRotaryShadow(Graphics &g) {
 
   float full_radius = std::min(getWidth() / 2.0f, getHeight() / 2.0f);
   float stroke_width = 2.0f * full_radius * stroke_percent;
-  Path shadow_path;
+  juce::Path shadow_path;
   float outer_radius = full_radius - stroke_width;
   shadow_path.addCentredArc(full_radius, full_radius,
                             0.89f * full_radius, 0.87f * full_radius,
                             0, -rotary_angle, rotary_angle, true);
   shadow.drawForPath(g, shadow_path);
 
-  Path rail_outer;
+  juce::Path rail_outer;
   rail_outer.addCentredArc(full_radius, full_radius, outer_radius, outer_radius,
                            0.0f, -rotary_angle, rotary_angle, true);
 
-  g.setColour(Colour(0xff333333));
+  g.setColour(juce::Colour(0xff333333));
 
-  PathStrokeType outer_stroke =
-      PathStrokeType(stroke_width, PathStrokeType::beveled, PathStrokeType::butt);
+  juce::PathStrokeType outer_stroke =
+      juce::PathStrokeType(stroke_width, juce::PathStrokeType::beveled, juce::PathStrokeType::butt);
   g.strokePath(rail_outer, outer_stroke);
 
   g.restoreState();
 }
 
-void SynthSlider::drawRectangularShadow(Graphics &g) {
-  static const DropShadow shadow(Colour(0xbb000000), 2, Point<int>(0, 0));
+void SynthSlider::drawRectangularShadow(juce::Graphics &g) {
+  static const juce::DropShadow shadow(juce::Colour(0xbb000000), 2, juce::Point<int>(0, 0));
 
   g.saveState();
   g.setOrigin(getX(), getY());
   shadow.drawForRectangle(g, getLocalBounds());
-  g.setColour(Colour(0xff333333));
+  g.setColour(juce::Colour(0xff333333));
   g.fillRect(getLocalBounds());
 
   g.restoreState();
@@ -274,14 +274,14 @@ void SynthSlider::addSliderListener(SynthSlider::SliderListener* listener) {
   slider_listeners_.push_back(listener);
 }
 
-String SynthSlider::formatValue(float value) {
+juce::String SynthSlider::formatValue(float value) {
   static const int number_length = 5;
   static const int max_decimals = 3;
 
   if (details_.steps)
-    return String(value) + " " + details_.display_units;
+    return juce::String(value) + " " + details_.display_units;
 
-  String format = String(value, max_decimals);
+  juce::String format = juce::String(value, max_decimals);
   format = format.substring(0, number_length);
   int spaces = number_length - format.length();
   

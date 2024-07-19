@@ -24,7 +24,7 @@
 
 class ValueBridge;
 
-class HelmPlugin : public SynthBase, public AudioProcessor, public ValueBridge::Listener {
+class HelmPlugin : public SynthBase, public juce::AudioProcessor, public ValueBridge::Listener {
   public:
     HelmPlugin();
     virtual ~HelmPlugin();
@@ -34,20 +34,20 @@ class HelmPlugin : public SynthBase, public AudioProcessor, public ValueBridge::
     void beginChangeGesture(const std::string& name) override;
     void endChangeGesture(const std::string& name) override;
     void setValueNotifyHost(const std::string& name, mopo::mopo_float value) override;
-    const CriticalSection& getCriticalSection() override;
+    const juce::CriticalSection& getCriticalSection() override;
 
     // AudioProcessor
     void prepareToPlay(double sample_rate, int buffer_size) override;
     void releaseResources() override;
-    void processBlock(AudioSampleBuffer&, MidiBuffer&) override;
+    void processBlock(juce::AudioSampleBuffer&, juce::MidiBuffer&) override;
 
-    AudioProcessorEditor* createEditor() override;
+    juce::AudioProcessorEditor* createEditor() override;
     bool hasEditor() const override;
 
-    const String getName() const override;
+    const juce::String getName() const override;
 
-    const String getInputChannelName(int channel_index) const override;
-    const String getOutputChannelName(int channel_index) const override;
+    const juce::String getInputChannelName(int channel_index) const override;
+    const juce::String getOutputChannelName(int channel_index) const override;
     bool isInputChannelStereoPair(int index) const override;
     bool isOutputChannelStereoPair(int index) const override;
 
@@ -59,10 +59,10 @@ class HelmPlugin : public SynthBase, public AudioProcessor, public ValueBridge::
     int getNumPrograms() override;
     int getCurrentProgram() override;
     void setCurrentProgram(int index) override;
-    const String getProgramName(int index) override;
-    void changeProgramName(int index, const String& new_name) override;
+    const juce::String getProgramName(int index) override;
+    void changeProgramName(int index, const juce::String& new_name) override;
 
-    void getStateInformation(MemoryBlock& destData) override;
+    void getStateInformation(juce::MemoryBlock& destData) override;
     void setStateInformation(const void* data, int size_in_bytes) override;
 
     // ValueBridge::Listener
@@ -71,11 +71,11 @@ class HelmPlugin : public SynthBase, public AudioProcessor, public ValueBridge::
     void loadPatches();
 
   private:
-    uint32 set_state_time_;
+    juce::uint32 set_state_time_;
 
     int current_program_;
-    Array<File> all_patches_;
-    AudioPlayHead::CurrentPositionInfo position_info_;
+    juce::Array<juce::File> all_patches_;
+    juce::AudioPlayHead::CurrentPositionInfo position_info_;
 
     std::map<std::string, ValueBridge*> bridge_lookup_;
 

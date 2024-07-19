@@ -25,18 +25,18 @@
 
 class FormantSection : public SynthSection {
   public:
-    FormantSection(String name);
+    FormantSection(juce::String name);
     ~FormantSection();
 
-    void paintBackground(Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
     void resized() override;
     void setActive(bool active = true) override;
 
   private:
-    ScopedPointer<SynthButton> on_;
-    ScopedPointer<SynthSlider> x_;
-    ScopedPointer<SynthSlider> y_;
-    ScopedPointer<XYPad> xy_pad_;
+    juce::ScopedPointer<SynthButton> on_;
+    juce::ScopedPointer<SynthSlider> x_;
+    juce::ScopedPointer<SynthSlider> y_;
+    juce::ScopedPointer<XYPad> xy_pad_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FormantSection)
 };

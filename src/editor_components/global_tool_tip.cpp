@@ -28,25 +28,25 @@ GlobalToolTip::GlobalToolTip() {
 
 GlobalToolTip::~GlobalToolTip() { }
 
-void GlobalToolTip::paint(Graphics& g) {
-  g.setColour(Colour(0xff383838));
+void GlobalToolTip::paint(juce::Graphics& g) {
+  g.setColour(juce::Colour(0xff383838));
   g.fillRect(0, 0, getWidth(), getHeight() / 2);
 
-  g.setColour(Colour(0xff444444));
+  g.setColour(juce::Colour(0xff444444));
   g.fillRect(0, getHeight() / 2, getWidth(), getHeight() / 2);
 
-  g.setColour(Colour(0xffffffff));
+  g.setColour(juce::Colour(0xffffffff));
   g.setFont(Fonts::instance()->monospace().withPointHeight(proportionOfHeight(0.3f)));
   g.drawText(parameter_text_, 0.0, 0.0,
-             getWidth(), proportionOfHeight(0.5), Justification::centred, false);
+             getWidth(), proportionOfHeight(0.5), juce::Justification::centred, false);
   g.drawText(value_text_, 0.0, proportionOfHeight(0.5),
-             getWidth(), proportionOfHeight(0.5), Justification::centred, false);
+             getWidth(), proportionOfHeight(0.5), juce::Justification::centred, false);
 }
 
-void GlobalToolTip::setText(String parameter, String value) {
+void GlobalToolTip::setText(juce::String parameter, juce::String value) {
   parameter_text_ = parameter;
   value_text_ = value;
-  time_updated_ = Time::currentTimeMillis();
+  time_updated_ = juce::Time::currentTimeMillis();
   setVisible(true);
 }
 
@@ -56,6 +56,6 @@ void GlobalToolTip::timerCallback() {
     shown_parameter_text_ = parameter_text_;
     repaint();
   }
-  else if (isVisible() && Time::currentTimeMillis() - time_updated_ > TIME_TO_STAY_VISIBLE)
+  else if (isVisible() && juce::Time::currentTimeMillis() - time_updated_ > TIME_TO_STAY_VISIBLE)
     setVisible(false);
 }

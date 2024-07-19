@@ -43,10 +43,10 @@
 
 class SynthesisInterface  : public SynthSection {
   public:
-    SynthesisInterface(mopo::control_map controls, MidiKeyboardState* keyboard_state);
+    SynthesisInterface(mopo::control_map controls, juce::MidiKeyboardState* keyboard_state);
     ~SynthesisInterface();
 
-    void paintBackground(Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
     void resized() override;
 
     void setFocus() { grabKeyboardFocus(); }
@@ -57,27 +57,27 @@ class SynthesisInterface  : public SynthSection {
     void setSectionThreeWidth(int width) { section_three_width_ = width; }
 
   private:
-    ScopedPointer<EnvelopeSection> amplitude_envelope_section_;
-    ScopedPointer<DelaySection> delay_section_;
-    ScopedPointer<DynamicSection> dynamic_section_;
-    ScopedPointer<EnvelopeSection> extra_envelope_section_;
-    ScopedPointer<ExtraModSection> extra_mod_section_;
-    ScopedPointer<FeedbackSection> feedback_section_;
-    ScopedPointer<EnvelopeSection> filter_envelope_section_;
-    ScopedPointer<FilterSection> filter_section_;
-    ScopedPointer<FormantSection> formant_section_;
-    ScopedPointer<LfoSection> mono_lfo_1_section_;
-    ScopedPointer<LfoSection> mono_lfo_2_section_;
-    ScopedPointer<MidiKeyboardComponent> keyboard_;
-    ScopedPointer<MixerSection> mixer_section_;
-    ScopedPointer<OscillatorSection> oscillator_section_;
-    ScopedPointer<LfoSection> poly_lfo_section_;
-    ScopedPointer<ReverbSection> reverb_section_;
-    ScopedPointer<DistortionSection> distortion_section_;
-    ScopedPointer<StepSequencerSection> step_sequencer_section_;
-    ScopedPointer<StutterSection> stutter_section_;
-    ScopedPointer<SubSection> sub_section_;
-    ScopedPointer<VoiceSection> voice_section_;
+    juce::ScopedPointer<EnvelopeSection> amplitude_envelope_section_;
+    juce::ScopedPointer<DelaySection> delay_section_;
+    juce::ScopedPointer<DynamicSection> dynamic_section_;
+    juce::ScopedPointer<EnvelopeSection> extra_envelope_section_;
+    juce::ScopedPointer<ExtraModSection> extra_mod_section_;
+    juce::ScopedPointer<FeedbackSection> feedback_section_;
+    juce::ScopedPointer<EnvelopeSection> filter_envelope_section_;
+    juce::ScopedPointer<FilterSection> filter_section_;
+    juce::ScopedPointer<FormantSection> formant_section_;
+    juce::ScopedPointer<LfoSection> mono_lfo_1_section_;
+    juce::ScopedPointer<LfoSection> mono_lfo_2_section_;
+    juce::ScopedPointer<juce::MidiKeyboardComponent> keyboard_;
+    juce::ScopedPointer<MixerSection> mixer_section_;
+    juce::ScopedPointer<OscillatorSection> oscillator_section_;
+    juce::ScopedPointer<LfoSection> poly_lfo_section_;
+    juce::ScopedPointer<ReverbSection> reverb_section_;
+    juce::ScopedPointer<DistortionSection> distortion_section_;
+    juce::ScopedPointer<StepSequencerSection> step_sequencer_section_;
+    juce::ScopedPointer<StutterSection> stutter_section_;
+    juce::ScopedPointer<SubSection> sub_section_;
+    juce::ScopedPointer<VoiceSection> voice_section_;
 
     int padding_;
     int section_one_width_;

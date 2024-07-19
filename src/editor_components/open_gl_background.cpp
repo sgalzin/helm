@@ -25,7 +25,7 @@ OpenGLBackground::OpenGLBackground() {
 
 OpenGLBackground::~OpenGLBackground() { }
 
-void OpenGLBackground::init(OpenGLContext& open_gl_context) {
+void OpenGLBackground::init(juce::OpenGLContext& open_gl_context) {
   static const float vertices[] = {
     -1.0f, 1.0f, 0.0f, 1.0f,
     -1.0f, -1.0f, 0.0f, 0.0f,
@@ -41,35 +41,35 @@ void OpenGLBackground::init(OpenGLContext& open_gl_context) {
   };
 
   open_gl_context.extensions.glGenBuffers(1, &vertex_buffer_);
-  open_gl_context.extensions.glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ARRAY_BUFFER, vertex_buffer_);
 
   GLsizeiptr vert_size = static_cast<GLsizeiptr>(static_cast<size_t>(sizeof(vertices)));
-  open_gl_context.extensions.glBufferData(GL_ARRAY_BUFFER, vert_size,
-                                          vertices_, GL_STATIC_DRAW);
+  open_gl_context.extensions.glBufferData(juce::gl::GL_ARRAY_BUFFER, vert_size,
+                                          vertices_, juce::gl::GL_STATIC_DRAW);
 
   open_gl_context.extensions.glGenBuffers(1, &triangle_buffer_);
-  open_gl_context.extensions.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangle_buffer_);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ELEMENT_ARRAY_BUFFER, triangle_buffer_);
 
   GLsizeiptr tri_size = static_cast<GLsizeiptr>(static_cast<size_t>(sizeof(triangles)));
-  open_gl_context.extensions.glBufferData(GL_ELEMENT_ARRAY_BUFFER, tri_size,
-                                          triangles, GL_STATIC_DRAW);
+  open_gl_context.extensions.glBufferData(juce::gl::GL_ELEMENT_ARRAY_BUFFER, tri_size,
+                                          triangles, juce::gl::GL_STATIC_DRAW);
 
   const char* vertex_shader = Shaders::getShader(Shaders::kBackgroundImageVertex);
   const char* fragment_shader = Shaders::getShader(Shaders::kBackgroundImageFragment);
 
-  image_shader_ = new OpenGLShaderProgram(open_gl_context);
+  image_shader_ = new juce::OpenGLShaderProgram(open_gl_context);
 
-  if (image_shader_->addVertexShader(OpenGLHelpers::translateVertexShaderToV3(vertex_shader)) &&
-      image_shader_->addFragmentShader(OpenGLHelpers::translateFragmentShaderToV3(fragment_shader)) &&
+  if (image_shader_->addVertexShader(juce::OpenGLHelpers::translateVertexShaderToV3(vertex_shader)) &&
+      image_shader_->addFragmentShader(juce::OpenGLHelpers::translateFragmentShaderToV3(fragment_shader)) &&
       image_shader_->link()) {
     image_shader_->use();
-    position_ = new OpenGLShaderProgram::Attribute(*image_shader_, "position");
-    texture_coordinates_ = new OpenGLShaderProgram::Attribute(*image_shader_, "tex_coord_in");
-    texture_uniform_ = new OpenGLShaderProgram::Uniform(*image_shader_, "image");
+    position_ = new juce::OpenGLShaderProgram::Attribute(*image_shader_, "position");
+    texture_coordinates_ = new juce::OpenGLShaderProgram::Attribute(*image_shader_, "tex_coord_in");
+    texture_uniform_ = new juce::OpenGLShaderProgram::Uniform(*image_shader_, "image");
   }
 }
 
-void OpenGLBackground::destroy(OpenGLContext& open_gl_context) {
+void OpenGLBackground::destroy(juce::OpenGLContext& open_gl_context) {
   if (background_.getWidth())
     background_.release();
 
@@ -82,27 +82,27 @@ void OpenGLBackground::destroy(OpenGLContext& open_gl_context) {
   open_gl_context.extensions.glDeleteBuffers(1, &triangle_buffer_);
 }
 
-void OpenGLBackground::bind(OpenGLContext& open_gl_context) {
-  open_gl_context.extensions.glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_);
-  open_gl_context.extensions.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangle_buffer_);
+void OpenGLBackground::bind(juce::OpenGLContext& open_gl_context) {
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ARRAY_BUFFER, vertex_buffer_);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ELEMENT_ARRAY_BUFFER, triangle_buffer_);
   background_.bind();
 }
 
-void OpenGLBackground::enableAttributes(OpenGLContext& open_gl_context) {
+void OpenGLBackground::enableAttributes(juce::OpenGLContext& open_gl_context) {
   if (position_ != nullptr) {
-    open_gl_context.extensions.glVertexAttribPointer(position_->attributeID, 2, GL_FLOAT,
-                                                     GL_FALSE, 4 * sizeof(float), 0);
+    open_gl_context.extensions.glVertexAttribPointer(position_->attributeID, 2, juce::gl::GL_FLOAT,
+                                                     juce::gl::GL_FALSE, 4 * sizeof(float), 0);
     open_gl_context.extensions.glEnableVertexAttribArray(position_->attributeID);
   }
   if (texture_coordinates_ != nullptr) {
-    open_gl_context.extensions.glVertexAttribPointer(texture_coordinates_->attributeID, 2, GL_FLOAT,
-                                                     GL_FALSE, 4 * sizeof(float),
+    open_gl_context.extensions.glVertexAttribPointer(texture_coordinates_->attributeID, 2, juce::gl::GL_FLOAT,
+                                                     juce::gl::GL_FALSE, 4 * sizeof(float),
                                                      (GLvoid*)(2 * sizeof(float)));
     open_gl_context.extensions.glEnableVertexAttribArray(texture_coordinates_->attributeID);
   }
 }
 
-void OpenGLBackground::disableAttributes(OpenGLContext& open_gl_context) {
+void OpenGLBackground::disableAttributes(juce::OpenGLContext& open_gl_context) {
   if (position_ != nullptr)
     open_gl_context.extensions.glDisableVertexAttribArray(position_->attributeID);
 
@@ -110,8 +110,8 @@ void OpenGLBackground::disableAttributes(OpenGLContext& open_gl_context) {
     open_gl_context.extensions.glDisableVertexAttribArray(texture_coordinates_->attributeID);
 }
 
-void OpenGLBackground::render(OpenGLContext& open_gl_context) {
-  MOPO_ASSERT(glGetError() == GL_NO_ERROR);
+void OpenGLBackground::render(juce::OpenGLContext& open_gl_context) {
+  MOPO_ASSERT(juce::gl::glGetError() == juce::gl::GL_NO_ERROR);
 
   if ((new_background_ || background_.getWidth() == 0) && background_image_.getWidth() > 0) {
     new_background_ = false;
@@ -125,33 +125,33 @@ void OpenGLBackground::render(OpenGLContext& open_gl_context) {
     vertices_[8] = vertices_[12] = width_end;
     vertices_[5] = vertices_[9] = height_end;
 
-    open_gl_context.extensions.glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_);
+    open_gl_context.extensions.glBindBuffer(juce::gl::GL_ARRAY_BUFFER, vertex_buffer_);
     GLsizeiptr vert_size = static_cast<GLsizeiptr>(static_cast<size_t>(16 * sizeof(float)));
-    open_gl_context.extensions.glBufferData(GL_ARRAY_BUFFER, vert_size,
-                                            vertices_, GL_STATIC_DRAW);
+    open_gl_context.extensions.glBufferData(juce::gl::GL_ARRAY_BUFFER, vert_size,
+                                            vertices_, juce::gl::GL_STATIC_DRAW);
   }
 
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  juce::gl::glTexParameteri(juce::gl::GL_TEXTURE_2D, juce::gl::GL_TEXTURE_WRAP_S, juce::gl::GL_CLAMP_TO_EDGE);
+  juce::gl::glTexParameteri(juce::gl::GL_TEXTURE_2D, juce::gl::GL_TEXTURE_WRAP_T, juce::gl::GL_CLAMP_TO_EDGE);
 
   image_shader_->use();
   bind(open_gl_context);
-  open_gl_context.extensions.glActiveTexture(GL_TEXTURE0);
+  open_gl_context.extensions.glActiveTexture(juce::gl::GL_TEXTURE0);
 
   if (texture_uniform_ != nullptr && background_.getWidth())
     texture_uniform_->set(0);
 
   enableAttributes(open_gl_context);
-  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+  juce::gl::glDrawElements(juce::gl::GL_TRIANGLES, 6, juce::gl::GL_UNSIGNED_INT, 0);
   disableAttributes(open_gl_context);
   background_.unbind();
 
-  open_gl_context.extensions.glBindBuffer(GL_ARRAY_BUFFER, 0);
-  open_gl_context.extensions.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-  MOPO_ASSERT(glGetError() == GL_NO_ERROR);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ARRAY_BUFFER, 0);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ELEMENT_ARRAY_BUFFER, 0);
+  MOPO_ASSERT(juce::gl::glGetError() == juce::gl::GL_NO_ERROR);
 }
 
-void OpenGLBackground::updateBackgroundImage(Image background) {
+void OpenGLBackground::updateBackgroundImage(juce::Image background) {
   background_image_ = background;
   new_background_ = true;
 }

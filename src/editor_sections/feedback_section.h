@@ -24,16 +24,16 @@
 
 class FeedbackSection : public SynthSection {
   public:
-    FeedbackSection(String name);
+    FeedbackSection(juce::String name);
     ~FeedbackSection();
 
-    void paintBackground(Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
     void resized() override;
 
   private:
-    ScopedPointer<SynthSlider> transpose_;
-    ScopedPointer<SynthSlider> tune_;
-    ScopedPointer<SynthSlider> amount_;
+    juce::ScopedPointer<SynthSlider> transpose_;
+    juce::ScopedPointer<SynthSlider> tune_;
+    juce::ScopedPointer<SynthSlider> amount_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FeedbackSection)
 };

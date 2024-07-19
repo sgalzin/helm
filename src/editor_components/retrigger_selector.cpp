@@ -34,39 +34,39 @@ namespace {
   }
 } // namespace
 
-RetriggerSelector::RetriggerSelector(String name) : SynthSlider(name) { }
+RetriggerSelector::RetriggerSelector(juce::String name) : SynthSlider(name) { }
 
-void RetriggerSelector::mouseDown(const MouseEvent& e) {
+void RetriggerSelector::mouseDown(const juce::MouseEvent& e) {
   if (e.mods.isPopupMenu()) {
     SynthSlider::mouseDown(e);
     return;
   }
-  PopupMenu m;
+  juce::PopupMenu m;
   m.setLookAndFeel(DefaultLookAndFeel::instance());
 
   m.addItem(kFree, TRANS("Free"));
   m.addItem(kRetrigger, TRANS("Retrigger"));
   m.addItem(kSyncToPlayhead, TRANS("Sync to Playhead"));
 
-  m.showMenuAsync(PopupMenu::Options().withTargetComponent(this),
-                  ModalCallbackFunction::forComponent(retriggerTypeSelectedCallback, this));
+  m.showMenuAsync(juce::PopupMenu::Options().withTargetComponent(this),
+                  juce::ModalCallbackFunction::forComponent(retriggerTypeSelectedCallback, this));
 }
 
-void RetriggerSelector::paint(Graphics& g) {
-  g.setColour(Colour(0xffbbbbbb));
+void RetriggerSelector::paint(juce::Graphics& g) {
+  g.setColour(juce::Colour(0xffbbbbbb));
   g.fillRect(0, 0, getWidth(), getHeight());
 
-  g.setColour(Colour(0xff222222));
+  g.setColour(juce::Colour(0xff222222));
   g.fillPath(arrow_);
 
   g.setFont(Fonts::instance()->monospace());
   int value = getValue() + 1;
   if (value == kFree)
-    g.drawText("F", getLocalBounds(), Justification::centred);
+    g.drawText("F", getLocalBounds(), juce::Justification::centred);
   else if (value == kRetrigger)
-    g.drawText("R", getLocalBounds(), Justification::centred);
+    g.drawText("R", getLocalBounds(), juce::Justification::centred);
   else if (value == kSyncToPlayhead)
-    g.drawText("S", getLocalBounds(), Justification::centred);
+    g.drawText("S", getLocalBounds(), juce::Justification::centred);
 }
 
 void RetriggerSelector::resized() {

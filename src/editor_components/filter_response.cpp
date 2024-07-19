@@ -49,18 +49,18 @@ FilterResponse::FilterResponse(int resolution) {
 
 FilterResponse::~FilterResponse() { }
 
-void FilterResponse::paintBackground(Graphics& g) {
-  g.fillAll(Colour(0xff424242));
+void FilterResponse::paintBackground(juce::Graphics& g) {
+  g.fillAll(juce::Colour(0xff424242));
 
-  g.setColour(Colour(0xff4a4a4a));
+  g.setColour(juce::Colour(0xff4a4a4a));
   for (int x = 0; x < getWidth(); x += GRID_CELL_WIDTH)
     g.drawLine(x, 0, x, getHeight());
   for (int y = 0; y < getHeight(); y += GRID_CELL_WIDTH)
     g.drawLine(0, y, getWidth(), y);
 }
 
-void FilterResponse::paint(Graphics& g) {
-  static const DropShadow shadow(Colour(0xbb000000), 5, Point<int>(0, 0));
+void FilterResponse::paint(juce::Graphics& g) {
+  static const juce::DropShadow shadow(juce::Colour(0xbb000000), 5, juce::Point<int>(0, 0));
 
   g.drawImage(background_,
               0, 0, getWidth(), getHeight(),
@@ -77,28 +77,28 @@ void FilterResponse::paint(Graphics& g) {
     g.setColour(Colors::graph_disable);
 
   float line_width = 1.5f * getHeight() / 150.0f;
-  PathStrokeType stroke(line_width, PathStrokeType::beveled, PathStrokeType::rounded);
+  juce::PathStrokeType stroke(line_width, juce::PathStrokeType::beveled, juce::PathStrokeType::rounded);
   g.strokePath(filter_response_path_, stroke);
 }
 
 void FilterResponse::resized() {
-  const Desktop::Displays::Display& display = Desktop::getInstance().getDisplays().getMainDisplay();
+  const juce::Displays::Display& display = juce::Desktop::getInstance().getDisplays().getMainDisplay();
   float scale = display.scale;
-  background_ = Image(Image::RGB, scale * getWidth(), scale * getHeight(), true);
-  Graphics g(background_);
-  g.addTransform(AffineTransform::scale(scale, scale));
+  background_ = juce::Image(juce::Image::RGB, scale * getWidth(), scale * getHeight(), true);
+  juce::Graphics g(background_);
+  g.addTransform(juce::AffineTransform::scale(scale, scale));
   paintBackground(g);
 
   computeFilterCoefficients();
   resetResponsePath();
 }
 
-void FilterResponse::mouseDown(const MouseEvent& e) {
+void FilterResponse::mouseDown(const juce::MouseEvent& e) {
   setFilterSettingsFromPosition(e.getPosition());
   repaint();
 }
 
-void FilterResponse::mouseDrag(const MouseEvent& e) {
+void FilterResponse::mouseDrag(const juce::MouseEvent& e) {
   setFilterSettingsFromPosition(e.getPosition());
   repaint();
 }
@@ -201,7 +201,7 @@ void FilterResponse::computeFilterCoefficients() {
   resetResponsePath();
 }
 
-void FilterResponse::setFilterSettingsFromPosition(Point<int> position) {
+void FilterResponse::setFilterSettingsFromPosition(juce::Point<int> position) {
   if (cutoff_slider_) {
     double percent = mopo::utils::clamp((1.0 * position.x) / getWidth(), 0.0, 1.0);
     double frequency = cutoff_slider_->proportionOfLengthToValue(percent);

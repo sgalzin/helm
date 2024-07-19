@@ -22,17 +22,17 @@
 
 class Colors {
   public:
-    static const Colour background;
-    static const Colour tab_heading;
-    static const Colour tab_body;
-    static const Colour audio;
-    static const Colour modulation;
-    static const Colour graph_disable;
-    static const Colour graph_fill;
-    static const Colour tab_heading_text;
-    static const Colour control_label_text;
-    static const Colour info_background;
-    static const Colour overlay_screen;
+    static const juce::Colour background;
+    static const juce::Colour tab_heading;
+    static const juce::Colour tab_body;
+    static const juce::Colour audio;
+    static const juce::Colour modulation;
+    static const juce::Colour graph_disable;
+    static const juce::Colour graph_fill;
+    static const juce::Colour tab_heading_text;
+    static const juce::Colour control_label_text;
+    static const juce::Colour info_background;
+    static const juce::Colour overlay_screen;
 
   private:
     Colors() { }

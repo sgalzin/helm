@@ -22,7 +22,7 @@
 
 class FullInterface;
 
-class SynthSlider : public Slider {
+class SynthSlider : public juce::Slider {
   public:
     static const float rotary_angle;
     static const float linear_rail_width;
@@ -36,21 +36,21 @@ class SynthSlider : public Slider {
         virtual void guiChanged(SynthSlider* slider) { }
     };
 
-    SynthSlider(String name);
+    SynthSlider(juce::String name);
 
     virtual void resized() override;
-    virtual void mouseDown(const MouseEvent& e) override;
-    virtual void mouseEnter(const MouseEvent& e) override;
-    virtual void mouseExit(const MouseEvent& e) override;
-    virtual void mouseUp(const MouseEvent& e) override;
+    virtual void mouseDown(const juce::MouseEvent& e) override;
+    virtual void mouseEnter(const juce::MouseEvent& e) override;
+    virtual void mouseExit(const juce::MouseEvent& e) override;
+    virtual void mouseUp(const juce::MouseEvent& e) override;
     void valueChanged() override;
-    String getTextFromValue(double value) override;
+    juce::String getTextFromValue(double value) override;
 
     virtual double snapValue(double attemptedValue, DragMode dragMode) override;
 
-    void drawShadow(Graphics& g);
-    void drawRotaryShadow(Graphics& g);
-    void drawRectangularShadow(Graphics& g);
+    void drawShadow(juce::Graphics& g);
+    void drawRotaryShadow(juce::Graphics& g);
+    void drawRectangularShadow(juce::Graphics& g);
     void snapToValue(bool snap, float value = 0.0) {
       snap_to_value_ = snap;
       snap_value_ = value;
@@ -70,9 +70,9 @@ class SynthSlider : public Slider {
     void setPostMultiply(float post_multiply) { details_.display_multiply = post_multiply; }
     float getPostMultiply() const { return details_.display_multiply; }
 
-    void setUnits(String units) { details_.display_units = units.toStdString(); }
-    String getUnits() const { return details_.display_units; }
-    String formatValue(float value);
+    void setUnits(juce::String units) { details_.display_units = units.toStdString(); }
+    juce::String getUnits() const { return details_.display_units; }
+    juce::String formatValue(float value);
 
     void flipColoring(bool flip_coloring = true);
     void setBipolar(bool bipolar = true);
@@ -107,7 +107,7 @@ class SynthSlider : public Slider {
     mopo::ValueDetails details_;
 
     const std::string* string_lookup_;
-    Point<float> click_position_;
+    juce::Point<float> click_position_;
 
     FullInterface* parent_;
 

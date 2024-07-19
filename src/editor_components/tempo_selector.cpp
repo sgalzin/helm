@@ -34,15 +34,15 @@ namespace {
   }
 } // namespace
 
-TempoSelector::TempoSelector(String name) : SynthSlider(name),
+TempoSelector::TempoSelector(juce::String name) : SynthSlider(name),
                                             free_slider_(0), tempo_slider_(0) { }
 
-void TempoSelector::mouseDown(const MouseEvent& e) {
+void TempoSelector::mouseDown(const juce::MouseEvent& e) {
   if (e.mods.isPopupMenu()) {
     SynthSlider::mouseDown(e);
     return;
   }
-  PopupMenu m;
+  juce::PopupMenu m;
   m.setLookAndFeel(DefaultLookAndFeel::instance());
 
   m.addItem(kSeconds, "Seconds");
@@ -50,11 +50,11 @@ void TempoSelector::mouseDown(const MouseEvent& e) {
   m.addItem(kTempoDotted, "Tempo Dotted");
   m.addItem(kTempoTriplet, "Tempo Triplets");
 
-  m.showMenuAsync(PopupMenu::Options().withTargetComponent(this),
-                  ModalCallbackFunction::forComponent(tempoTypeSelectedCallback, this));
+  m.showMenuAsync(juce::PopupMenu::Options().withTargetComponent(this),
+                  juce::ModalCallbackFunction::forComponent(tempoTypeSelectedCallback, this));
 }
 
-void TempoSelector::mouseUp(const MouseEvent& e) {
+void TempoSelector::mouseUp(const juce::MouseEvent& e) {
   if (e.mods.isPopupMenu()) {
     SynthSlider::mouseDown(e);
     return;
@@ -68,14 +68,14 @@ void TempoSelector::valueChanged() {
   tempo_slider_->setVisible(!free_slider);
 }
 
-void TempoSelector::paint(Graphics& g) {
+void TempoSelector::paint(juce::Graphics& g) {
   if (isActive())
-    g.setColour(Colour(0xffbbbbbb));
+    g.setColour(juce::Colour(0xffbbbbbb));
   else
-    g.setColour(Colour(0xff555555));
+    g.setColour(juce::Colour(0xff555555));
   g.fillRect(0, 0, getWidth(), getHeight());
 
-  g.setColour(Colour(0xff222222));
+  g.setColour(juce::Colour(0xff222222));
   g.fillPath(arrow_);
 
   int value = getValue() + 1;

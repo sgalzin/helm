@@ -24,21 +24,21 @@ int FileListBoxModel::getNumRows() {
   return files_.size();
 }
 
-void FileListBoxModel::paintListBoxItem(int row_number, Graphics& g,
+void FileListBoxModel::paintListBoxItem(int row_number, juce::Graphics& g,
                                         int width, int height, bool selected) {
-  g.fillAll(Colour(0xff323232));
-  g.setColour(Colour(0xffdddddd));
+  g.fillAll(juce::Colour(0xff323232));
+  g.setColour(juce::Colour(0xffdddddd));
   if (selected) {
-    g.fillAll(Colour(0xff444444));
+    g.fillAll(juce::Colour(0xff444444));
     g.setColour(Colors::audio);
   }
 
   g.setFont(Fonts::instance()->monospace().withPointHeight(12.0f));
   g.drawText(files_[row_number].getFileNameWithoutExtension(),
              5, 0, width, height,
-             Justification::centredLeft, true);
+             juce::Justification::centredLeft, true);
 
-  g.setColour(Colour(0x88000000));
+  g.setColour(juce::Colour(0x88000000));
   g.fillRect(0.0f, height - 1.0f, 1.0f * width, 1.0f);
 }
 
@@ -51,26 +51,26 @@ void FileListBoxModel::deleteKeyPressed(int lastRowSelected) {
   if (delete_section_ == nullptr)
     return;
 
-  File selected_patch = getFileAtRow(lastRowSelected);
+  juce::File selected_patch = getFileAtRow(lastRowSelected);
   if (selected_patch.exists()) {
     delete_section_->setFileToDelete(selected_patch);
     delete_section_->setVisible(true);
   }
 }
 
-void FileListBoxModel::rescanFiles(const Array<File>& folders,
-                                   String search,
+void FileListBoxModel::rescanFiles(const juce::Array<juce::File>& folders,
+                                   juce::String search,
                                    bool find_files) {
   static const FileSorterAscending file_sorter;
   files_.clear();
 
-  for (File folder : folders) {
+  for (juce::File folder : folders) {
     if (folder.isDirectory()) {
-      Array<File> child_folders;
+      juce::Array<juce::File> child_folders;
       if (find_files)
-        folder.findChildFiles(child_folders, File::findFiles, false, search);
+        folder.findChildFiles(child_folders, juce::File::findFiles, false, search);
       else
-        folder.findChildFiles(child_folders, File::findDirectories, false);
+        folder.findChildFiles(child_folders, juce::File::findDirectories, false);
 
       child_folders.sort(file_sorter);
       files_.addArray(child_folders);

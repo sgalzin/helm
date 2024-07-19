@@ -21,12 +21,12 @@
 #include "processor.h"
 #include "synth_slider.h"
 
-class ModulationHighlight : public Component {
+class ModulationHighlight : public juce::Component {
   public:
     ModulationHighlight();
     virtual ~ModulationHighlight();
 
-    void paint(Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
 
     void updateValue();

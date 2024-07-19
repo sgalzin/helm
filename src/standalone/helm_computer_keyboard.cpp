@@ -20,7 +20,7 @@
 #define KEYBOARD_MIDI_CHANNEL 1
 
 HelmComputerKeyboard::HelmComputerKeyboard(mopo::HelmEngine* synth,
-                                           MidiKeyboardState* keyboard_state) {
+                                           juce::MidiKeyboardState* keyboard_state) {
   synth_ = synth;
   keyboard_state_ = keyboard_state;
   computer_keyboard_offset_ = mopo::DEFAULT_KEYBOARD_OFFSET;
@@ -43,22 +43,22 @@ void HelmComputerKeyboard::changeKeyboardOffset(int new_offset) {
   computer_keyboard_offset_ = mopo::utils::iclamp(new_offset, 0, max);
 }
 
-bool HelmComputerKeyboard::keyPressed(const KeyPress &key, Component *origin) {
+bool HelmComputerKeyboard::keyPressed(const juce::KeyPress &key, juce::Component *origin) {
   return false;
 }
 
-bool HelmComputerKeyboard::keyStateChanged(bool isKeyDown, Component *origin) {
+bool HelmComputerKeyboard::keyStateChanged(bool isKeyDown, juce::Component *origin) {
   bool consumed = false;
   for (int i = 0; i < layout_.length(); ++i) {
     int note = computer_keyboard_offset_ + i;
 
-    ModifierKeys modifiers = ModifierKeys::getCurrentModifiersRealtime();
-    if (KeyPress::isKeyCurrentlyDown(layout_[i]) &&
+    juce::ModifierKeys modifiers = juce::ModifierKeys::getCurrentModifiersRealtime();
+    if (juce::KeyPress::isKeyCurrentlyDown(layout_[i]) &&
         !keys_pressed_.count(layout_[i]) && isKeyDown && !modifiers.isCommandDown()) {
       keys_pressed_.insert(layout_[i]);
       keyboard_state_->noteOn(KEYBOARD_MIDI_CHANNEL, note, 1.0f);
     }
-    else if (!KeyPress::isKeyCurrentlyDown(layout_[i]) &&
+    else if (!juce::KeyPress::isKeyCurrentlyDown(layout_[i]) &&
              keys_pressed_.count(layout_[i])) {
       keys_pressed_.erase(layout_[i]);
       keyboard_state_->noteOff(KEYBOARD_MIDI_CHANNEL, note, 1.0f);
@@ -66,7 +66,7 @@ bool HelmComputerKeyboard::keyStateChanged(bool isKeyDown, Component *origin) {
     consumed = true;
   }
 
-  if (KeyPress::isKeyCurrentlyDown(down_key_)) {
+  if (juce::KeyPress::isKeyCurrentlyDown(down_key_)) {
     if (!keys_pressed_.count(down_key_)) {
       keys_pressed_.insert(down_key_);
       changeKeyboardOffset(computer_keyboard_offset_ - mopo::NOTES_PER_OCTAVE);
@@ -76,7 +76,7 @@ bool HelmComputerKeyboard::keyStateChanged(bool isKeyDown, Component *origin) {
   else
     keys_pressed_.erase(down_key_);
 
-  if (KeyPress::isKeyCurrentlyDown(up_key_)) {
+  if (juce::KeyPress::isKeyCurrentlyDown(up_key_)) {
     if (!keys_pressed_.count(up_key_)) {
       keys_pressed_.insert(up_key_);
       changeKeyboardOffset(computer_keyboard_offset_ + mopo::NOTES_PER_OCTAVE);
@@ -86,7 +86,7 @@ bool HelmComputerKeyboard::keyStateChanged(bool isKeyDown, Component *origin) {
   else
     keys_pressed_.erase(up_key_);
 
-  if (KeyPress::isKeyCurrentlyDown(KeyPress::spaceKey)) {
+  if (juce::KeyPress::isKeyCurrentlyDown(juce::KeyPress::spaceKey)) {
     if (!keys_pressed_.count(' ')) {
       keys_pressed_.insert(' ');
       synth_->correctToTime(0.0);

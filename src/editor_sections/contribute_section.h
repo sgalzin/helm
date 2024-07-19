@@ -21,7 +21,7 @@
 #include "JuceHeader.h"
 #include "overlay.h"
 
-class CustomAmountEditor : public TextEditor {
+class CustomAmountEditor : public juce::TextEditor {
   public:
     class Listener {
       public:
@@ -29,7 +29,7 @@ class CustomAmountEditor : public TextEditor {
         virtual void textEditorFocusGained(FocusChangeType cause) { }
     };
 
-    CustomAmountEditor(String name) : TextEditor(name) { }
+    CustomAmountEditor(juce::String name) : TextEditor(name) { }
 
     void focusGained(FocusChangeType cause) override {
       for (Listener* listener: listeners_)
@@ -45,34 +45,34 @@ class CustomAmountEditor : public TextEditor {
     std::vector<Listener*> listeners_;
 };
 
-class ContributeSection : public Overlay, public Button::Listener, CustomAmountEditor::Listener {
+class ContributeSection : public Overlay, public juce::Button::Listener, CustomAmountEditor::Listener {
   public:
-    ContributeSection(String name);
+    ContributeSection(juce::String name);
     ~ContributeSection() { }
-    void paint(Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
 
-    Rectangle<int> getInfoRect();
+    juce::Rectangle<int> getInfoRect();
 
-    void mouseUp(const MouseEvent& e) override;
-    void buttonClicked(Button* clicked_button) override;
+    void mouseUp(const juce::MouseEvent& e) override;
+    void buttonClicked(juce::Button* clicked_button) override;
 
     void textEditorFocusGained(FocusChangeType cause) override;
 
   private:
-    URL getUrl();
+    juce::URL getUrl();
 
-    ScopedPointer<Button> give_100_button_;
-    ScopedPointer<Button> give_50_button_;
-    ScopedPointer<Button> give_25_button_;
-    ScopedPointer<Button> give_10_button_;
-    ScopedPointer<Button> give_5_button_;
-    std::set<Button*> give_buttons_;
-    ScopedPointer<CustomAmountEditor> custom_amount_;
+    juce::ScopedPointer<juce::Button> give_100_button_;
+    juce::ScopedPointer<juce::Button> give_50_button_;
+    juce::ScopedPointer<juce::Button> give_25_button_;
+    juce::ScopedPointer<juce::Button> give_10_button_;
+    juce::ScopedPointer<juce::Button> give_5_button_;
+    std::set<juce::Button*> give_buttons_;
+    juce::ScopedPointer<CustomAmountEditor> custom_amount_;
 
-    ScopedPointer<Button> remind_button_;
-    ScopedPointer<Button> never_again_button_;
-    ScopedPointer<Button> pay_button_;
+    juce::ScopedPointer<juce::Button> remind_button_;
+    juce::ScopedPointer<juce::Button> never_again_button_;
+    juce::ScopedPointer<juce::Button> pay_button_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ContributeSection)
 };

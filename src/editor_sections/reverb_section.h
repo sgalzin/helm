@@ -25,17 +25,17 @@
 
 class ReverbSection : public SynthSection {
   public:
-    ReverbSection(String name);
+    ReverbSection(juce::String name);
     ~ReverbSection();
 
-    void paintBackground(Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
     void resized() override;
 
   private:
-    ScopedPointer<SynthButton> on_;
-    ScopedPointer<SynthSlider> feedback_;
-    ScopedPointer<SynthSlider> damping_;
-    ScopedPointer<SynthSlider> dry_wet_;
+    juce::ScopedPointer<SynthButton> on_;
+    juce::ScopedPointer<SynthSlider> feedback_;
+    juce::ScopedPointer<SynthSlider> damping_;
+    juce::ScopedPointer<SynthSlider> dry_wet_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ReverbSection)
 };

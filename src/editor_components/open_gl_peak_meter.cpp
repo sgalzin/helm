@@ -51,31 +51,31 @@ void OpenGLPeakMeter::resized() {
   OpenGLComponent::resized();
 }
 
-void OpenGLPeakMeter::init(OpenGLContext& open_gl_context) {
+void OpenGLPeakMeter::init(juce::OpenGLContext& open_gl_context) {
   open_gl_context.extensions.glGenBuffers(1, &vertex_buffer_);
-  open_gl_context.extensions.glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ARRAY_BUFFER, vertex_buffer_);
 
   GLsizeiptr vert_size = static_cast<GLsizeiptr>(static_cast<size_t>(8 * sizeof(float)));
-  open_gl_context.extensions.glBufferData(GL_ARRAY_BUFFER, vert_size,
-                                          position_vertices_, GL_STATIC_DRAW);
+  open_gl_context.extensions.glBufferData(juce::gl::GL_ARRAY_BUFFER, vert_size,
+                                          position_vertices_, juce::gl::GL_STATIC_DRAW);
 
   open_gl_context.extensions.glGenBuffers(1, &triangle_buffer_);
-  open_gl_context.extensions.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangle_buffer_);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ELEMENT_ARRAY_BUFFER, triangle_buffer_);
 
   GLsizeiptr tri_size = static_cast<GLsizeiptr>(static_cast<size_t>(6 * sizeof(float)));
-  open_gl_context.extensions.glBufferData(GL_ELEMENT_ARRAY_BUFFER, tri_size,
-                                          position_triangles_, GL_STATIC_DRAW);
+  open_gl_context.extensions.glBufferData(juce::gl::GL_ELEMENT_ARRAY_BUFFER, tri_size,
+                                          position_triangles_, juce::gl::GL_STATIC_DRAW);
 
   const char* vertex_shader = Shaders::getShader(Shaders::kGainMeterVertex);
   const char* fragment_shader = Shaders::getShader(Shaders::kGainMeterFragment);
 
-  shader_ = new OpenGLShaderProgram(open_gl_context);
+  shader_ = new juce::OpenGLShaderProgram(open_gl_context);
 
-  if (shader_->addVertexShader(OpenGLHelpers::translateVertexShaderToV3(vertex_shader)) &&
-      shader_->addFragmentShader(OpenGLHelpers::translateFragmentShaderToV3(fragment_shader)) &&
+  if (shader_->addVertexShader(juce::OpenGLHelpers::translateVertexShaderToV3(vertex_shader)) &&
+      shader_->addFragmentShader(juce::OpenGLHelpers::translateFragmentShaderToV3(fragment_shader)) &&
       shader_->link()) {
     shader_->use();
-    position_ = new OpenGLShaderProgram::Attribute(*shader_, "position");
+    position_ = new juce::OpenGLShaderProgram::Attribute(*shader_, "position");
   }
 }
 
@@ -90,8 +90,8 @@ void OpenGLPeakMeter::updateVertices() {
   position_vertices_[6] = position;
 }
 
-void OpenGLPeakMeter::render(OpenGLContext& open_gl_context, bool animate) {
-  MOPO_ASSERT(glGetError() == GL_NO_ERROR);
+void OpenGLPeakMeter::render(juce::OpenGLContext& open_gl_context, bool animate) {
+  MOPO_ASSERT(juce::gl::glGetError() == juce::gl::GL_NO_ERROR);
 
   if (!animate || peak_output_ == nullptr)
     return;
@@ -99,42 +99,42 @@ void OpenGLPeakMeter::render(OpenGLContext& open_gl_context, bool animate) {
   updateVertices();
   setViewPort(open_gl_context);
 
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+  juce::gl::glEnable(juce::gl::GL_BLEND);
+  juce::gl::glBlendFunc(juce::gl::GL_ONE, juce::gl::GL_ONE_MINUS_SRC_ALPHA);
 
   shader_->use();
 
-  open_gl_context.extensions.glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ARRAY_BUFFER, vertex_buffer_);
   GLsizeiptr vert_size = static_cast<GLsizeiptr>(static_cast<size_t>(8 * sizeof(float)));
-  open_gl_context.extensions.glBufferData(GL_ARRAY_BUFFER, vert_size,
-                                          position_vertices_, GL_STATIC_DRAW);
+  open_gl_context.extensions.glBufferData(juce::gl::GL_ARRAY_BUFFER, vert_size,
+                                          position_vertices_, juce::gl::GL_STATIC_DRAW);
 
-  open_gl_context.extensions.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangle_buffer_);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ELEMENT_ARRAY_BUFFER, triangle_buffer_);
 
-  open_gl_context.extensions.glVertexAttribPointer(position_->attributeID, 2, GL_FLOAT,
-                                                   GL_FALSE, 2 * sizeof(float), 0);
+  open_gl_context.extensions.glVertexAttribPointer(position_->attributeID, 2, juce::gl::GL_FLOAT,
+                                                   juce::gl::GL_FALSE, 2 * sizeof(float), 0);
   open_gl_context.extensions.glEnableVertexAttribArray(position_->attributeID);
 
-  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+  juce::gl::glDrawElements(juce::gl::GL_TRIANGLES, 6, juce::gl::GL_UNSIGNED_INT, 0);
 
-  open_gl_context.extensions.glBindBuffer(GL_ARRAY_BUFFER, 0);
-  open_gl_context.extensions.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ARRAY_BUFFER, 0);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ELEMENT_ARRAY_BUFFER, 0);
   
-  MOPO_ASSERT(glGetError() == GL_NO_ERROR);
+  MOPO_ASSERT(juce::gl::glGetError() == juce::gl::GL_NO_ERROR);
 }
 
-void OpenGLPeakMeter::destroy(OpenGLContext& open_gl_context) {
+void OpenGLPeakMeter::destroy(juce::OpenGLContext& open_gl_context) {
   shader_ = nullptr;
   position_ = nullptr;
   open_gl_context.extensions.glDeleteBuffers(1, &vertex_buffer_);
   open_gl_context.extensions.glDeleteBuffers(1, &triangle_buffer_);
 }
 
-void OpenGLPeakMeter::paintBackground(Graphics& g) {
+void OpenGLPeakMeter::paintBackground(juce::Graphics& g) {
   float x = getWidth() / sqrt(MAX_GAIN);
-  g.setColour(Colour(0xff222222));
+  g.setColour(juce::Colour(0xff222222));
   g.fillRect(x, 0.0f, getWidth() - x, 1.0f * getHeight());
 
-  g.setColour(Colour(0xff888888));
+  g.setColour(juce::Colour(0xff888888));
   g.fillRect(x - 1.0f, 0.0f, 2.0f, 1.0f * getHeight());
 }

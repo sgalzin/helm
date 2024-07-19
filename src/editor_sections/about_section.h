@@ -21,32 +21,32 @@
 #include "JuceHeader.h"
 #include "overlay.h"
 
-class AboutSection : public Overlay, public Button::Listener {
+class AboutSection : public Overlay, public juce::Button::Listener {
   public:
-    AboutSection(String name);
+    AboutSection(juce::String name);
     ~AboutSection() { }
-    void paint(Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
 
-    Rectangle<int> getInfoRect();
+    juce::Rectangle<int> getInfoRect();
 
-    void mouseUp(const MouseEvent& e) override;
+    void mouseUp(const juce::MouseEvent& e) override;
     void setVisible(bool should_be_visible) override;
-    void buttonClicked(Button* clicked_button) override;
+    void buttonClicked(juce::Button* clicked_button) override;
 
   private:
     void setGuiSize(float multiplier);
 
-    ScopedPointer<HyperlinkButton> developer_link_;
-    ScopedPointer<HyperlinkButton> free_software_link_;
-    ScopedPointer<AudioDeviceSelectorComponent> device_selector_;
-    ScopedPointer<Button> check_for_updates_;
-    ScopedPointer<Button> animate_;
+    juce::ScopedPointer<juce::HyperlinkButton> developer_link_;
+    juce::ScopedPointer<juce::HyperlinkButton> free_software_link_;
+    juce::ScopedPointer<juce::AudioDeviceSelectorComponent> device_selector_;
+    juce::ScopedPointer<juce::Button> check_for_updates_;
+    juce::ScopedPointer<juce::Button> animate_;
 
-    ScopedPointer<Button> size_button_small_;
-    ScopedPointer<Button> size_button_normal_;
-    ScopedPointer<Button> size_button_large_;
-    ScopedPointer<Button> size_button_extra_large_;
+    juce::ScopedPointer<juce::Button> size_button_small_;
+    juce::ScopedPointer<juce::Button> size_button_normal_;
+    juce::ScopedPointer<juce::Button> size_button_large_;
+    juce::ScopedPointer<juce::Button> size_button_extra_large_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AboutSection)
 };

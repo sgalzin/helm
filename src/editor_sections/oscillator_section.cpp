@@ -31,19 +31,19 @@
 #define TRANS_WIDTH 42
 #define WAVE_SELECTOR_HEIGHT 10
 
-OscillatorSection::OscillatorSection(String name) : SynthSection(name) {
+OscillatorSection::OscillatorSection(juce::String name) : SynthSection(name) {
   static const int UNISON_DRAG_SENSITIVITY = 100;
   static const int TRANSPOSE_MOUSE_SENSITIVITY = 800;
 
   addSlider(wave_selector_1_ = new WaveSelector("osc_1_waveform"));
-  wave_selector_1_->setSliderStyle(Slider::LinearBar);
+  wave_selector_1_->setSliderStyle(juce::Slider::LinearBar);
   wave_selector_1_->setStringLookup(mopo::strings::waveforms);
-  wave_selector_1_->setPopupPlacement(BubbleComponent::above);
+  wave_selector_1_->setPopupPlacement(juce::BubbleComponent::above);
 
   addSlider(wave_selector_2_ = new WaveSelector("osc_2_waveform"));
-  wave_selector_2_->setSliderStyle(Slider::LinearBar);
+  wave_selector_2_->setSliderStyle(juce::Slider::LinearBar);
   wave_selector_2_->setStringLookup(mopo::strings::waveforms);
-  wave_selector_2_->setPopupPlacement(BubbleComponent::above);
+  wave_selector_2_->setPopupPlacement(juce::BubbleComponent::above);
 
   addAndMakeVisible(wave_viewer_1_ = new WaveViewer(WAVE_RESOLUTION));
   wave_viewer_1_->setWaveSlider(wave_selector_1_);
@@ -51,41 +51,41 @@ OscillatorSection::OscillatorSection(String name) : SynthSection(name) {
   wave_viewer_2_->setWaveSlider(wave_selector_2_);
 
   addSlider(cross_modulation_ = new SynthSlider("cross_modulation"));
-  cross_modulation_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  cross_modulation_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
 
   addSlider(transpose_1_ = new SynthSlider("osc_1_transpose"));
-  transpose_1_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  transpose_1_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   transpose_1_->setBipolar();
   transpose_1_->setMouseDragSensitivity(TRANSPOSE_MOUSE_SENSITIVITY);
 
   addSlider(transpose_2_ = new SynthSlider("osc_2_transpose"));
-  transpose_2_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  transpose_2_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   transpose_2_->setBipolar();
   transpose_2_->setMouseDragSensitivity(TRANSPOSE_MOUSE_SENSITIVITY);
 
   addSlider(tune_1_ = new SynthSlider("osc_1_tune"));
-  tune_1_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  tune_1_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   tune_1_->setBipolar();
 
   addSlider(tune_2_ = new SynthSlider("osc_2_tune"));
-  tune_2_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  tune_2_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   tune_2_->setBipolar();
 
   addSlider(unison_detune_1_ = new SynthSlider("osc_1_unison_detune"));
-  unison_detune_1_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  unison_detune_1_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   unison_detune_1_->setLookAndFeel(TextLookAndFeel::instance());
 
   addSlider(unison_detune_2_ = new SynthSlider("osc_2_unison_detune"));
-  unison_detune_2_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  unison_detune_2_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   unison_detune_2_->setLookAndFeel(TextLookAndFeel::instance());
 
   addSlider(unison_voices_1_ = new SynthSlider("osc_1_unison_voices"));
-  unison_voices_1_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  unison_voices_1_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   unison_voices_1_->setLookAndFeel(TextLookAndFeel::instance());
   unison_voices_1_->setMouseDragSensitivity(UNISON_DRAG_SENSITIVITY);
 
   addSlider(unison_voices_2_ = new SynthSlider("osc_2_unison_voices"));
-  unison_voices_2_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  unison_voices_2_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   unison_voices_2_->setLookAndFeel(TextLookAndFeel::instance());
   unison_voices_2_->setMouseDragSensitivity(UNISON_DRAG_SENSITIVITY);
 
@@ -116,8 +116,8 @@ OscillatorSection::~OscillatorSection() {
   cross_modulation_ = nullptr;
 }
 
-void OscillatorSection::paintBackground(Graphics& g) {
-  static const DropShadow component_shadow(Colour(0x99000000), 4, Point<int>(0, 0));
+void OscillatorSection::paintBackground(juce::Graphics& g) {
+  static const juce::DropShadow component_shadow(juce::Colour(0x99000000), 4, juce::Point<int>(0, 0));
   float extra_knob_padding = size_ratio_ * 4.0f;
 
   SynthSection::paintBackground(g);
@@ -128,21 +128,21 @@ void OscillatorSection::paintBackground(Graphics& g) {
   g.fillEllipse(transpose_2_->getBounds().toFloat().expanded(extra_knob_padding));
   g.fillEllipse(tune_2_->getBounds().toFloat().expanded(extra_knob_padding));
 
-  g.setColour(Colour(0xff303030));
+  g.setColour(juce::Colour(0xff303030));
   g.fillRect(0.0f, 1.0f * tune_1_->getBottom() + size_ratio_ * 2.0f,
              1.0f * getWidth(), size_ratio_ * 5.0f);
 
-  g.setColour(Colour(0xff4fc3f7));
-  g.strokePath(top_left_cross_path_, PathStrokeType(1.0f));
+  g.setColour(juce::Colour(0xff4fc3f7));
+  g.strokePath(top_left_cross_path_, juce::PathStrokeType(1.0f));
 
-  g.setColour(Colour(0xff4fc3f7));
-  g.strokePath(top_right_cross_path_, PathStrokeType(1.0f));
+  g.setColour(juce::Colour(0xff4fc3f7));
+  g.strokePath(top_right_cross_path_, juce::PathStrokeType(1.0f));
 
-  g.setColour(Colour(0xff4fc3f7));
-  g.strokePath(bottom_left_cross_path_, PathStrokeType(1.0f));
+  g.setColour(juce::Colour(0xff4fc3f7));
+  g.strokePath(bottom_left_cross_path_, juce::PathStrokeType(1.0f));
 
-  g.setColour(Colour(0xff4fc3f7));
-  g.strokePath(bottom_right_cross_path_, PathStrokeType(1.0f));
+  g.setColour(juce::Colour(0xff4fc3f7));
+  g.strokePath(bottom_right_cross_path_, juce::PathStrokeType(1.0f));
 
   g.setColour(Colors::control_label_text);
   g.setFont(Fonts::instance()->proportional_regular().withPointHeight(size_ratio_ * 10.0f));
@@ -158,7 +158,7 @@ void OscillatorSection::paintBackground(Graphics& g) {
   component_shadow.drawForRectangle(g, wave_viewer_1_->getBounds());
   component_shadow.drawForRectangle(g, wave_viewer_2_->getBounds());
 
-  g.setColour(Colour(0xff424242));
+  g.setColour(juce::Colour(0xff424242));
   paintKnobShadows(g);
 }
 

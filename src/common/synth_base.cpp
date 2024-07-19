@@ -26,7 +26,7 @@
 SynthBase::SynthBase() {
   controls_ = engine_.getControls();
 
-  keyboard_state_ = new MidiKeyboardState();
+  keyboard_state_ = new juce::MidiKeyboardState();
   midi_manager_ = new MidiManager(this, keyboard_state_, &save_info_, this);
 
   last_played_note_ = 0.0;
@@ -56,7 +56,7 @@ void SynthBase::valueChangedThroughMidi(const std::string& name, mopo::mopo_floa
   callback->post();
 }
 
-void SynthBase::patchChangedThroughMidi(File patch) {
+void SynthBase::patchChangedThroughMidi(juce::File patch) {
   SynthGuiInterface* gui_interface = getGuiInterface();
   if (gui_interface) {
     gui_interface->updateFullGui();
@@ -140,11 +140,11 @@ SynthBase::getDestinationConnections(const std::string& destination) {
 }
 
 mopo::Output* SynthBase::getModSource(const std::string& name) {
-  ScopedLock lock(getCriticalSection());
+  juce::ScopedLock lock(getCriticalSection());
   return engine_.getModulationSource(name);
 }
 
-var SynthBase::saveToVar(String author) {
+juce::var SynthBase::saveToVar(juce::String author) {
   save_info_["author"] = author;
   return LoadSave::stateToVar(this, save_info_, getCriticalSection());
 }
@@ -161,11 +161,11 @@ void SynthBase::loadFromVar(juce::var state) {
   getCriticalSection().exit();
 }
 
-bool SynthBase::loadFromFile(File patch) {
-  var parsed_json_state;
-  if (patch.exists() && JSON::parse(patch.loadFileAsString(), parsed_json_state).wasOk()) {
+bool SynthBase::loadFromFile(juce::File patch) {
+  juce::var parsed_json_state;
+  if (patch.exists() && juce::JSON::parse(patch.loadFileAsString(), parsed_json_state).wasOk()) {
     active_file_ = patch;
-    File parent = patch.getParentDirectory();
+    juce::File parent = patch.getParentDirectory();
     loadFromVar(parsed_json_state);
     setFolderName(parent.getFileNameWithoutExtension());
     setPatchName(patch.getFileNameWithoutExtension());
@@ -182,20 +182,20 @@ bool SynthBase::loadFromFile(File patch) {
 }
 
 bool SynthBase::exportToFile() {
-  File active_file = getActiveFile();
-  FileChooser save_box("Export Patch", File(), String("*.") + mopo::PATCH_EXTENSION);
-  if (!save_box.browseForFileToSave(true))
-    return false;
+  juce::File active_file = getActiveFile();
+  juce::FileChooser save_box("Export Patch", juce::File(), juce::String("*.") + mopo::PATCH_EXTENSION);
+  /*if (!save_box.browseForFileToSave(true))
+    return false;*/
 
   saveToFile(save_box.getResult());
   return true;
 }
 
-bool SynthBase::saveToFile(File patch) {
-  if (patch.getFileExtension() != String(mopo::PATCH_EXTENSION))
-    patch = patch.withFileExtension(String(mopo::PATCH_EXTENSION));
+bool SynthBase::saveToFile(juce::File patch) {
+  if (patch.getFileExtension() != juce::String(mopo::PATCH_EXTENSION))
+    patch = patch.withFileExtension(juce::String(mopo::PATCH_EXTENSION));
 
-  File parent = patch.getParentDirectory();
+  juce::File parent = patch.getParentDirectory();
   setFolderName(parent.getFileNameWithoutExtension());
   setPatchName(patch.getFileNameWithoutExtension());
 
@@ -205,7 +205,7 @@ bool SynthBase::saveToFile(File patch) {
     gui_interface->notifyFresh();
   }
 
-  if (patch.replaceWithText(JSON::toString(saveToVar(save_info_["author"])))) {
+  if (patch.replaceWithText(juce::JSON::toString(saveToVar(save_info_["author"])))) {
     active_file_ = patch;
     return true;
   }
@@ -219,7 +219,7 @@ bool SynthBase::saveToActiveFile() {
   return saveToFile(active_file_);
 }
 
-void SynthBase::processAudio(AudioSampleBuffer* buffer, int channels, int samples, int offset) {
+void SynthBase::processAudio(juce::AudioSampleBuffer* buffer, int channels, int samples, int offset) {
   mopo::utils::enableDenormalFlushing(true);
 
   if (engine_.getBufferSize() != samples)
@@ -243,9 +243,9 @@ void SynthBase::processAudio(AudioSampleBuffer* buffer, int channels, int sample
   updateMemoryOutput(samples, engine_output_left, engine_output_right);
 }
 
-void SynthBase::processMidi(MidiBuffer& midi_messages, int start_sample, int end_sample) {
-  MidiBuffer::Iterator midi_iter(midi_messages);
-  MidiMessage midi_message;
+void SynthBase::processMidi(juce::MidiBuffer& midi_messages, int start_sample, int end_sample) {
+  juce::MidiBuffer::Iterator midi_iter(midi_messages);
+  juce::MidiMessage midi_message;
   int midi_sample = 0;
   bool process_all = end_sample == 0;
   while (midi_iter.getNextEvent(midi_message, midi_sample)) {
@@ -254,8 +254,8 @@ void SynthBase::processMidi(MidiBuffer& midi_messages, int start_sample, int end
   }
 }
 
-void SynthBase::processKeyboardEvents(MidiBuffer& buffer, int num_samples) {
-  MidiBuffer keyboard_messages;
+void SynthBase::processKeyboardEvents(juce::MidiBuffer& buffer, int num_samples) {
+  juce::MidiBuffer keyboard_messages;
   midi_manager_->replaceKeyboardMessages(keyboard_messages, num_samples);
   midi_manager_->replaceKeyboardMessages(buffer, num_samples);
 
@@ -341,27 +341,27 @@ bool SynthBase::isMidiMapped(const std::string& name) {
   return midi_manager_->isMidiMapped(name);
 }
 
-void SynthBase::setAuthor(String author) {
+void SynthBase::setAuthor(juce::String author) {
   save_info_["author"] = author;
 }
 
-void SynthBase::setPatchName(String patch_name) {
+void SynthBase::setPatchName(juce::String patch_name) {
   save_info_["patch_name"] = patch_name;
 }
 
-void SynthBase::setFolderName(String folder_name) {
+void SynthBase::setFolderName(juce::String folder_name) {
   save_info_["folder_name"] = folder_name;
 }
 
-String SynthBase::getAuthor() {
+juce::String SynthBase::getAuthor() {
   return save_info_["author"];
 }
 
-String SynthBase::getPatchName() {
+juce::String SynthBase::getPatchName() {
   return save_info_["patch_name"];
 }
 
-String SynthBase::getFolderName() {
+juce::String SynthBase::getFolderName() {
   return save_info_["folder_name"];
 }
 

@@ -17,13 +17,13 @@
 #include "open_gl_component.h"
 #include "full_interface.h"
 
-void OpenGLComponent::setViewPort(OpenGLContext& open_gl_context) {
+void OpenGLComponent::setViewPort(juce::OpenGLContext& open_gl_context) {
   float scale = open_gl_context.getRenderingScale();
   FullInterface* parent = findParentComponentOfClass<FullInterface>();
-  Rectangle<int> top_level_bounds = parent->getBounds();
-  Rectangle<int> global_bounds = parent->getLocalArea(this, getLocalBounds());
+  juce::Rectangle<int> top_level_bounds = parent->getBounds();
+  juce::Rectangle<int> global_bounds = parent->getLocalArea(this, getLocalBounds());
 
-  glViewport(scale * global_bounds.getX(),
+  juce::gl::glViewport(scale * global_bounds.getX(),
              scale * (top_level_bounds.getHeight() - global_bounds.getBottom()),
              scale * global_bounds.getWidth(), scale * global_bounds.getHeight());
 }

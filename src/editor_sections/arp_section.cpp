@@ -28,15 +28,15 @@
 
 #define SHADOW_WIDTH 3
 
-ArpSection::ArpSection(String name) : SynthSection(name) {
+ArpSection::ArpSection(juce::String name) : SynthSection(name) {
   static const int INDEX_DRAG_SENSITIVITY = 60;
 
   addSlider(frequency_ = new SynthSlider("arp_frequency"));
-  frequency_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  frequency_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   frequency_->setLookAndFeel(TextLookAndFeel::instance());
 
   addSlider(tempo_ = new SynthSlider("arp_tempo"));
-  tempo_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  tempo_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   tempo_->setLookAndFeel(TextLookAndFeel::instance());
   tempo_->setStringLookup(mopo::strings::synced_frequencies);
 
@@ -46,14 +46,14 @@ ArpSection::ArpSection(String name) : SynthSection(name) {
   sync_->setFreeSlider(frequency_);
 
   addSlider(gate_ = new SynthSlider("arp_gate"));
-  gate_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  gate_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
 
   addSlider(octaves_ = new SynthSlider("arp_octaves"));
-  octaves_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  octaves_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   octaves_->setMouseDragSensitivity(INDEX_DRAG_SENSITIVITY);
 
   addSlider(pattern_ = new TextSelector("arp_pattern"));
-  pattern_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  pattern_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   pattern_->setStringLookup(mopo::strings::arp_patterns);
   pattern_->setMouseDragSensitivity(INDEX_DRAG_SENSITIVITY);
   pattern_->setLookAndFeel(TextLookAndFeel::instance());
@@ -72,7 +72,7 @@ ArpSection::~ArpSection() {
   on_ = nullptr;
 }
 
-void ArpSection::paintBackground(Graphics& g) {
+void ArpSection::paintBackground(juce::Graphics& g) {
   SynthSection::paintContainer(g);
   float knob_width = getStandardKnobSize();
   float text_height = size_ratio_ * TEXT_HEIGHT;
@@ -80,8 +80,8 @@ void ArpSection::paintBackground(Graphics& g) {
   int title_width = getTitleWidth();
   float shadow_left = getTitleWidth() - size_ratio_ * SHADOW_WIDTH;
 
-  g.setGradientFill(ColourGradient(Colour(0x22000000), shadow_left, 0.0f,
-                                   Colour(0x66000000), title_width, 0.0f,
+  g.setGradientFill(juce::ColourGradient(juce::Colour(0x22000000), shadow_left, 0.0f,
+                                   juce::Colour(0x66000000), title_width, 0.0f,
                                    false));
   g.fillRoundedRectangle(0, 0, title_width, getHeight(), 1.0f);
 
@@ -95,18 +95,18 @@ void ArpSection::paintBackground(Graphics& g) {
   g.drawText(TRANS("FREQUENCY"),
              frequency_->getBounds().getX() - size_ratio_ * 5, font_y,
              frequency_->getBounds().getWidth() + text_height + size_ratio_ * 10,
-             size_ratio_ * 10, Justification::centred, false);
+             size_ratio_ * 10, juce::Justification::centred, false);
   g.drawText(TRANS("PATTERN"),
              pattern_->getBounds().getX() - size_ratio_ * 5, font_y,
              pattern_->getBounds().getWidth() + size_ratio_ * 10,
-             size_ratio_ * 10, Justification::centred, false);
+             size_ratio_ * 10, juce::Justification::centred, false);
 
   g.saveState();
-  g.addTransform(AffineTransform::rotation(-static_cast<float>(mopo::PI) / 2.0f, 0, 0));
+  g.addTransform(juce::AffineTransform::rotation(-static_cast<float>(mopo::PI) / 2.0f, 0, 0));
   g.setColour(Colors::tab_heading_text);
   g.setFont(Fonts::instance()->proportional_light().withPointHeight(size_ratio_ * 13.40f));
   g.drawText(getName(), -getHeight(), 0, getHeight() - title_width, title_width,
-             Justification::centred, false);
+             juce::Justification::centred, false);
   g.restoreState();
 
   paintKnobShadows(g);

@@ -24,7 +24,7 @@ namespace mopo {
   struct ModulationConnection;
 } // namespace mopo
 
-class ModulationButton : public ToggleButton {
+class ModulationButton : public juce::ToggleButton {
   public:
     class ModulationDisconnectListener {
       public:
@@ -33,10 +33,10 @@ class ModulationButton : public ToggleButton {
         virtual void modulationDisconnected(mopo::ModulationConnection* connection, bool last) = 0;
     };
   
-    ModulationButton(String name);
+    ModulationButton(juce::String name);
 
-    void mouseDown(const MouseEvent& e) override;
-    void mouseUp(const MouseEvent& e) override;
+    void mouseDown(const juce::MouseEvent& e) override;
+    void mouseUp(const juce::MouseEvent& e) override;
     void addDisconnectListener(ModulationDisconnectListener* listener);
     void disconnectIndex(int index);
 

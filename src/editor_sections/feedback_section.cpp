@@ -19,20 +19,20 @@
 #include "colors.h"
 #include "fonts.h"
 
-FeedbackSection::FeedbackSection(String name) : SynthSection(name) {
+FeedbackSection::FeedbackSection(juce::String name) : SynthSection(name) {
   static const int TRANSPOSE_MOUSE_SENSITIVITY = 800;
 
   addSlider(transpose_ = new SynthSlider("osc_feedback_transpose"));
-  transpose_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  transpose_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   transpose_->setBipolar();
   transpose_->setMouseDragSensitivity(TRANSPOSE_MOUSE_SENSITIVITY);
 
   addSlider(amount_ = new SynthSlider("osc_feedback_amount"));
-  amount_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  amount_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   amount_->setBipolar();
 
   addSlider(tune_ = new SynthSlider("osc_feedback_tune"));
-  tune_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  tune_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   tune_->setBipolar();
 }
 
@@ -42,7 +42,7 @@ FeedbackSection::~FeedbackSection() {
   tune_ = nullptr;
 }
 
-void FeedbackSection::paintBackground(Graphics& g) {
+void FeedbackSection::paintBackground(juce::Graphics& g) {
   SynthSection::paintBackground(g);
 
   g.setColour(Colors::control_label_text);

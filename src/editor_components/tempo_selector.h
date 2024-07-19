@@ -22,11 +22,11 @@
 
 class TempoSelector : public SynthSlider {
   public:
-    TempoSelector(String name);
+    TempoSelector(juce::String name);
 
-    void mouseDown(const MouseEvent& e) override;
-    void mouseUp(const MouseEvent& e) override;
-    void paint(Graphics& g) override;
+    void mouseDown(const juce::MouseEvent& e) override;
+    void mouseUp(const juce::MouseEvent& e) override;
+    void paint(juce::Graphics& g) override;
     void valueChanged() override;
     void resized() override;
 
@@ -37,8 +37,8 @@ class TempoSelector : public SynthSlider {
     Slider* free_slider_;
     Slider* tempo_slider_;
 
-    Path arrow_;
-    Path clock_;
+    juce::Path arrow_;
+    juce::Path clock_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(TempoSelector)
 };

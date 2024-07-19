@@ -24,20 +24,20 @@
 
 class FormantTuner : public SynthSection {
   public:
-    FormantTuner(String name);
+    FormantTuner(juce::String name);
     ~FormantTuner();
 
-    void paintBackground(Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
     void resized() override;
 
     static const int kNumFormants = 4;
 
   private:
-    ScopedPointer<SynthSlider> cutoffs_[kNumFormants];
-    ScopedPointer<SynthSlider> resonances_[kNumFormants];
-    ScopedPointer<SynthSlider> gains_[kNumFormants];
+    juce::ScopedPointer<SynthSlider> cutoffs_[kNumFormants];
+    juce::ScopedPointer<SynthSlider> resonances_[kNumFormants];
+    juce::ScopedPointer<SynthSlider> gains_[kNumFormants];
 
-    ScopedPointer<FormantResponse> formant_response_;
+    juce::ScopedPointer<FormantResponse> formant_response_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FormantTuner)
 };

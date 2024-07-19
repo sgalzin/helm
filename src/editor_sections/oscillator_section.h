@@ -25,34 +25,34 @@
 
 class OscillatorSection : public SynthSection {
   public:
-    OscillatorSection(String name);
+    OscillatorSection(juce::String name);
     ~OscillatorSection();
 
-    void paintBackground(Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
     void resized() override;
     void reset() override;
 
   private:
-    ScopedPointer<WaveViewer> wave_viewer_1_;
-    ScopedPointer<WaveViewer> wave_viewer_2_;
-    ScopedPointer<SynthSlider> wave_selector_1_;
-    ScopedPointer<SynthSlider> wave_selector_2_;
-    ScopedPointer<SynthSlider> transpose_1_;
-    ScopedPointer<SynthSlider> transpose_2_;
-    ScopedPointer<SynthSlider> tune_1_;
-    ScopedPointer<SynthSlider> tune_2_;
-    ScopedPointer<SynthSlider> unison_voices_1_;
-    ScopedPointer<SynthSlider> unison_voices_2_;
-    ScopedPointer<SynthSlider> unison_detune_1_;
-    ScopedPointer<SynthSlider> unison_detune_2_;
-    ScopedPointer<ToggleButton> unison_harmonize_1_;
-    ScopedPointer<ToggleButton> unison_harmonize_2_;
-    ScopedPointer<SynthSlider> cross_modulation_;
+    juce::ScopedPointer<WaveViewer> wave_viewer_1_;
+    juce::ScopedPointer<WaveViewer> wave_viewer_2_;
+    juce::ScopedPointer<SynthSlider> wave_selector_1_;
+    juce::ScopedPointer<SynthSlider> wave_selector_2_;
+    juce::ScopedPointer<SynthSlider> transpose_1_;
+    juce::ScopedPointer<SynthSlider> transpose_2_;
+    juce::ScopedPointer<SynthSlider> tune_1_;
+    juce::ScopedPointer<SynthSlider> tune_2_;
+    juce::ScopedPointer<SynthSlider> unison_voices_1_;
+    juce::ScopedPointer<SynthSlider> unison_voices_2_;
+    juce::ScopedPointer<SynthSlider> unison_detune_1_;
+    juce::ScopedPointer<SynthSlider> unison_detune_2_;
+    juce::ScopedPointer<juce::ToggleButton> unison_harmonize_1_;
+    juce::ScopedPointer<juce::ToggleButton> unison_harmonize_2_;
+    juce::ScopedPointer<SynthSlider> cross_modulation_;
 
-    Path top_left_cross_path_;
-    Path top_right_cross_path_;
-    Path bottom_left_cross_path_;
-    Path bottom_right_cross_path_;
+    juce::Path top_left_cross_path_;
+    juce::Path top_right_cross_path_;
+    juce::Path bottom_left_cross_path_;
+    juce::Path bottom_right_cross_path_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OscillatorSection)
 };

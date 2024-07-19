@@ -21,17 +21,17 @@
 
 #define KNOB_WIDTH 40
 
-NoiseSection::NoiseSection(String name) : SynthSection(name) {
+NoiseSection::NoiseSection(juce::String name) : SynthSection(name) {
   addSlider(volume_ = new SynthSlider("noise_volume"));
-  volume_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  volume_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
 }
 
 NoiseSection::~NoiseSection() {
   volume_ = nullptr;
 }
 
-void NoiseSection::paintBackground(Graphics& g) {
-  static const DropShadow component_shadow(Colour(0x88000000), 2, Point<int>(0, 1));
+void NoiseSection::paintBackground(juce::Graphics& g) {
+  static const juce::DropShadow component_shadow(juce::Colour(0x88000000), 2, juce::Point<int>(0, 1));
   SynthSection::paintBackground(g);
 
   g.setColour(Colors::control_label_text);

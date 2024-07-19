@@ -32,125 +32,125 @@
 #define PADDING_X 25
 #define PADDING_Y 15
 
-SaveSection::SaveSection(String name) : Overlay(name) {
+SaveSection::SaveSection(juce::String name) : Overlay(name) {
   listener_ = nullptr;
   banks_model_ = new FileListBoxModel();
   banks_model_->setListener(this);
   folders_model_ = new FileListBoxModel();
-  banks_view_ = new ListBox("banks", banks_model_);
-  folders_view_ = new ListBox("folders", folders_model_);
+  banks_view_ = new juce::ListBox("banks", banks_model_);
+  folders_view_ = new juce::ListBox("folders", folders_model_);
   rescanFolders();
-  banks_view_->setColour(ListBox::backgroundColourId, Colour(0xff323232));
-  folders_view_->setColour(ListBox::backgroundColourId, Colour(0xff323232));
+  banks_view_->setColour(juce::ListBox::backgroundColourId, juce::Colour(0xff323232));
+  folders_view_->setColour(juce::ListBox::backgroundColourId, juce::Colour(0xff323232));
   addAndMakeVisible(banks_view_);
   addAndMakeVisible(folders_view_);
 
-  patch_name_ = new TextEditor("Patch Name");
+  patch_name_ = new juce::TextEditor("Patch Name");
   patch_name_->addListener(this);
-  patch_name_->setTextToShowWhenEmpty(TRANS("Patch Name"), Colour(0xff777777));
+  patch_name_->setTextToShowWhenEmpty(TRANS("Patch Name"), juce::Colour(0xff777777));
   patch_name_->setFont(Fonts::instance()->monospace().withPointHeight(16.0f));
-  patch_name_->setColour(CaretComponent::caretColourId, Colour(0xff888888));
-  patch_name_->setColour(TextEditor::textColourId, Colors::audio);
-  patch_name_->setColour(TextEditor::highlightedTextColourId, Colour(0xff03a9f4));
-  patch_name_->setColour(TextEditor::highlightColourId, Colour(0xff888888));
-  patch_name_->setColour(TextEditor::backgroundColourId, Colour(0xff323232));
-  patch_name_->setColour(TextEditor::outlineColourId, Colour(0xff888888));
-  patch_name_->setColour(TextEditor::focusedOutlineColourId, Colour(0xff888888));
+  patch_name_->setColour(juce::CaretComponent::caretColourId, juce::Colour(0xff888888));
+  patch_name_->setColour(juce::TextEditor::textColourId, Colors::audio);
+  patch_name_->setColour(juce::TextEditor::highlightedTextColourId, juce::Colour(0xff03a9f4));
+  patch_name_->setColour(juce::TextEditor::highlightColourId, juce::Colour(0xff888888));
+  patch_name_->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0xff323232));
+  patch_name_->setColour(juce::TextEditor::outlineColourId, juce::Colour(0xff888888));
+  patch_name_->setColour(juce::TextEditor::focusedOutlineColourId, juce::Colour(0xff888888));
   addAndMakeVisible(patch_name_);
 
-  author_ = new TextEditor("Author");
+  author_ = new juce::TextEditor("Author");
   author_->addListener(this);
-  author_->setTextToShowWhenEmpty(TRANS("Author"), Colour(0xff777777));
+  author_->setTextToShowWhenEmpty(TRANS("Author"), juce::Colour(0xff777777));
   author_->setFont(Fonts::instance()->monospace().withPointHeight(16.0f));
-  author_->setColour(CaretComponent::caretColourId, Colour(0xff888888));
-  author_->setColour(TextEditor::textColourId, Colour(0xffcccccc));
-  author_->setColour(TextEditor::highlightedTextColourId, Colour(0xffcccccc));
-  author_->setColour(TextEditor::highlightColourId, Colour(0xff888888));
-  author_->setColour(TextEditor::backgroundColourId, Colour(0xff323232));
-  author_->setColour(TextEditor::outlineColourId, Colour(0xff888888));
-  author_->setColour(TextEditor::focusedOutlineColourId, Colour(0xff888888));
+  author_->setColour(juce::CaretComponent::caretColourId, juce::Colour(0xff888888));
+  author_->setColour(juce::TextEditor::textColourId, juce::Colour(0xffcccccc));
+  author_->setColour(juce::TextEditor::highlightedTextColourId, juce::Colour(0xffcccccc));
+  author_->setColour(juce::TextEditor::highlightColourId, juce::Colour(0xff888888));
+  author_->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0xff323232));
+  author_->setColour(juce::TextEditor::outlineColourId, juce::Colour(0xff888888));
+  author_->setColour(juce::TextEditor::focusedOutlineColourId, juce::Colour(0xff888888));
   addAndMakeVisible(author_);
 
-  add_bank_name_ = new TextEditor("Add Bank");
+  add_bank_name_ = new juce::TextEditor("Add Bank");
   add_bank_name_->addListener(this);
-  add_bank_name_->setTextToShowWhenEmpty(TRANS("New Bank"), Colour(0xff777777));
+  add_bank_name_->setTextToShowWhenEmpty(TRANS("New Bank"), juce::Colour(0xff777777));
   add_bank_name_->setFont(Fonts::instance()->monospace().withPointHeight(12.0f));
-  add_bank_name_->setColour(CaretComponent::caretColourId, Colour(0xff888888));
-  add_bank_name_->setColour(TextEditor::textColourId, Colour(0xffcccccc));
-  add_bank_name_->setColour(TextEditor::highlightedTextColourId, Colour(0xffcccccc));
-  add_bank_name_->setColour(TextEditor::highlightColourId, Colour(0xff888888));
-  add_bank_name_->setColour(TextEditor::backgroundColourId, Colour(0xff323232));
-  add_bank_name_->setColour(TextEditor::outlineColourId, Colour(0xff888888));
-  add_bank_name_->setColour(TextEditor::focusedOutlineColourId, Colour(0xff888888));
+  add_bank_name_->setColour(juce::CaretComponent::caretColourId, juce::Colour(0xff888888));
+  add_bank_name_->setColour(juce::TextEditor::textColourId, juce::Colour(0xffcccccc));
+  add_bank_name_->setColour(juce::TextEditor::highlightedTextColourId, juce::Colour(0xffcccccc));
+  add_bank_name_->setColour(juce::TextEditor::highlightColourId, juce::Colour(0xff888888));
+  add_bank_name_->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0xff323232));
+  add_bank_name_->setColour(juce::TextEditor::outlineColourId, juce::Colour(0xff888888));
+  add_bank_name_->setColour(juce::TextEditor::focusedOutlineColourId, juce::Colour(0xff888888));
   addAndMakeVisible(add_bank_name_);
 
-  add_folder_name_ = new TextEditor("Add Folder");
+  add_folder_name_ = new juce::TextEditor("Add Folder");
   add_folder_name_->addListener(this);
-  add_folder_name_->setTextToShowWhenEmpty(TRANS("New Folder"), Colour(0xff777777));
+  add_folder_name_->setTextToShowWhenEmpty(TRANS("New Folder"), juce::Colour(0xff777777));
   add_folder_name_->setFont(Fonts::instance()->monospace().withPointHeight(12.0f));
-  add_folder_name_->setColour(CaretComponent::caretColourId, Colour(0xff888888));
-  add_folder_name_->setColour(TextEditor::textColourId, Colour(0xffcccccc));
-  add_folder_name_->setColour(TextEditor::highlightedTextColourId, Colour(0xffcccccc));
-  add_folder_name_->setColour(TextEditor::highlightColourId, Colour(0xff888888));
-  add_folder_name_->setColour(TextEditor::backgroundColourId, Colour(0xff323232));
-  add_folder_name_->setColour(TextEditor::outlineColourId, Colour(0xff888888));
-  add_folder_name_->setColour(TextEditor::focusedOutlineColourId, Colour(0xff888888));
+  add_folder_name_->setColour(juce::CaretComponent::caretColourId, juce::Colour(0xff888888));
+  add_folder_name_->setColour(juce::TextEditor::textColourId, juce::Colour(0xffcccccc));
+  add_folder_name_->setColour(juce::TextEditor::highlightedTextColourId, juce::Colour(0xffcccccc));
+  add_folder_name_->setColour(juce::TextEditor::highlightColourId, juce::Colour(0xff888888));
+  add_folder_name_->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0xff323232));
+  add_folder_name_->setColour(juce::TextEditor::outlineColourId, juce::Colour(0xff888888));
+  add_folder_name_->setColour(juce::TextEditor::focusedOutlineColourId, juce::Colour(0xff888888));
   addAndMakeVisible(add_folder_name_);
 
-  save_button_ = new TextButton(TRANS("Save"));
+  save_button_ = new juce::TextButton(TRANS("Save"));
   save_button_->addListener(this);
   addAndMakeVisible(save_button_);
 
-  cancel_button_ = new TextButton(TRANS("Cancel"));
+  cancel_button_ = new juce::TextButton(TRANS("Cancel"));
   cancel_button_->addListener(this);
   addAndMakeVisible(cancel_button_);
 
-  add_bank_button_ = new TextButton("+");
+  add_bank_button_ = new juce::TextButton("+");
   add_bank_button_->addListener(this);
   addAndMakeVisible(add_bank_button_);
 
-  add_folder_button_ = new TextButton("+");
+  add_folder_button_ = new juce::TextButton("+");
   add_folder_button_->addListener(this);
   addAndMakeVisible(add_folder_button_);
 }
 
-void SaveSection::paint(Graphics& g) {
-  static const DropShadow shadow(Colour(0xff000000), 5, Point<int>(0, 0));
+void SaveSection::paint(juce::Graphics& g) {
+  static const juce::DropShadow shadow(juce::Colour(0xff000000), 5, juce::Point<int>(0, 0));
 
   g.setColour(Colors::overlay_screen);
   g.fillAll();
 
-  Rectangle<int> save_rect = getSaveRect();
+  juce::Rectangle<int> save_rect = getSaveRect();
   shadow.drawForRectangle(g, save_rect);
-  g.setColour(Colour(0xff303030));
+  g.setColour(juce::Colour(0xff303030));
   g.fillRect(save_rect);
 
   g.saveState();
   g.setOrigin(save_rect.getX() + PADDING_X, save_rect.getY() + PADDING_Y);
 
   g.setFont(Fonts::instance()->proportional_regular().withPointHeight(14.0f));
-  g.setColour(Colour(0xff888888));
+  g.setColour(juce::Colour(0xff888888));
 
   g.drawText(TRANS("PATCH NAME"),
              0, PADDING_Y, DIVISION - 10, TEXT_EDITOR_HEIGHT,
-             Justification::centredRight, false);
+             juce::Justification::centredRight, false);
   g.drawText(TRANS("AUTHOR"),
              0, 2 * PADDING_Y + TEXT_EDITOR_HEIGHT, DIVISION - 10, TEXT_EDITOR_HEIGHT,
-             Justification::centredRight, false);
+             juce::Justification::centredRight, false);
   g.drawText(TRANS("BANK"),
              0, banks_view_->getY() - save_rect.getY() - PADDING_Y,
              DIVISION - 10, TEXT_EDITOR_HEIGHT,
-             Justification::centredRight, false);
+             juce::Justification::centredRight, false);
   g.drawText(TRANS("FOLDER"),
              0, folders_view_->getY() - save_rect.getY() - PADDING_Y,
              DIVISION - 10, TEXT_EDITOR_HEIGHT,
-             Justification::centredRight, false);
+             juce::Justification::centredRight, false);
 
   g.restoreState();
 }
 
 void SaveSection::resized() {
-  Rectangle<int> save_rect = getSaveRect();
+  juce::Rectangle<int> save_rect = getSaveRect();
   patch_name_->setBounds(save_rect.getX() + PADDING_X + DIVISION,
                          save_rect.getY() + 2 * PADDING_Y,
                          save_rect.getWidth() - 2 * PADDING_X - DIVISION,
@@ -187,11 +187,11 @@ void SaveSection::resized() {
 
 void SaveSection::visibilityChanged() {
   if (isVisible()) {
-    SparseSet<int> selected_banks = banks_view_->getSelectedRows();
+    juce::SparseSet<int> selected_banks = banks_view_->getSelectedRows();
     if (selected_banks.size() == 0)
       banks_view_->selectRow(0);
 
-    SparseSet<int> selected_rows = folders_view_->getSelectedRows();
+    juce::SparseSet<int> selected_rows = folders_view_->getSelectedRows();
     if (selected_rows.size() == 0)
       folders_view_->selectRow(0);
 
@@ -199,12 +199,12 @@ void SaveSection::visibilityChanged() {
   }
 }
 
-void SaveSection::mouseUp(const MouseEvent &e) {
+void SaveSection::mouseUp(const juce::MouseEvent &e) {
   if (!getSaveRect().contains(e.getPosition()))
     setVisible(false);
 }
 
-void SaveSection::textEditorReturnKeyPressed(TextEditor& editor) {
+void SaveSection::textEditorReturnKeyPressed(juce::TextEditor& editor) {
   if (&editor == add_folder_name_)
     createNewFolder();
   else
@@ -216,7 +216,7 @@ void SaveSection::selectedFilesChanged(FileListBoxModel* list_box) {
     rescanFolders();
 }
 
-void SaveSection::buttonClicked(Button* clicked_button) {
+void SaveSection::buttonClicked(juce::Button* clicked_button) {
   if (clicked_button == save_button_)
     save();
   else if (clicked_button == cancel_button_)
@@ -227,27 +227,27 @@ void SaveSection::buttonClicked(Button* clicked_button) {
     createNewFolder();
 }
 
-Rectangle<int> SaveSection::getSaveRect() {
+juce::Rectangle<int> SaveSection::getSaveRect() {
   if (active_rect_.getWidth() > 0.0f)
     return active_rect_;
 
   int x = (getWidth() - SAVE_WIDTH) / 2;
   int y = (getHeight() - SAVE_HEIGHT) / 2;
-  return Rectangle<int>(x, y, SAVE_WIDTH, SAVE_HEIGHT);
+  return juce::Rectangle<int>(x, y, SAVE_WIDTH, SAVE_HEIGHT);
 }
 
 void SaveSection::save() {
   SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
-  SparseSet<int> selected_rows = folders_view_->getSelectedRows();
+  juce::SparseSet<int> selected_rows = folders_view_->getSelectedRows();
   if (selected_rows.size() == 0)
     return;
 
-  File folder = folders_model_->getFileAtRow(selected_rows[0]);
-  String patch_name = patch_name_->getText();
+  juce::File folder = folders_model_->getFileAtRow(selected_rows[0]);
+  juce::String patch_name = patch_name_->getText();
   if (patch_name.length() == 0)
     return;
 
-  File save_file = folder.getChildFile(patch_name);
+  juce::File save_file = folder.getChildFile(patch_name);
   parent->getSynth()->setAuthor(author_->getText());
   parent->getSynth()->saveToFile(save_file);
 
@@ -258,12 +258,12 @@ void SaveSection::save() {
 }
 
 void SaveSection::createNewBank() {
-  String bank_name = add_bank_name_->getText();
+  juce::String bank_name = add_bank_name_->getText();
   if (bank_name.length() == 0)
     return;
 
-  File banks_dir = LoadSave::getBankDirectory();
-  File new_bank = banks_dir.getChildFile(bank_name);
+  juce::File banks_dir = LoadSave::getBankDirectory();
+  juce::File new_bank = banks_dir.getChildFile(bank_name);
   if (!new_bank.exists())
     new_bank.createDirectory();
 
@@ -276,16 +276,16 @@ void SaveSection::createNewBank() {
 }
 
 void SaveSection::createNewFolder() {
-  String folder_name = add_folder_name_->getText();
+  juce::String folder_name = add_folder_name_->getText();
   if (folder_name.length() == 0)
     return;
 
-  SparseSet<int> selected_rows = banks_view_->getSelectedRows();
+  juce::SparseSet<int> selected_rows = banks_view_->getSelectedRows();
   if (selected_rows.size() == 0)
     return;
-  File bank_dir = banks_model_->getFileAtRow(selected_rows[0]);
+  juce::File bank_dir = banks_model_->getFileAtRow(selected_rows[0]);
 
-  File new_folder = bank_dir.getChildFile(folder_name);
+  juce::File new_folder = bank_dir.getChildFile(folder_name);
   if (!new_folder.exists())
     new_folder.createDirectory();
 
@@ -298,8 +298,8 @@ void SaveSection::createNewFolder() {
 }
 
 void SaveSection::rescanBanks() {
-  Array<File> bank_locations;
-  File banks_dir = LoadSave::getBankDirectory();
+  juce::Array<juce::File> bank_locations;
+  juce::File banks_dir = LoadSave::getBankDirectory();
   bank_locations.add(banks_dir);
   banks_model_->rescanFiles(bank_locations);
   banks_view_->updateContent();
@@ -307,12 +307,12 @@ void SaveSection::rescanBanks() {
 
 void SaveSection::rescanFolders() {
   rescanBanks();
-  SparseSet<int> selected_rows = banks_view_->getSelectedRows();
+  juce::SparseSet<int> selected_rows = banks_view_->getSelectedRows();
   if (selected_rows.size() == 0)
     return;
-  File bank_dir = banks_model_->getFileAtRow(selected_rows[0]);
+  juce::File bank_dir = banks_model_->getFileAtRow(selected_rows[0]);
 
-  Array<File> folder_locations;
+  juce::Array<juce::File> folder_locations;
   folder_locations.add(bank_dir);
   folders_model_->rescanFiles(folder_locations);
   folders_view_->updateContent();

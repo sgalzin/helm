@@ -21,14 +21,14 @@
 #include "JuceHeader.h"
 #include "memory.h"
 
-class Oscilloscope : public Component, public Timer {
+class Oscilloscope : public juce::Component, public juce::Timer {
   public:
     Oscilloscope();
     ~Oscilloscope();
 
     void timerCallback() override;
-    void paint(Graphics& g) override;
-    void paintBackground(Graphics& g);
+    void paint(juce::Graphics& g) override;
+    void paintBackground(juce::Graphics& g);
     void resized() override;
 
     void resetWavePath();
@@ -37,8 +37,8 @@ class Oscilloscope : public Component, public Timer {
 
   private:
     const float* output_memory_;
-    Path wave_path_;
-    Image background_;
+    juce::Path wave_path_;
+    juce::Image background_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Oscilloscope)
 };

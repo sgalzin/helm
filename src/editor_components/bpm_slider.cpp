@@ -19,7 +19,7 @@
 
 #define FRAMES_PER_SECOND 24
 
-BpmSlider::BpmSlider(String name) : SynthSlider(name) {
+BpmSlider::BpmSlider(juce::String name) : SynthSlider(name) {
   startTimerHz(FRAMES_PER_SECOND);
 }
 
@@ -32,5 +32,5 @@ void BpmSlider::timerCallback() {
   
   double bpm = parent->getControlValue(getName().toStdString());
   if (getValue() != bpm)
-    setValue(bpm, NotificationType::dontSendNotification);
+    setValue(bpm, juce::NotificationType::dontSendNotification);
 }

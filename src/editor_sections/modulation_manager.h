@@ -29,7 +29,7 @@
 class ModulationHighlight;
 class ModulationMeter;
 
-class ModulationManager : public SynthSection, public Timer,
+class ModulationManager : public SynthSection, public juce::Timer,
                           public ModulationButton::ModulationDisconnectListener,
                           public SynthSlider::SliderListener {
   public:
@@ -48,10 +48,10 @@ class ModulationManager : public SynthSection, public Timer,
 
     void timerCallback() override;
     void updateModulationValues();
-    void paint(Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
-    void buttonClicked(Button* clicked_button) override;
-    void sliderValueChanged(Slider* moved_slider) override;
+    void buttonClicked(juce::Button* clicked_button) override;
+    void sliderValueChanged(juce::Slider* moved_slider) override;
     void modulationDisconnected(mopo::ModulationConnection* connection, bool last) override;
 
     // SynthSlider::SliderListener
@@ -63,16 +63,16 @@ class ModulationManager : public SynthSection, public Timer,
     void makeModulationsVisible(std::string destination, bool visible);
     void setSliderValues();
 
-    ScopedPointer<Component> polyphonic_destinations_;
-    ScopedPointer<Component> monophonic_destinations_;
+    juce::ScopedPointer<Component> polyphonic_destinations_;
+    juce::ScopedPointer<Component> monophonic_destinations_;
 
     std::string current_modulator_;
     double last_value_;
     std::map<std::string, ModulationButton*> modulation_buttons_;
 
-    std::map<std::string, Slider*> slider_lookup_;
+    std::map<std::string, juce::Slider*> slider_lookup_;
     std::map<std::string, SynthSlider*> slider_model_lookup_;
-    std::vector<Slider*> owned_sliders_;
+    std::vector<juce::Slider*> owned_sliders_;
 
     std::map<std::string, ModulationMeter*> meter_lookup_;
     std::map<std::string, ModulationHighlight*> overlay_lookup_;

@@ -22,10 +22,10 @@
 
 class TextSelector : public SynthSlider {
   public:
-    TextSelector(String name);
+    TextSelector(juce::String name);
 
-    void mouseDown(const MouseEvent& e) override;
-    void mouseUp(const MouseEvent& e) override;
+    void mouseDown(const juce::MouseEvent& e) override;
+    void mouseUp(const juce::MouseEvent& e) override;
 
     void setLongStringLookup(const std::string* lookup) { long_lookup_ = lookup; }
 

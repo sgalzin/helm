@@ -26,7 +26,7 @@ namespace {
   }
 } // namespace
 
-TextSelector::TextSelector(String name) : SynthSlider(name), long_lookup_(nullptr) { }
+TextSelector::TextSelector(juce::String name) : SynthSlider(name), long_lookup_(nullptr) { }
 
 void TextSelector::mouseDown(const juce::MouseEvent &e) {
   if (e.mods.isPopupMenu()) {
@@ -38,18 +38,18 @@ void TextSelector::mouseDown(const juce::MouseEvent &e) {
   if (long_lookup_)
     lookup = long_lookup_;
 
-  PopupMenu m;
+  juce::PopupMenu m;
   m.setLookAndFeel(DefaultLookAndFeel::instance());
 
   for (int i = 0; i <= getMaximum(); ++i)
     m.addItem(i + 1, lookup[i]);
 
 
-  m.showMenuAsync(PopupMenu::Options().withTargetComponent(this),
-                  ModalCallbackFunction::forComponent(textSelectedCallback, this));
+  m.showMenuAsync(juce::PopupMenu::Options().withTargetComponent(this),
+                  juce::ModalCallbackFunction::forComponent(textSelectedCallback, this));
 }
 
-void TextSelector::mouseUp(const MouseEvent& e) {
+void TextSelector::mouseUp(const juce::MouseEvent& e) {
   if (e.mods.isPopupMenu()) {
     SynthSlider::mouseDown(e);
     return;

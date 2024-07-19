@@ -23,25 +23,25 @@
 
 #define SHADOW_WIDTH 3
 
-BpmSection::BpmSection(String name) : SynthSection(name) {
+BpmSection::BpmSection(juce::String name) : SynthSection(name) {
   addSlider(bpm_ = new BpmSlider("beats_per_minute"));
-  bpm_->setSliderStyle(Slider::LinearBarVertical);
-  bpm_->setColour(Slider::textBoxTextColourId, Colours::white);
+  bpm_->setSliderStyle(juce::Slider::LinearBarVertical);
+  bpm_->setColour(juce::Slider::textBoxTextColourId, juce::Colours::white);
   bpm_->flipColoring(true);
-  bpm_->setPopupPlacement(BubbleComponent::below, 0);
+  bpm_->setPopupPlacement(juce::BubbleComponent::below, 0);
 }
 
 BpmSection::~BpmSection() {
   bpm_ = nullptr;
 }
 
-void BpmSection::paintBackground(Graphics& g) {
+void BpmSection::paintBackground(juce::Graphics& g) {
   SynthSection::paintContainer(g);
   float title_width = getTitleWidth();
   float shadow_left = title_width - size_ratio_ * SHADOW_WIDTH;
 
-  g.setGradientFill(ColourGradient(Colour(0x22000000), shadow_left, 0.0f,
-                                   Colour(0x66000000), title_width, 0.0f,
+  g.setGradientFill(juce::ColourGradient(juce::Colour(0x22000000), shadow_left, 0.0f,
+                                   juce::Colour(0x66000000), title_width, 0.0f,
                                    false));
   g.fillRoundedRectangle(0, 0, title_width, getHeight(), 1.0f);
 
@@ -49,11 +49,11 @@ void BpmSection::paintBackground(Graphics& g) {
   g.setFont(Fonts::instance()->proportional_regular().withPointHeight(size_ratio_ * 10.0f));
 
   g.saveState();
-  g.addTransform(AffineTransform::rotation(-static_cast<float>(mopo::PI) / 2.0f, 0, 0));
+  g.addTransform(juce::AffineTransform::rotation(-static_cast<float>(mopo::PI) / 2.0f, 0, 0));
   g.setColour(Colors::tab_heading_text);
   g.setFont(Fonts::instance()->proportional_light().withPointHeight(size_ratio_ * 13.40f));
   g.drawText(TRANS("BPM"), -getHeight(), 0, getHeight(), title_width,
-             Justification::centred, false);
+             juce::Justification::centred, false);
   g.restoreState();
 
   paintKnobShadows(g);

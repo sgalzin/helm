@@ -20,7 +20,7 @@
 #include "fonts.h"
 #include "modulation_look_and_feel.h"
 
-ExtraModSection::ExtraModSection(String name) : SynthSection(name) {
+ExtraModSection::ExtraModSection(juce::String name) : SynthSection(name) {
   addModulationButton(aftertouch_mod_ = new ModulationButton("aftertouch"));
   aftertouch_mod_->setLookAndFeel(ModulationLookAndFeel::instance());
 
@@ -49,13 +49,13 @@ ExtraModSection::~ExtraModSection() {
   random_mod_ = nullptr;
 }
 
-void ExtraModSection::drawTextToRightOfComponent(Graphics& g, Component* component, String text) {
+void ExtraModSection::drawTextToRightOfComponent(juce::Graphics& g, Component* component, juce::String text) {
   float space = size_ratio_ * 6.0f;
   g.drawText(text, component->getRight() + space, component->getY(), getWidth() / 2,
-             component->getHeight(), Justification::centredLeft, false);
+             component->getHeight(), juce::Justification::centredLeft, false);
 }
 
-void ExtraModSection::paintBackground(Graphics& g) {
+void ExtraModSection::paintBackground(juce::Graphics& g) {
   SynthSection::paintBackground(g);
 
   g.setColour(Colors::control_label_text);

@@ -26,30 +26,30 @@
 #define TEXT_WIDTH 42
 #define TEXT_HEIGHT 16
 
-DelaySection::DelaySection(String name) : SynthSection(name) {
+DelaySection::DelaySection(juce::String name) : SynthSection(name) {
   static const int TEMPO_DRAG_SENSITIVITY = 150;
   addSlider(frequency_ = new SynthSlider("delay_frequency"));
-  frequency_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  frequency_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   frequency_->setLookAndFeel(TextLookAndFeel::instance());
 
   addSlider(tempo_ = new SynthSlider("delay_tempo"));
-  tempo_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  tempo_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   tempo_->setStringLookup(mopo::strings::synced_frequencies);
   tempo_->setLookAndFeel(TextLookAndFeel::instance());
   tempo_->setMouseDragSensitivity(TEMPO_DRAG_SENSITIVITY);
 
   addSlider(sync_ = new TempoSelector("delay_sync"));
-  sync_->setSliderStyle(Slider::LinearBar);
+  sync_->setSliderStyle(juce::Slider::LinearBar);
   sync_->setTempoSlider(tempo_);
   sync_->setFreeSlider(frequency_);
   sync_->setStringLookup(mopo::strings::freq_sync_styles);
 
   addSlider(feedback_ = new SynthSlider("delay_feedback"));
-  feedback_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  feedback_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   feedback_->setBipolar();
 
   addSlider(dry_wet_ = new SynthSlider("delay_dry_wet"));
-  dry_wet_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  dry_wet_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
 
   addButton(on_ = new SynthButton("delay_on"));
   setActivator(on_);
@@ -64,7 +64,7 @@ DelaySection::~DelaySection() {
   dry_wet_ = nullptr;
 }
 
-void DelaySection::paintBackground(Graphics& g) {
+void DelaySection::paintBackground(juce::Graphics& g) {
   SynthSection::paintBackground(g);
 
   int text_height = size_ratio_ * TEXT_HEIGHT;
@@ -80,7 +80,7 @@ void DelaySection::paintBackground(Graphics& g) {
              frequency_->getBounds().getX() - size_ratio_ * 5.0f,
              feedback_->getBounds().getY() + knob_width + size_ratio_ * 4,
              frequency_->getBounds().getWidth() + text_height + size_ratio_ * 10,
-             size_ratio_ * 10.0f, Justification::centred, false);
+             size_ratio_ * 10.0f, juce::Justification::centred, false);
 }
 
 void DelaySection::resized() {

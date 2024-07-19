@@ -45,12 +45,12 @@ WaveViewer::~WaveViewer() { }
 
 void WaveViewer::paint(juce::Graphics &g) {
   g.drawImageWithin(background_,
-                    0, 0, getWidth(), getHeight(), RectanglePlacement());
+                    0, 0, getWidth(), getHeight(), juce::RectanglePlacement());
 
   if (wave_phase_) {
     if (phase_ >= 0.0 && phase_ < 1.0) {
       float x = phaseToX(phase_);
-      g.setColour(Colour(0x33ffffff));
+      g.setColour(juce::Colour(0x33ffffff));
       g.fillRect(x - 0.5f, 0.0f, 1.0f, (float)getHeight());
 
       float y = PADDING + (getHeight() - 2 * PADDING) * (1.0f - amp_) / 2.0f;
@@ -58,19 +58,19 @@ void WaveViewer::paint(juce::Graphics &g) {
       g.setColour(Colors::modulation);
       g.fillEllipse(x - MARKER_WIDTH / 2.0f, y - MARKER_WIDTH / 2.0f,
                     MARKER_WIDTH, MARKER_WIDTH);
-      g.setColour(Colour(0xff000000));
+      g.setColour(juce::Colour(0xff000000));
       g.fillEllipse(x - MARKER_WIDTH / 4.0f, y - MARKER_WIDTH / 4.0f,
                     MARKER_WIDTH / 2.0f, MARKER_WIDTH / 2.0f);
     }
   }
 }
 
-void WaveViewer::paintBackground(Graphics& g) {
-  static const DropShadow shadow(Colour(0xbb000000), 5, Point<int>(0, 0));
+void WaveViewer::paintBackground(juce::Graphics& g) {
+  static const juce::DropShadow shadow(juce::Colour(0xbb000000), 5, juce::Point<int>(0, 0));
 
-  g.fillAll(Colour(0xff424242));
+  g.fillAll(juce::Colour(0xff424242));
 
-  g.setColour(Colour(0xff4a4a4a));
+  g.setColour(juce::Colour(0xff4a4a4a));
   for (int x = 0; x < getWidth(); x += GRID_CELL_WIDTH)
     g.drawLine(x, 0, x, getHeight());
   for (int y = 0; y < getHeight(); y += GRID_CELL_WIDTH)
@@ -87,18 +87,18 @@ void WaveViewer::paintBackground(Graphics& g) {
     g.setColour(Colors::audio);
 
   float line_width = 1.5f * getRatio();
-  PathStrokeType stroke(line_width, PathStrokeType::beveled, PathStrokeType::rounded);
+  juce::PathStrokeType stroke(line_width, juce::PathStrokeType::beveled, juce::PathStrokeType::rounded);
   g.strokePath(wave_path_, stroke);
 }
 
 void WaveViewer::resized() {
-  const Desktop::Displays::Display& display = Desktop::getInstance().getDisplays().getMainDisplay();
+  const juce::Displays::Display& display = juce::Desktop::getInstance().getDisplays().getMainDisplay();
   float scale = display.scale;
-  background_ = Image(Image::RGB, scale * getWidth(), scale * getHeight(), true);
+  background_ = juce::Image(juce::Image::RGB, scale * getWidth(), scale * getHeight(), true);
   resetWavePath();
 }
 
-void WaveViewer::mouseDown(const MouseEvent& e) {
+void WaveViewer::mouseDown(const juce::MouseEvent& e) {
   if (wave_slider_) {
     int current_value = wave_slider_->getValue();
     if (e.mods.isRightButtonDown())
@@ -125,7 +125,7 @@ void WaveViewer::timerCallback() {
   }
 }
 
-void WaveViewer::setWaveSlider(Slider* slider) {
+void WaveViewer::setWaveSlider(juce::Slider* slider) {
   if (wave_slider_)
     wave_slider_->removeListener(this);
   wave_slider_ = slider;
@@ -133,7 +133,7 @@ void WaveViewer::setWaveSlider(Slider* slider) {
   resetWavePath();
 }
 
-void WaveViewer::setAmplitudeSlider(Slider* slider) {
+void WaveViewer::setAmplitudeSlider(juce::Slider* slider) {
   if (amplitude_slider_)
     amplitude_slider_->removeListener(this);
   amplitude_slider_ = slider;
@@ -216,16 +216,16 @@ void WaveViewer::resetWavePath() {
   else
     drawSmoothRandom();
 
-  const Desktop::Displays::Display& display = Desktop::getInstance().getDisplays().getMainDisplay();
+  const juce::Displays::Display& display = juce::Desktop::getInstance().getDisplays().getMainDisplay();
   float scale = display.scale;
-  Graphics g(background_);
-  g.addTransform(AffineTransform::scale(scale, scale));
+  juce::Graphics g(background_);
+  g.addTransform(juce::AffineTransform::scale(scale, scale));
   paintBackground(g);
 
   repaint();
 }
 
-void WaveViewer::sliderValueChanged(Slider* sliderThatWasMoved) {
+void WaveViewer::sliderValueChanged(juce::Slider* sliderThatWasMoved) {
   resetWavePath();
 }
 

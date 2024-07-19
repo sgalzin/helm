@@ -30,7 +30,7 @@ class ModulationHighlight;
 class OpenGLModulationMeter;
 
 class OpenGLModulationManager : public OpenGLComponent,
-                                public Slider::Listener, public Button::Listener,
+                                public juce::Slider::Listener, public juce::Button::Listener,
                                 public ModulationButton::ModulationDisconnectListener,
                                 public SynthSlider::SliderListener {
   public:
@@ -47,16 +47,16 @@ class OpenGLModulationManager : public OpenGLComponent,
     std::string getCurrentModulator() { return current_modulator_; }
     void reset();
 
-    void paint(Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
-    void buttonClicked(Button* clicked_button) override;
-    void sliderValueChanged(Slider* moved_slider) override;
+    void buttonClicked(juce::Button* clicked_button) override;
+    void sliderValueChanged(juce::Slider* moved_slider) override;
     void modulationDisconnected(mopo::ModulationConnection* connection, bool last) override;
 
-    void init(OpenGLContext& open_gl_context) override;
-    void render(OpenGLContext& open_gl_context, bool animate = true) override;
-    void destroy(OpenGLContext& open_gl_context) override;
-    void paintBackground(Graphics& g) override { }
+    void init(juce::OpenGLContext& open_gl_context) override;
+    void render(juce::OpenGLContext& open_gl_context, bool animate = true) override;
+    void destroy(juce::OpenGLContext& open_gl_context) override;
+    void paintBackground(juce::Graphics& g) override { }
 
     // SynthSlider::SliderListener
     void hoverStarted(const std::string& name) override;
@@ -67,26 +67,26 @@ class OpenGLModulationManager : public OpenGLComponent,
     void makeModulationsVisible(std::string destination, bool visible);
     void setSliderValues();
 
-    ScopedPointer<Component> polyphonic_destinations_;
-    ScopedPointer<Component> monophonic_destinations_;
+    juce::ScopedPointer<Component> polyphonic_destinations_;
+    juce::ScopedPointer<Component> monophonic_destinations_;
 
     std::string current_modulator_;
     double last_value_;
     std::map<std::string, ModulationButton*> modulation_buttons_;
 
-    std::map<std::string, Slider*> slider_lookup_;
+    std::map<std::string, juce::Slider*> slider_lookup_;
     std::map<std::string, SynthSlider*> slider_model_lookup_;
-    std::vector<Slider*> owned_sliders_;
+    std::vector<juce::Slider*> owned_sliders_;
 
     std::map<std::string, OpenGLModulationMeter*> meter_lookup_;
     std::map<std::string, ModulationHighlight*> overlay_lookup_;
     mopo::output_map modulation_sources_;
 
-    ScopedPointer<OpenGLShaderProgram> shader_;
-    ScopedPointer<OpenGLShaderProgram::Attribute> position_;
-    ScopedPointer<OpenGLShaderProgram::Attribute> coordinates_;
-    ScopedPointer<OpenGLShaderProgram::Attribute> range_;
-    ScopedPointer<OpenGLShaderProgram::Uniform> radius_uniform_;
+    juce::ScopedPointer<juce::OpenGLShaderProgram> shader_;
+    juce::ScopedPointer<juce::OpenGLShaderProgram::Attribute> position_;
+    juce::ScopedPointer<juce::OpenGLShaderProgram::Attribute> coordinates_;
+    juce::ScopedPointer<juce::OpenGLShaderProgram::Attribute> range_;
+    juce::ScopedPointer<juce::OpenGLShaderProgram::Uniform> radius_uniform_;
 
     float* vertices_;
     int* triangles_;

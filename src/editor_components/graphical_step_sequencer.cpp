@@ -33,16 +33,16 @@ GraphicalStepSequencer::GraphicalStepSequencer() {
 
 GraphicalStepSequencer::~GraphicalStepSequencer() { }
 
-void GraphicalStepSequencer::paintBackground(Graphics& g) {
-  static const DropShadow shadow(Colour(0xbb000000), 1, Point<int>(0, 0));
+void GraphicalStepSequencer::paintBackground(juce::Graphics& g) {
+  static const juce::DropShadow shadow(juce::Colour(0xbb000000), 1, juce::Point<int>(0, 0));
   if (sequence_.size() == 0 || num_steps_slider_ == nullptr)
     return;
 
-  g.fillAll(Colour(0xff424242));
+  g.fillAll(juce::Colour(0xff424242));
 
   float x_inc = getWidth() / (1.0f * num_steps_);
   float line_width = 1.5f * getHeight() / 80.0f;
-  g.setColour(Colour(0xff545454));
+  g.setColour(juce::Colour(0xff545454));
   for (int i = 1; i * x_inc < getWidth(); ++i)
     g.drawLine(i * x_inc, 0, i * x_inc, getHeight());
 
@@ -51,7 +51,7 @@ void GraphicalStepSequencer::paintBackground(Graphics& g) {
   for (int i = 0; i < num_steps_; ++i) {
     float val = sequence_[i]->getValue();
     float bar_position = (getHeight() - 1.0f) * ((1.0f - val) / 2.0f);
-    Rectangle<int> rect(x, bar_position, x_inc, 1);
+    juce::Rectangle<int> rect(x, bar_position, x_inc, 1);
     shadow.drawForRectangle(g, rect);
     x += x_inc;
   }
@@ -77,7 +77,7 @@ void GraphicalStepSequencer::paintBackground(Graphics& g) {
   }
 }
 
-void GraphicalStepSequencer::paint(Graphics& g) {
+void GraphicalStepSequencer::paint(juce::Graphics& g) {
   if (sequence_.size() == 0 || num_steps_slider_ == nullptr)
     return;
 
@@ -88,12 +88,12 @@ void GraphicalStepSequencer::paint(Graphics& g) {
   float step_width = getWidth() / (1.0f * num_steps_);
 
   if (highlighted_step_ >= 0) {
-    g.setColour(Colour(0x11ffffff));
+    g.setColour(juce::Colour(0x11ffffff));
     g.fillRect(highlighted_step_ * step_width, 0.0f, step_width, 1.0f * getHeight());
   }
 
   if (last_step_ >= 0) {
-    g.setColour(Colour(0x08ffffff));
+    g.setColour(juce::Colour(0x08ffffff));
     g.fillRect(last_step_ * step_width, 0.0f, step_width, 1.0f * getHeight());
   }
 }
@@ -101,27 +101,27 @@ void GraphicalStepSequencer::paint(Graphics& g) {
 void GraphicalStepSequencer::resized() {
   ensureMinSize();
 
-  const Desktop::Displays::Display& display = Desktop::getInstance().getDisplays().getMainDisplay();
+  const juce::Displays::Display& display = juce::Desktop::getInstance().getDisplays().getMainDisplay();
   float scale = display.scale;
-  background_ = Image(Image::RGB, scale * getWidth(), scale * getHeight(), true);
+  background_ = juce::Image(juce::Image::RGB, scale * getWidth(), scale * getHeight(), true);
   resetBackground();
 }
 
-void GraphicalStepSequencer::mouseMove(const MouseEvent& e) {
+void GraphicalStepSequencer::mouseMove(const juce::MouseEvent& e) {
   updateHover(getHoveredStep(e.getPosition()));
 }
 
-void GraphicalStepSequencer::mouseExit(const MouseEvent& e) {
+void GraphicalStepSequencer::mouseExit(const juce::MouseEvent& e) {
   updateHover(-1);
 }
 
-void GraphicalStepSequencer::mouseDown(const MouseEvent& e) {
+void GraphicalStepSequencer::mouseDown(const juce::MouseEvent& e) {
   last_edit_position_ = e.getPosition();
   updateHover(getHoveredStep(e.getPosition()));
   changeStep(e);
 }
 
-void GraphicalStepSequencer::mouseDrag(const MouseEvent& e) {
+void GraphicalStepSequencer::mouseDrag(const juce::MouseEvent& e) {
   updateHover(getHoveredStep(e.getPosition()));
   changeStep(e);
   last_edit_position_ = e.getPosition();
@@ -137,7 +137,7 @@ void GraphicalStepSequencer::timerCallback() {
   }
 }
 
-void GraphicalStepSequencer::setStepSliders(std::vector<Slider*> sliders) {
+void GraphicalStepSequencer::setStepSliders(std::vector<juce::Slider*> sliders) {
   sequence_ = sliders;
   for (int i = 0; i < sliders.size(); ++i)
     sequence_[i]->addListener(this);
@@ -145,7 +145,7 @@ void GraphicalStepSequencer::setStepSliders(std::vector<Slider*> sliders) {
   resetBackground();
 }
 
-void GraphicalStepSequencer::sliderValueChanged(Slider* moved_slider) {
+void GraphicalStepSequencer::sliderValueChanged(juce::Slider* moved_slider) {
   ensureMinSize();
   resetBackground();
 }
@@ -177,10 +177,10 @@ void GraphicalStepSequencer::resetBackground() {
     return;
 
   ensureMinSize();
-  const Desktop::Displays::Display& display = Desktop::getInstance().getDisplays().getMainDisplay();
+  const juce::Displays::Display& display = juce::Desktop::getInstance().getDisplays().getMainDisplay();
   float scale = display.scale;
-  Graphics g(background_);
-  g.addTransform(AffineTransform::scale(scale, scale));
+  juce::Graphics g(background_);
+  g.addTransform(juce::AffineTransform::scale(scale, scale));
   paintBackground(g);
   repaint();
 }
@@ -188,8 +188,8 @@ void GraphicalStepSequencer::resetBackground() {
 // Sets the height of the steps based on mouse positions.
 // If the mouse skipped over some steps between last mouseDrag event, we'll interpolate
 // and set all the steps between to appropriate values.
-void GraphicalStepSequencer::changeStep(const MouseEvent& e) {
-  Point<int> mouse_position = e.getPosition();
+void GraphicalStepSequencer::changeStep(const juce::MouseEvent& e) {
+  juce::Point<int> mouse_position = e.getPosition();
   int from_step = getHoveredStep(last_edit_position_);
   int selected_step = getHoveredStep(mouse_position);
 
@@ -211,7 +211,7 @@ void GraphicalStepSequencer::changeStep(const MouseEvent& e) {
     if (step >= 0 && step < num_steps_) {
       float new_value = -2.0f * y / getHeight() + 1.0f;
       new_value = std::max(std::min(new_value, 1.0f), -1.0f);
-      new_value = sequence_[step]->snapValue(new_value, Slider::DragMode::absoluteDrag);
+      new_value = sequence_[step]->snapValue(new_value, juce::Slider::DragMode::absoluteDrag);
       sequence_[step]->setValue(new_value);
     }
     y += inc_x * slope;
@@ -220,7 +220,7 @@ void GraphicalStepSequencer::changeStep(const MouseEvent& e) {
   resetBackground();
 }
 
-int GraphicalStepSequencer::getHoveredStep(Point<int> position) {
+int GraphicalStepSequencer::getHoveredStep(juce::Point<int> position) {
   return floorf(num_steps_ * (1.0f * position.x) / getWidth());
 }
 

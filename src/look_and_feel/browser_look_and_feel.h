@@ -22,13 +22,13 @@
 
 class BrowserLookAndFeel : public juce::LookAndFeel_V3 {
   public:
-    void drawButtonBackground(Graphics& g, Button& button, const Colour &backgroundColour,
+    void drawButtonBackground(juce::Graphics& g, juce::Button& button, const juce::Colour &backgroundColour,
                               bool hover, bool is_down) override;
 
-    void drawToggleButton(Graphics& g, ToggleButton& button,
+    void drawToggleButton(juce::Graphics& g, juce::ToggleButton& button,
                           bool hover, bool is_down) override;
 
-    Font getTextButtonFont(TextButton&, int buttonHeight) override;
+    juce::Font getTextButtonFont(juce::TextButton&, int buttonHeight) override;
 
     static BrowserLookAndFeel* instance() {
       static BrowserLookAndFeel instance;

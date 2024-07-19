@@ -38,8 +38,8 @@ class Startup {
     static void copyFactoryPatches();
     static void fixPatchesFolder();
     static void updateAllPatches(SynthBase* synth,
-                                 std::map<std::string, String>* gui_state,
-                                 const CriticalSection& critical_section);
+                                 std::map<std::string, juce::String>* gui_state,
+                                 const juce::CriticalSection& critical_section);
 };
 
 #endif  // STARTUP_H

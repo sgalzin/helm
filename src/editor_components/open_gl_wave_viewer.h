@@ -37,16 +37,16 @@ class OpenGLWaveViewer : public OpenGLComponent, public SynthSlider::SliderListe
     void resetWavePath();
     void guiChanged(SynthSlider* slider) override;
 
-    void mouseDown(const MouseEvent& e) override;
+    void mouseDown(const juce::MouseEvent& e) override;
     void resized() override;
 
-    void init(OpenGLContext& open_gl_context) override;
-    void render(OpenGLContext& open_gl_context, bool animate = true) override;
-    void destroy(OpenGLContext& open_gl_context) override;
-    void paintBackground(Graphics& g) override { }
+    void init(juce::OpenGLContext& open_gl_context) override;
+    void render(juce::OpenGLContext& open_gl_context, bool animate = true) override;
+    void destroy(juce::OpenGLContext& open_gl_context) override;
+    void paintBackground(juce::Graphics& g) override { }
 
   private:
-    void drawPosition(OpenGLContext& open_gl_context);
+    void drawPosition(juce::OpenGLContext& open_gl_context);
     void paintPositionImage();
     void paintBackground();
     float phaseToX(float phase);
@@ -56,15 +56,15 @@ class OpenGLWaveViewer : public OpenGLComponent, public SynthSlider::SliderListe
     SynthSlider* amplitude_slider_;
     mopo::Output* wave_phase_;
     mopo::Output* wave_amp_;
-    Path wave_path_;
+    juce::Path wave_path_;
     int resolution_;
 
     OpenGLBackground background_;
   
-    Image position_image_;
-    Image background_image_;
-    OpenGLTexture position_texture_;
-    ScopedPointer<OpenGLShaderProgram::Uniform> texture_;
+    juce::Image position_image_;
+    juce::Image background_image_;
+    juce::OpenGLTexture position_texture_;
+    juce::ScopedPointer<juce::OpenGLShaderProgram::Uniform> texture_;
 
     float* position_vertices_;
     int* position_triangles_;

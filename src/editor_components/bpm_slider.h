@@ -20,9 +20,9 @@
 #include "JuceHeader.h"
 #include "synth_slider.h"
 
-class BpmSlider : public SynthSlider, public Timer {
+class BpmSlider : public SynthSlider, public juce::Timer {
   public:
-    BpmSlider(String name);
+    BpmSlider(juce::String name);
 
     void timerCallback() override;
 

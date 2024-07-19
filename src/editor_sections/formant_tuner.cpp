@@ -20,26 +20,26 @@
 #include "formant_response.h"
 #include "synth_slider.h"
 
-FormantTuner::FormantTuner(String name) : SynthSection(name) {
-  std::vector<Slider*> cutoffs;
-  std::vector<Slider*> resonances;
-  std::vector<Slider*> gains;
+FormantTuner::FormantTuner(juce::String name) : SynthSection(name) {
+  std::vector<juce::Slider*> cutoffs;
+  std::vector<juce::Slider*> resonances;
+  std::vector<juce::Slider*> gains;
 
   for (int i = 0; i < kNumFormants; ++i) {
     cutoffs_[i] = new SynthSlider("cutoff");
     addAndMakeVisible(cutoffs_[i]);
-    cutoffs_[i]->setSliderStyle(Slider::LinearBarVertical);
-    cutoffs_[i]->setTextBoxStyle(Slider::TextBoxAbove, false, 150, 20);
+    cutoffs_[i]->setSliderStyle(juce::Slider::LinearBarVertical);
+    cutoffs_[i]->setTextBoxStyle(juce::Slider::TextBoxAbove, false, 150, 20);
 
     resonances_[i] = new SynthSlider("resonance");
     addAndMakeVisible(resonances_[i]);
-    resonances_[i]->setSliderStyle(Slider::LinearBarVertical);
-    resonances_[i]->setTextBoxStyle(Slider::TextBoxAbove, false, 150, 20);
+    resonances_[i]->setSliderStyle(juce::Slider::LinearBarVertical);
+    resonances_[i]->setTextBoxStyle(juce::Slider::TextBoxAbove, false, 150, 20);
 
     gains_[i] = new SynthSlider("reverb_dry_wet");
     addAndMakeVisible(gains_[i]);
-    gains_[i]->setSliderStyle(Slider::LinearBarVertical);
-    gains_[i]->setTextBoxStyle(Slider::TextBoxAbove, false, 150, 20);
+    gains_[i]->setSliderStyle(juce::Slider::LinearBarVertical);
+    gains_[i]->setTextBoxStyle(juce::Slider::TextBoxAbove, false, 150, 20);
 
     cutoffs.push_back(cutoffs_[i]);
     resonances.push_back(resonances_[i]);
@@ -61,11 +61,11 @@ FormantTuner::~FormantTuner() {
   formant_response_ = nullptr;
 }
 
-void FormantTuner::paintBackground(Graphics& g) {
-  static const DropShadow component_shadow(Colour(0xbb000000), 4, Point<int>(0, 0));
+void FormantTuner::paintBackground(juce::Graphics& g) {
+  static const juce::DropShadow component_shadow(juce::Colour(0xbb000000), 4, juce::Point<int>(0, 0));
   SynthSection::paintBackground(g);
 
-  g.setColour(Colour(0xffbbbbbb));
+  g.setColour(juce::Colour(0xffbbbbbb));
   component_shadow.drawForRectangle(g, formant_response_->getBounds());
 }
 

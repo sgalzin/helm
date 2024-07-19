@@ -20,21 +20,21 @@
 
 #include "JuceHeader.h"
 
-class GlobalToolTip  : public Component, public Timer {
+class GlobalToolTip  : public juce::Component, public juce::Timer {
   public:
     GlobalToolTip();
     ~GlobalToolTip();
 
-    void setText(String parameter, String value);
+    void setText(juce::String parameter, juce::String value);
     void timerCallback() override;
-    void paint(Graphics& g) override;
+    void paint(juce::Graphics& g) override;
 
   private:
-    String shown_parameter_text_;
-    String shown_value_text_;
-    String parameter_text_;
-    String value_text_;
-    int64 time_updated_;
+    juce::String shown_parameter_text_;
+    juce::String shown_value_text_;
+    juce::String parameter_text_;
+    juce::String value_text_;
+    juce::int64 time_updated_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GlobalToolTip)
 };

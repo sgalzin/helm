@@ -33,12 +33,12 @@
 FullInterface::FullInterface(mopo::control_map controls, mopo::output_map modulation_sources,
                              mopo::output_map mono_modulations,
                              mopo::output_map poly_modulations,
-                             MidiKeyboardState* keyboard_state) : SynthSection("full_interface") {
+                             juce::MidiKeyboardState* keyboard_state) : SynthSection("full_interface") {
   animate_ = true;
   open_gl_context.setContinuousRepainting(true);
   open_gl_context.setRenderer(this);
   open_gl_context.attachTo(*getTopLevelComponent());
-  open_gl_context.setOpenGLVersionRequired(OpenGLContext::openGL3_2);
+  open_gl_context.setOpenGLVersionRequired(juce::OpenGLContext::openGL3_2);
 
   addSubSection(synthesis_interface_ = new SynthesisInterface(controls, keyboard_state));
   addSubSection(arp_section_ = new ArpSection(TRANS("ARP")));
@@ -52,23 +52,23 @@ FullInterface::FullInterface(mopo::control_map controls, mopo::output_map modula
   setAllValues(controls);
   createModulationSliders(modulation_sources, mono_modulations, poly_modulations);
 
-  logo_button_ = new ImageButton("logo_button");
-  const Desktop::Displays::Display& display = Desktop::getInstance().getDisplays().getMainDisplay();
+  logo_button_ = new juce::ImageButton("logo_button");
+  const juce::Displays::Display& display = juce::Desktop::getInstance().getDisplays().getMainDisplay();
   if (display.scale > 1.5) {
-    Image helm = ImageCache::getFromMemory(BinaryData::helm_icon_128_2x_png,
+    juce::Image helm = juce::ImageCache::getFromMemory(BinaryData::helm_icon_128_2x_png,
                                            BinaryData::helm_icon_128_2x_pngSize);
     logo_button_->setImages(true, true, false,
-                            helm, 1.0, Colours::transparentBlack,
-                            helm, 1.0, Colour(0x11ffffff),
-                            helm, 1.0, Colour(0x11000000));
+                            helm, 1.0, juce::Colours::transparentBlack,
+                            helm, 1.0, juce::Colour(0x11ffffff),
+                            helm, 1.0, juce::Colour(0x11000000));
   }
   else {
-    Image helm_small = ImageCache::getFromMemory(BinaryData::helm_icon_128_1x_png,
+    juce::Image helm_small = juce::ImageCache::getFromMemory(BinaryData::helm_icon_128_1x_png,
                                                  BinaryData::helm_icon_128_1x_pngSize);
     logo_button_->setImages(true, true, false,
-                            helm_small, 1.0, Colours::transparentBlack,
-                            helm_small, 1.0, Colour(0x11ffffff),
-                            helm_small, 1.0, Colour(0x11000000));
+                            helm_small, 1.0, juce::Colours::transparentBlack,
+                            helm_small, 1.0, juce::Colour(0x11ffffff),
+                            helm_small, 1.0, juce::Colour(0x11000000));
   }
   addAndMakeVisible(logo_button_);
   logo_button_->addListener(this);
@@ -125,13 +125,13 @@ FullInterface::~FullInterface() {
   volume_section_ = nullptr;
 }
 
-void FullInterface::paint(Graphics& g) { }
+void FullInterface::paint(juce::Graphics& g) { }
 
-void FullInterface::paintBackground(Graphics& g) {
-  static const DropShadow shadow(Colour(0xcc000000), 3, Point<int>(0, 1));
-  static const DropShadow logo_shadow(Colour(0xff000000), 8, Point<int>(0, 0));
-  static const DropShadow component_shadow(Colour(0xcc000000), 5, Point<int>(0, 1));
-  Image helm_small = ImageCache::getFromMemory(BinaryData::helm_icon_32_2x_png,
+void FullInterface::paintBackground(juce::Graphics& g) {
+  static const juce::DropShadow shadow(juce::Colour(0xcc000000), 3, juce::Point<int>(0, 1));
+  static const juce::DropShadow logo_shadow(juce::Colour(0xff000000), 8, juce::Point<int>(0, 0));
+  static const juce::DropShadow component_shadow(juce::Colour(0xcc000000), 5, juce::Point<int>(0, 1));
+  juce::Image helm_small = juce::ImageCache::getFromMemory(BinaryData::helm_icon_32_2x_png,
                                                BinaryData::helm_icon_32_2x_pngSize);
   g.setColour(Colors::background);
   g.fillRect(getLocalBounds());
@@ -144,14 +144,14 @@ void FullInterface::paintBackground(Graphics& g) {
   int x = logo_button_->getX() - logo_padding;
   int width = logo_button_->getWidth() + 2 * logo_padding;
 
-  shadow.drawForRectangle(g, Rectangle<int>(x, logo_button_->getY(),
+  shadow.drawForRectangle(g, juce::Rectangle<int>(x, logo_button_->getY(),
                                             width, logo_button_->getHeight()));
-  g.setColour(Colour(0xff303030));
+  g.setColour(juce::Colour(0xff303030));
   g.fillRoundedRectangle(x, logo_button_->getY(), width, logo_button_->getHeight(), 3.0f);
 
   g.saveState();
   g.setOrigin(logo_button_->getX(), logo_button_->getY());
-  g.addTransform(AffineTransform::scale(size_ratio_, size_ratio_));
+  g.addTransform(juce::AffineTransform::scale(size_ratio_, size_ratio_));
 
   logo_shadow.drawForImage(g, helm_small);
   g.restoreState();
@@ -271,12 +271,12 @@ void FullInterface::createModulationSliders(mopo::output_map modulation_sources,
   addOpenGLComponent(modulation_manager_);
 }
 
-void FullInterface::setToolTipText(String parameter, String value) {
+void FullInterface::setToolTipText(juce::String parameter, juce::String value) {
   if (global_tool_tip_)
     global_tool_tip_->setText(parameter, value);
 }
 
-void FullInterface::buttonClicked(Button* clicked_button) {
+void FullInterface::buttonClicked(juce::Button* clicked_button) {
   if (clicked_button == logo_button_) {
     about_section_->setVisible(true);
   }
@@ -292,15 +292,15 @@ void FullInterface::animate(bool animate) {
 }
 
 void FullInterface::checkBackground() {
-  const Desktop::Displays::Display& display = Desktop::getInstance().getDisplays().getMainDisplay();
+  const juce::Displays::Display& display = juce::Desktop::getInstance().getDisplays().getMainDisplay();
   float scale = display.scale;
   int width = scale * getWidth();
   int height = scale * getHeight();
 
   if (background_image_.getWidth() != width || background_image_.getHeight() != height) {
-    background_image_ = Image(Image::ARGB, width, height, true);
-    Graphics g(background_image_);
-    g.addTransform(AffineTransform::scale(scale, scale));
+    background_image_ = juce::Image(juce::Image::ARGB, width, height, true);
+    juce::Graphics g(background_image_);
+    g.addTransform(juce::AffineTransform::scale(scale, scale));
     paintBackground(g);
     background_.updateBackgroundImage(background_image_);
   }

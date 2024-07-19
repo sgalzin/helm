@@ -24,15 +24,15 @@
 
 class VolumeSection : public SynthSection {
   public:
-    VolumeSection(String name);
+    VolumeSection(juce::String name);
     ~VolumeSection();
 
     void resized() override;
 
   private:
-    ScopedPointer<SynthSlider> volume_;
-    ScopedPointer<OpenGLPeakMeter> peak_meter_left_;
-    ScopedPointer<OpenGLPeakMeter> peak_meter_right_;
+    juce::ScopedPointer<SynthSlider> volume_;
+    juce::ScopedPointer<OpenGLPeakMeter> peak_meter_left_;
+    juce::ScopedPointer<OpenGLPeakMeter> peak_meter_right_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(VolumeSection)
 };

@@ -36,28 +36,28 @@
 
 
 namespace {
-  Array<File> getSelectedFolders(ListBox* view, FileListBoxModel* model) {
-    SparseSet<int> selected_rows = view->getSelectedRows();
+  juce::Array<juce::File> getSelectedFolders(juce::ListBox* view, FileListBoxModel* model) {
+    juce::SparseSet<int> selected_rows = view->getSelectedRows();
 
-    Array<File> selected_folders;
+    juce::Array<juce::File> selected_folders;
     for (int i = 0; i < selected_rows.size(); ++i)
       selected_folders.add(model->getFileAtRow(selected_rows[i]));
 
     return selected_folders;
   }
 
-  Array<File> getFoldersToScan(ListBox* view, FileListBoxModel* model) {
+  juce::Array<juce::File> getFoldersToScan(juce::ListBox* view, FileListBoxModel* model) {
     if (view->getSelectedRows().size())
       return getSelectedFolders(view, model);
 
     return model->getAllFiles();
   }
 
-  void setSelectedRows(ListBox* view, FileListBoxModel* model, Array<File> selected) {
+  void setSelectedRows(juce::ListBox* view, FileListBoxModel* model, juce::Array<juce::File> selected) {
     view->deselectAllRows();
 
     for (int sel = 0, row = 0; sel < selected.size() && row < model->getNumRows();) {
-      String selected_path = selected[sel].getFullPathName();
+      juce::String selected_path = selected[sel].getFullPathName();
       int compare = model->getFileAtRow(row).getFullPathName().compare(selected_path);
 
       if (compare < 0)
@@ -80,12 +80,12 @@ PatchBrowser::PatchBrowser() : Overlay("patch_browser") {
 
   banks_model_ = new FileListBoxModel();
   banks_model_->setListener(this);
-  Array<File> bank_locations;
-  File bank_dir = LoadSave::getBankDirectory();
+  juce::Array<juce::File> bank_locations;
+  juce::File bank_dir = LoadSave::getBankDirectory();
   bank_locations.add(bank_dir);
   banks_model_->rescanFiles(bank_locations);
 
-  banks_view_ = new ListBox("banks", banks_model_);
+  banks_view_ = new juce::ListBox("banks", banks_model_);
   banks_view_->setMultipleSelectionEnabled(false);
   banks_view_->setClickingTogglesRowSelection(true);
   banks_view_->updateContent();
@@ -94,7 +94,7 @@ PatchBrowser::PatchBrowser() : Overlay("patch_browser") {
   folders_model_ = new FileListBoxModel();
   folders_model_->setListener(this);
 
-  folders_view_ = new ListBox("folders", folders_model_);
+  folders_view_ = new juce::ListBox("folders", folders_model_);
   folders_view_->setMultipleSelectionEnabled(true);
   folders_view_->setClickingTogglesRowSelection(true);
   folders_view_->updateContent();
@@ -103,33 +103,33 @@ PatchBrowser::PatchBrowser() : Overlay("patch_browser") {
   patches_model_ = new FileListBoxModel();
   patches_model_->setListener(this);
 
-  patches_view_ = new ListBox("patches", patches_model_);
+  patches_view_ = new juce::ListBox("patches", patches_model_);
   patches_view_->updateContent();
   addAndMakeVisible(patches_view_);
 
-  banks_view_->setColour(ListBox::backgroundColourId, Colour(0xff323232));
-  folders_view_->setColour(ListBox::backgroundColourId, Colour(0xff323232));
-  patches_view_->setColour(ListBox::backgroundColourId, Colour(0xff323232));
+  banks_view_->setColour(juce::ListBox::backgroundColourId, juce::Colour(0xff323232));
+  folders_view_->setColour(juce::ListBox::backgroundColourId, juce::Colour(0xff323232));
+  patches_view_->setColour(juce::ListBox::backgroundColourId, juce::Colour(0xff323232));
 
-  search_box_ = new TextEditor("Search");
+  search_box_ = new juce::TextEditor("Search");
   search_box_->addListener(this);
   search_box_->setSelectAllWhenFocused(true);
-  search_box_->setTextToShowWhenEmpty(TRANS("Search"), Colour(0xff777777));
+  search_box_->setTextToShowWhenEmpty(TRANS("Search"), juce::Colour(0xff777777));
   search_box_->setFont(Fonts::instance()->proportional_light().withPointHeight(16.0f));
-  search_box_->setColour(CaretComponent::caretColourId, Colour(0xff888888));
-  search_box_->setColour(TextEditor::textColourId, Colour(0xffcccccc));
-  search_box_->setColour(TextEditor::highlightedTextColourId, Colour(0xffcccccc));
-  search_box_->setColour(TextEditor::highlightColourId, Colour(0xff888888));
-  search_box_->setColour(TextEditor::backgroundColourId, Colour(0xff323232));
-  search_box_->setColour(TextEditor::outlineColourId, Colour(0xff888888));
-  search_box_->setColour(TextEditor::focusedOutlineColourId, Colour(0xff888888));
+  search_box_->setColour(juce::CaretComponent::caretColourId, juce::Colour(0xff888888));
+  search_box_->setColour(juce::TextEditor::textColourId, juce::Colour(0xffcccccc));
+  search_box_->setColour(juce::TextEditor::highlightedTextColourId, juce::Colour(0xffcccccc));
+  search_box_->setColour(juce::TextEditor::highlightColourId, juce::Colour(0xff888888));
+  search_box_->setColour(juce::TextEditor::backgroundColourId, juce::Colour(0xff323232));
+  search_box_->setColour(juce::TextEditor::outlineColourId, juce::Colour(0xff888888));
+  search_box_->setColour(juce::TextEditor::focusedOutlineColourId, juce::Colour(0xff888888));
   addAndMakeVisible(search_box_);
 
-  import_bank_button_ = new TextButton(TRANS("Import Bank"));
+  import_bank_button_ = new juce::TextButton(TRANS("Import Bank"));
   import_bank_button_->addListener(this);
   addAndMakeVisible(import_bank_button_);
 
-  export_bank_button_ = new TextButton(TRANS("Export Bank"));
+  export_bank_button_ = new juce::TextButton(TRANS("Export Bank"));
   export_bank_button_->addListener(this);
   addAndMakeVisible(export_bank_button_);
   export_bank_button_->setEnabled(false);
@@ -137,33 +137,33 @@ PatchBrowser::PatchBrowser() : Overlay("patch_browser") {
   selectedFilesChanged(banks_model_);
   selectedFilesChanged(folders_model_);
 
-  cc_license_link_ = new HyperlinkButton("CC-BY",
-                                         URL("https://creativecommons.org/licenses/by/4.0/"));
+  cc_license_link_ = new juce::HyperlinkButton("CC-BY",
+                                         juce::URL("https://creativecommons.org/licenses/by/4.0/"));
   cc_license_link_->setFont(Fonts::instance()->monospace().withPointHeight(12.0f),
-                            false, Justification::centredLeft);
-  cc_license_link_->setColour(HyperlinkButton::textColourId, Colour(0xffffd740));
+                            false, juce::Justification::centredLeft);
+  cc_license_link_->setColour(juce::HyperlinkButton::textColourId, juce::Colour(0xffffd740));
   addAndMakeVisible(cc_license_link_);
 
-  gpl_license_link_ = new HyperlinkButton("GPL-3",
-                                          URL("http://www.gnu.org/licenses/gpl-3.0.en.html"));
+  gpl_license_link_ = new juce::HyperlinkButton("GPL-3",
+                                          juce::URL("http://www.gnu.org/licenses/gpl-3.0.en.html"));
   gpl_license_link_->setFont(Fonts::instance()->monospace().withPointHeight(12.0f),
-                             false, Justification::centredLeft);
-  gpl_license_link_->setColour(HyperlinkButton::textColourId, Colour(0xffffd740));
+                             false, juce::Justification::centredLeft);
+  gpl_license_link_->setColour(juce::HyperlinkButton::textColourId, juce::Colour(0xffffd740));
   addAndMakeVisible(gpl_license_link_);
 
-  save_as_button_ = new TextButton(TRANS("Save Patch As"));
+  save_as_button_ = new juce::TextButton(TRANS("Save Patch As"));
   save_as_button_->addListener(this);
   addAndMakeVisible(save_as_button_);
 
-  delete_patch_button_ = new TextButton(TRANS("Delete Patch"));
+  delete_patch_button_ = new juce::TextButton(TRANS("Delete Patch"));
   delete_patch_button_->addListener(this);
   addAndMakeVisible(delete_patch_button_);
 
-  hide_button_ = new TextButton("X");
+  hide_button_ = new juce::TextButton("X");
   hide_button_->addListener(this);
   addAndMakeVisible(hide_button_);
 
-  done_button_ = new TextButton("Done");
+  done_button_ = new juce::TextButton("Done");
   done_button_->addListener(this);
   addAndMakeVisible(done_button_);
 
@@ -173,14 +173,14 @@ PatchBrowser::PatchBrowser() : Overlay("patch_browser") {
 PatchBrowser::~PatchBrowser() {
 }
 
-void PatchBrowser::paint(Graphics& g) {
+void PatchBrowser::paint(juce::Graphics& g) {
   g.fillAll(Colors::overlay_screen);
-  g.setColour(Colour(0xff111111));
+  g.setColour(juce::Colour(0xff111111));
   g.fillRect(0.0f, 0.0f, 1.0f * getWidth(), size_ratio_ * BROWSING_HEIGHT);
 
   g.setColour(Colors::background);
   float info_width = getPatchInfoWidth();
-  Rectangle<int> data_rect(getWidth() - info_width - BROWSE_PADDING, BROWSE_PADDING,
+  juce::Rectangle<int> data_rect(getWidth() - info_width - BROWSE_PADDING, BROWSE_PADDING,
                            info_width, size_ratio_ * BROWSING_HEIGHT - 2.0f * BROWSE_PADDING);
   g.fillRect(data_rect);
 
@@ -190,29 +190,29 @@ void PatchBrowser::paint(Graphics& g) {
     float buffer = 20.0f;
 
     g.setFont(Fonts::instance()->proportional_light().withPointHeight(14.0f));
-    g.setColour(Colour(0xff888888));
+    g.setColour(juce::Colour(0xff888888));
 
     g.fillRect(data_x + division + buffer / 2.0f, BROWSE_PADDING + 70.0f,
                1.0f, 120.0f);
 
     g.drawText(TRANS("AUTHOR"),
                data_x, BROWSE_PADDING + 80.0f, division, 20.0f,
-               Justification::centredRight, false);
+               juce::Justification::centredRight, false);
     g.drawText(TRANS("BANK"),
                data_x, BROWSE_PADDING + 120.0f, division, 20.0f,
-               Justification::centredRight, false);
+               juce::Justification::centredRight, false);
     g.drawText(TRANS("LICENSE"),
                data_x, BROWSE_PADDING + 160.0f, division, 20.0f,
-               Justification::centredRight, false);
+               juce::Justification::centredRight, false);
 
     g.setFont(Fonts::instance()->monospace().withPointHeight(16.0f));
     g.setColour(Colors::audio);
 
-    File selected_patch = getSelectedPatch();
+    juce::File selected_patch = getSelectedPatch();
     g.drawFittedText(selected_patch.getFileNameWithoutExtension(),
                      data_x + 2.0f * BROWSE_PADDING, 4.0f * BROWSE_PADDING,
                      info_width - 2.0f * BROWSE_PADDING, 20.0f,
-                     Justification::centred, true);
+                     juce::Justification::centred, true);
 
     g.setFont(Fonts::instance()->monospace().withPointHeight(12.0f));
     g.setColour(Colors::control_label_text);
@@ -220,10 +220,10 @@ void PatchBrowser::paint(Graphics& g) {
     float data_width = info_width - division - buffer - 2.0f * BROWSE_PADDING;
     g.drawText(author_,
                data_x + division + buffer, BROWSE_PADDING + 80.0f, data_width, 20.0f,
-               Justification::centredLeft, true);
+               juce::Justification::centredLeft, true);
     g.drawText(selected_patch.getParentDirectory().getParentDirectory().getFileName(),
                data_x + division + buffer, BROWSE_PADDING + 120.0f, data_width, 20.0f,
-               Justification::centredLeft, true);
+               juce::Justification::centredLeft, true);
   }
 }
 
@@ -300,12 +300,12 @@ void PatchBrowser::selectedFilesChanged(FileListBoxModel* model) {
   if (model == banks_model_ || model == folders_model_)
     scanPatches();
   else if (model == patches_model_) {
-    SparseSet<int> selected_rows = patches_view_->getSelectedRows();
+    juce::SparseSet<int> selected_rows = patches_view_->getSelectedRows();
     delete_patch_button_->setEnabled(selected_rows.size());
 
     if (selected_rows.size()) {
-      external_patch_ = File();
-      File patch = patches_model_->getFileAtRow(selected_rows[0]);
+      external_patch_ = juce::File();
+      juce::File patch = patches_model_->getFileAtRow(selected_rows[0]);
       loadFromFile(patch);
 
       if (listener_)
@@ -319,16 +319,16 @@ void PatchBrowser::selectedFilesChanged(FileListBoxModel* model) {
   }
 }
 
-void PatchBrowser::textEditorTextChanged(TextEditor& editor) {
+void PatchBrowser::textEditorTextChanged(juce::TextEditor& editor) {
   scanPatches();
 }
 
-void PatchBrowser::textEditorEscapeKeyPressed(TextEditor& editor) {
+void PatchBrowser::textEditorEscapeKeyPressed(juce::TextEditor& editor) {
   if (isVisible())
     setVisible(false);
 }
 
-void PatchBrowser::fileSaved(File saved_file) {
+void PatchBrowser::fileSaved(juce::File saved_file) {
   patches_view_->deselectAllRows();
   folders_view_->deselectAllRows();
   banks_view_->deselectAllRows();
@@ -337,15 +337,15 @@ void PatchBrowser::fileSaved(File saved_file) {
   patches_view_->selectRow(index);
 }
 
-void PatchBrowser::fileDeleted(File saved_file) {
+void PatchBrowser::fileDeleted(juce::File saved_file) {
   scanAll();
 }
 
-void PatchBrowser::buttonClicked(Button* clicked_button) {
+void PatchBrowser::buttonClicked(juce::Button* clicked_button) {
   if (clicked_button == save_as_button_ && save_section_)
     save_section_->setVisible(true);
   else if (clicked_button == delete_patch_button_ && delete_section_) {
-    File selected_patch = getSelectedPatch();
+    juce::File selected_patch = getSelectedPatch();
     if (selected_patch.exists()) {
       delete_section_->setFileToDelete(selected_patch);
       delete_section_->setVisible(true);
@@ -358,14 +358,14 @@ void PatchBrowser::buttonClicked(Button* clicked_button) {
     scanAll();
   }
   else if (clicked_button == export_bank_button_) {
-    Array<File> banks = getFoldersToScan(banks_view_, banks_model_);
+    juce::Array<juce::File> banks = getFoldersToScan(banks_view_, banks_model_);
     if (banks.size())
       LoadSave::exportBank(banks[0].getFileName());
   }
 }
 
-bool PatchBrowser::keyPressed(const KeyPress &key, Component *origin) {
-  if (key.getKeyCode() == KeyPress::escapeKey && isVisible()) {
+bool PatchBrowser::keyPressed(const juce::KeyPress &key, Component *origin) {
+  if (key.getKeyCode() == juce::KeyPress::escapeKey && isVisible()) {
     setVisible(false);
     return true;
   }
@@ -378,7 +378,7 @@ bool PatchBrowser::keyStateChanged(bool is_key_down, Component *origin) {
   return false;
 }
 
-void PatchBrowser::mouseUp(const MouseEvent& e) {
+void PatchBrowser::mouseUp(const juce::MouseEvent& e) {
   if (e.getPosition().y > size_ratio_ * BROWSING_HEIGHT)
     setVisible(false);
 }
@@ -387,33 +387,33 @@ bool PatchBrowser::isPatchSelected() {
   return external_patch_.exists() || patches_view_->getSelectedRows().size();
 }
 
-File PatchBrowser::getSelectedPatch() {
+juce::File PatchBrowser::getSelectedPatch() {
   if (external_patch_.exists())
     return external_patch_;
 
-  SparseSet<int> selected_rows = patches_view_->getSelectedRows();
+  juce::SparseSet<int> selected_rows = patches_view_->getSelectedRows();
   if (selected_rows.size())
     return patches_model_->getFileAtRow(selected_rows[0]);
-  return File();
+  return juce::File();
 }
 
 void PatchBrowser::jumpToPatch(int indices) {
   static const FileSorterAscending file_sorter;
 
-  File parent = external_patch_.getParentDirectory();
+  juce::File parent = external_patch_.getParentDirectory();
   if (parent.exists()) {
-    Array<File> patches;
-    parent.findChildFiles(patches, File::findFiles, false, String("*.") + mopo::PATCH_EXTENSION);
+    juce::Array<juce::File> patches;
+    parent.findChildFiles(patches, juce::File::findFiles, false, juce::String("*.") + mopo::PATCH_EXTENSION);
     patches.sort(file_sorter);
     int index = patches.indexOf(external_patch_);
     index = (index + indices + patches.size()) % patches.size();
 
-    File new_patch = patches[index];
+    juce::File new_patch = patches[index];
     loadFromFile(new_patch);
     externalPatchLoaded(new_patch);
   }
   else {
-    SparseSet<int> selected_rows = patches_view_->getSelectedRows();
+    juce::SparseSet<int> selected_rows = patches_view_->getSelectedRows();
     if (selected_rows.size()) {
       int num_rows = patches_model_->getNumRows();
       int row = (selected_rows[0] + indices + num_rows) % num_rows;
@@ -432,13 +432,13 @@ void PatchBrowser::loadNextPatch() {
   jumpToPatch(1);
 }
 
-void PatchBrowser::externalPatchLoaded(File file) {
+void PatchBrowser::externalPatchLoaded(juce::File file) {
   external_patch_ = file;
   patches_view_->deselectAllRows();
   setPatchInfo(file);
 }
 
-bool PatchBrowser::loadFromFile(File& patch) {
+bool PatchBrowser::loadFromFile(juce::File& patch) {
   SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
   if (parent == nullptr)
     return false;
@@ -454,9 +454,9 @@ bool PatchBrowser::loadFromFile(File& patch) {
   return false;
 }
 
-void PatchBrowser::setPatchInfo(File& patch) {
-  var parsed_json_state;
-  if (patch.exists() && JSON::parse(patch.loadFileAsString(), parsed_json_state).wasOk()) {
+void PatchBrowser::setPatchInfo(juce::File& patch) {
+  juce::var parsed_json_state;
+  if (patch.exists() && juce::JSON::parse(patch.loadFileAsString(), parsed_json_state).wasOk()) {
     author_ = LoadSave::getAuthor(parsed_json_state);
     license_ = LoadSave::getLicense(parsed_json_state);
 
@@ -480,9 +480,9 @@ void PatchBrowser::setDeleteSection(DeleteSection* delete_section) {
 }
 
 void PatchBrowser::scanBanks() {
-  Array<File> top_level;
+  juce::Array<juce::File> top_level;
   top_level.add(LoadSave::getBankDirectory());
-  Array<File> banks_selected = getSelectedFolders(banks_view_, banks_model_);
+  juce::Array<juce::File> banks_selected = getSelectedFolders(banks_view_, banks_model_);
 
   banks_model_->rescanFiles(top_level);
   banks_view_->updateContent();
@@ -490,8 +490,8 @@ void PatchBrowser::scanBanks() {
 }
 
 void PatchBrowser::scanFolders() {
-  Array<File> banks = getFoldersToScan(banks_view_, banks_model_);
-  Array<File> folders_selected = getSelectedFolders(folders_view_, folders_model_);
+  juce::Array<juce::File> banks = getFoldersToScan(banks_view_, banks_model_);
+  juce::Array<juce::File> folders_selected = getSelectedFolders(folders_view_, folders_model_);
 
   folders_model_->rescanFiles(banks);
   folders_view_->updateContent();
@@ -499,10 +499,10 @@ void PatchBrowser::scanFolders() {
 }
 
 void PatchBrowser::scanPatches() {
-  Array<File> folders = getFoldersToScan(folders_view_, folders_model_);
-  Array<File> patches_selected = getSelectedFolders(patches_view_, patches_model_);
+  juce::Array<juce::File> folders = getFoldersToScan(folders_view_, folders_model_);
+  juce::Array<juce::File> patches_selected = getSelectedFolders(patches_view_, patches_model_);
 
-  String search = "*" + search_box_->getText() + "*." + mopo::PATCH_EXTENSION;
+  juce::String search = "*" + search_box_->getText() + "*." + mopo::PATCH_EXTENSION;
   patches_model_->rescanFiles(folders, search, true);
   patches_view_->updateContent();
   setSelectedRows(patches_view_, patches_model_, patches_selected);

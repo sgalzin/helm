@@ -42,8 +42,8 @@ HelmEditor::HelmEditor(HelmPlugin& helm) : AudioProcessorEditor(&helm), SynthGui
   repaint();
 }
 
-void HelmEditor::paint(Graphics& g) {
-  g.fillAll(Colours::white);
+void HelmEditor::paint(juce::Graphics& g) {
+  g.fillAll(juce::Colours::white);
 }
 
 void HelmEditor::resized() {

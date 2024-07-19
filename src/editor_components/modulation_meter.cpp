@@ -30,7 +30,7 @@ ModulationMeter::ModulationMeter(const mopo::Output* mono_total,
                                  const SynthSlider* slider) :
         mono_total_(mono_total), poly_total_(poly_total),
         destination_(slider), current_value_(0.0), knob_percent_(0.0), mod_percent_(0.0),
-        knob_stroke_(0.0f, PathStrokeType::beveled, PathStrokeType::butt),
+        knob_stroke_(0.0f, juce::PathStrokeType::beveled, juce::PathStrokeType::butt),
         full_radius_(0.0), outer_radius_(0.0) {
   setInterceptsMouseClicks(false, false);
   updateValue();
@@ -40,8 +40,8 @@ ModulationMeter::ModulationMeter(const mopo::Output* mono_total,
 ModulationMeter::~ModulationMeter() {
 }
 
-void ModulationMeter::paint(Graphics& g) {
-  if (destination_->getSliderStyle() == Slider::RotaryHorizontalVerticalDrag) {
+void ModulationMeter::paint(juce::Graphics& g) {
+  if (destination_->getSliderStyle() == juce::Slider::RotaryHorizontalVerticalDrag) {
     if (&destination_->getLookAndFeel() == TextLookAndFeel::instance())
       drawTextSlider(g);
     else
@@ -56,7 +56,7 @@ void ModulationMeter::resized() {
 
   full_radius_ = std::min(getWidth() / 2.0f, getHeight() / 2.0f);
   float stroke_width = 2.0f * full_radius_ * stroke_percent;
-  knob_stroke_ = PathStrokeType(stroke_width, PathStrokeType::beveled, PathStrokeType::butt);
+  knob_stroke_ = juce::PathStrokeType(stroke_width, juce::PathStrokeType::beveled, juce::PathStrokeType::butt);
   outer_radius_ = full_radius_ - stroke_width;
 
   SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
@@ -88,8 +88,8 @@ void ModulationMeter::updateDrawing() {
   }
 }
 
-void ModulationMeter::drawTextSlider(Graphics& g) {
-  g.setColour(Colour(SLIDER_MOD_COLOR));
+void ModulationMeter::drawTextSlider(juce::Graphics& g) {
+  g.setColour(juce::Colour(SLIDER_MOD_COLOR));
 
   float diff_percent = mod_percent_ - knob_percent_;
 
@@ -103,10 +103,10 @@ void ModulationMeter::drawTextSlider(Graphics& g) {
   }
 }
 
-void ModulationMeter::drawSlider(Graphics& g) {
-  g.setColour(Colour(SLIDER_MOD_COLOR));
+void ModulationMeter::drawSlider(juce::Graphics& g) {
+  g.setColour(juce::Colour(SLIDER_MOD_COLOR));
 
-  if (destination_->getSliderStyle() == Slider::LinearBar) {
+  if (destination_->getSliderStyle() == juce::Slider::LinearBar) {
     float knob_position = getWidth() * knob_percent_;
     float mod_position = getWidth() * mod_percent_;
 
@@ -114,7 +114,7 @@ void ModulationMeter::drawSlider(Graphics& g) {
       int index = mod_percent_ * destination_->getMaximum() + 0.5;
       float width = getWidth() / (destination_->getMaximum() + 1.0);
 
-      g.setColour(Colour(0xaaffffff));
+      g.setColour(juce::Colour(0xaaffffff));
       g.drawRect(index * width, 0.0f, width, float(getHeight()), 1.0f);
     }
     else
@@ -128,12 +128,12 @@ void ModulationMeter::drawSlider(Graphics& g) {
   }
 }
 
-void ModulationMeter::drawKnob(Graphics& g) {
+void ModulationMeter::drawKnob(juce::Graphics& g) {
   float current_mod_angle = mopo::utils::interpolate(-ANGLE, ANGLE, mod_percent_);
   float current_knob_angle = mopo::utils::interpolate(-ANGLE, ANGLE, knob_percent_);
 
   if (current_mod_angle != current_knob_angle) {
-    Path mod_section;
+    juce::Path mod_section;
     mod_section.addCentredArc(full_radius_, full_radius_, outer_radius_, outer_radius_,
                               0.0f, current_mod_angle, current_knob_angle, true);
     g.setColour(Colors::modulation);
@@ -141,14 +141,14 @@ void ModulationMeter::drawKnob(Graphics& g) {
   }
 }
 
-void ModulationMeter::fillHorizontalRect(Graphics& g, float x1, float x2, float height) {
+void ModulationMeter::fillHorizontalRect(juce::Graphics& g, float x1, float x2, float height) {
   float x = std::min(x1, x2);
   float width = fabsf(x1 - x2);
   float padding = (getHeight() - height) / 2.0f;
   g.fillRect(x, padding, width, height);
 }
 
-void ModulationMeter::fillVerticalRect(Graphics& g, float y1, float y2, float width) {
+void ModulationMeter::fillVerticalRect(juce::Graphics& g, float y1, float y2, float width) {
   float y = std::min(y1, y2);
   float height = fabsf(y1 - y2);
   float padding = (getWidth() - width) / 2.0f;

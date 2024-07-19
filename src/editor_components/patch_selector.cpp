@@ -36,30 +36,30 @@ namespace {
 PatchSelector::PatchSelector() : SynthSection("patch_selector"),
                                  browser_(nullptr), save_section_(nullptr), modified_(false) {
   setLookAndFeel(BrowserLookAndFeel::instance());
-  addButton(prev_patch_ = new TextButton("prev_patch"));
+  addButton(prev_patch_ = new juce::TextButton("prev_patch"));
   prev_patch_->setButtonText(TRANS("<"));
-  prev_patch_->setColour(TextButton::buttonColourId, Colour(0xff464646));
-  prev_patch_->setColour(TextButton::textColourOffId, Colours::white);
+  prev_patch_->setColour(juce::TextButton::buttonColourId, juce::Colour(0xff464646));
+  prev_patch_->setColour(juce::TextButton::textColourOffId, juce::Colours::white);
 
-  addButton(next_patch_ = new TextButton("next_patch"));
+  addButton(next_patch_ = new juce::TextButton("next_patch"));
   next_patch_->setButtonText(TRANS(">"));
-  next_patch_->setColour(TextButton::buttonColourId, Colour(0xff464646));
-  next_patch_->setColour(TextButton::textColourOffId, Colours::white);
+  next_patch_->setColour(juce::TextButton::buttonColourId, juce::Colour(0xff464646));
+  next_patch_->setColour(juce::TextButton::textColourOffId, juce::Colours::white);
 
-  addButton(save_ = new TextButton("save"));
+  addButton(save_ = new juce::TextButton("save"));
   save_->setButtonText(TRANS("SAVE"));
-  save_->setColour(TextButton::buttonColourId, Colour(0xff303030));
-  save_->setColour(TextButton::textColourOffId, Colours::white);
+  save_->setColour(juce::TextButton::buttonColourId, juce::Colour(0xff303030));
+  save_->setColour(juce::TextButton::textColourOffId, juce::Colours::white);
 
-  addButton(export_ = new TextButton("export"));
+  addButton(export_ = new juce::TextButton("export"));
   export_->setButtonText(TRANS("EXPORT"));
-  export_->setColour(TextButton::buttonColourId, Colour(0xff303030));
-  export_->setColour(TextButton::textColourOffId, Colours::white);
+  export_->setColour(juce::TextButton::buttonColourId, juce::Colour(0xff303030));
+  export_->setColour(juce::TextButton::textColourOffId, juce::Colours::white);
 
-  addButton(browse_ = new TextButton("browse"));
+  addButton(browse_ = new juce::TextButton("browse"));
   browse_->setButtonText(TRANS("BROWSE"));
-  browse_->setColour(TextButton::buttonColourId, Colour(0xff303030));
-  browse_->setColour(TextButton::textColourOffId, Colours::white);
+  browse_->setColour(juce::TextButton::buttonColourId, juce::Colour(0xff303030));
+  browse_->setColour(juce::TextButton::textColourOffId, juce::Colours::white);
 }
 
 PatchSelector::~PatchSelector() {
@@ -70,7 +70,7 @@ PatchSelector::~PatchSelector() {
   browse_ = nullptr;
 }
 
-void PatchSelector::paint(Graphics& g) {
+void PatchSelector::paint(juce::Graphics& g) {
   SynthSection::paint(g);
 
   SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
@@ -83,32 +83,32 @@ void PatchSelector::paint(Graphics& g) {
   folder_text_ = parent->getSynth()->getFolderName();
 
   int browse_height = proportionOfHeight(BROWSE_PERCENT);
-  Rectangle<int> top(proportionOfWidth(0.1f) + TEXT_PADDING, 0,
+  juce::Rectangle<int> top(proportionOfWidth(0.1f) + TEXT_PADDING, 0,
                      proportionOfWidth(0.8f) - TEXT_PADDING, browse_height);
-  Rectangle<int> bottom(proportionOfWidth(0.1f) + TEXT_PADDING, browse_height,
+  juce::Rectangle<int> bottom(proportionOfWidth(0.1f) + TEXT_PADDING, browse_height,
                         proportionOfWidth(0.8f) - TEXT_PADDING, browse_height);
 
   g.setFont(Fonts::instance()->monospace().withPointHeight(size_ratio_ * 12.0f));
   g.setColour(Colors::control_label_text);
-  g.drawFittedText(folder_text_, top, Justification::centredLeft, 1);
-  g.setColour(Colour(0xffffffff));
-  g.drawFittedText(patch_text_, bottom, Justification::centredLeft, 1);
+  g.drawFittedText(folder_text_, top, juce::Justification::centredLeft, 1);
+  g.setColour(juce::Colour(0xffffffff));
+  g.drawFittedText(patch_text_, bottom, juce::Justification::centredLeft, 1);
 }
 
 
-void PatchSelector::paintBackground(Graphics& g) {
-  static const DropShadow shadow(Colour(0xff000000), 4, Point<int>(0, 0));
+void PatchSelector::paintBackground(juce::Graphics& g) {
+  static const juce::DropShadow shadow(juce::Colour(0xff000000), 4, juce::Point<int>(0, 0));
 
-  g.setColour(Colour(0xff383838));
+  g.setColour(juce::Colour(0xff383838));
   g.fillRect(0, 0, getWidth(), proportionOfHeight(BROWSE_PERCENT));
 
-  g.setColour(Colour(0xff444444));
+  g.setColour(juce::Colour(0xff444444));
   g.fillRect(0, proportionOfHeight(BROWSE_PERCENT), getWidth(), proportionOfHeight(BROWSE_PERCENT));
 
   int browse_height = proportionOfHeight(BROWSE_PERCENT);
 
-  Rectangle<int> left(0, 0, proportionOfWidth(0.1f), 2 * browse_height);
-  Rectangle<int> right(proportionOfWidth(0.9f), 0, proportionOfWidth(0.1f), 2 * browse_height);
+  juce::Rectangle<int> left(0, 0, proportionOfWidth(0.1f), 2 * browse_height);
+  juce::Rectangle<int> right(proportionOfWidth(0.9f), 0, proportionOfWidth(0.1f), 2 * browse_height);
   shadow.drawForRectangle(g, left);
   shadow.drawForRectangle(g, right);
 }
@@ -128,20 +128,20 @@ void PatchSelector::resized() {
   SynthSection::resized();
 }
 
-void PatchSelector::mouseUp(const MouseEvent& event) {
+void PatchSelector::mouseUp(const juce::MouseEvent& event) {
   if (event.mods.isPopupMenu()) {
-    PopupMenu m;
+    juce::PopupMenu m;
     m.setLookAndFeel(DefaultLookAndFeel::instance());
 
     m.addItem(1, "Load Init Patch");
-    m.showMenuAsync(PopupMenu::Options(),
-                    ModalCallbackFunction::forComponent(initPatchCallback, this));
+    m.showMenuAsync(juce::PopupMenu::Options(),
+                    juce::ModalCallbackFunction::forComponent(initPatchCallback, this));
   }
   else if (browser_)
     browser_->setVisible(!browser_->isVisible());
 }
 
-void PatchSelector::buttonClicked(Button* clicked_button) {
+void PatchSelector::buttonClicked(juce::Button* clicked_button) {
   if (browser_ == nullptr)
     return;
 
@@ -164,7 +164,7 @@ void PatchSelector::buttonClicked(Button* clicked_button) {
     browser_->loadNextPatch();
 }
 
-void PatchSelector::newPatchSelected(File patch) {
+void PatchSelector::newPatchSelected(juce::File patch) {
   repaint();
 }
 
@@ -176,7 +176,7 @@ void PatchSelector::setModified(bool modified) {
   repaint();
 }
 
-void PatchSelector::loadFromFile(File& patch) {
+void PatchSelector::loadFromFile(juce::File& patch) {
   SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
   parent->getSynth()->loadFromFile(patch);
 }
@@ -188,7 +188,7 @@ int PatchSelector::getBrowseHeight() {
 void PatchSelector::initPatch() {
   SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
   parent->getSynth()->loadInitPatch();
-  browser_->externalPatchLoaded(File());
+  browser_->externalPatchLoaded(juce::File());
   parent->updateFullGui();
   parent->notifyFresh();
 }

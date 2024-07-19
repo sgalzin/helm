@@ -37,17 +37,17 @@ void SynthSection::resized() {
   Component::resized();
 }
 
-void SynthSection::paint(Graphics& g) { }
+void SynthSection::paint(juce::Graphics& g) { }
 
-void SynthSection::paintBackground(Graphics& g) {
-  static const DropShadow button_shadow(Colour(0xff000000), size_ratio_ * 3.0f, Point<int>(0, 0));
+void SynthSection::paintBackground(juce::Graphics& g) {
+  static const juce::DropShadow button_shadow(juce::Colour(0xff000000), size_ratio_ * 3.0f, juce::Point<int>(0, 0));
 
   paintContainer(g);
   // Draw shadow divider.
   float shadow_top = size_ratio_ * (TITLE_WIDTH - SHADOW_WIDTH);
   int title_width = getTitleWidth();
-  g.setGradientFill(ColourGradient(Colour(0x22000000), 0.0f, shadow_top,
-                                   Colour(0x66000000), 0.0f, title_width,
+  g.setGradientFill(juce::ColourGradient(juce::Colour(0x22000000), 0.0f, shadow_top,
+                                   juce::Colour(0x66000000), 0.0f, title_width,
                                    false));
   g.fillRoundedRectangle(0, 0, getWidth(), title_width, 1.0f);
 
@@ -55,14 +55,14 @@ void SynthSection::paintBackground(Graphics& g) {
   g.setColour(Colors::tab_heading_text);
   g.setFont(Fonts::instance()->proportional_light().withPointHeight(size_ratio_ * 14.0f));
   g.drawText(TRANS(getName()), 0, 0, getWidth(), title_width,
-             Justification::centred, true);
+             juce::Justification::centred, true);
 
   paintKnobShadows(g);
   paintChildrenBackgrounds(g);
 }
 
-void SynthSection::paintContainer(Graphics& g) {
-  g.setColour(Colour(0xff303030));
+void SynthSection::paintContainer(juce::Graphics& g) {
+  g.setColour(juce::Colour(0xff303030));
   g.fillRoundedRectangle(0, 0, getWidth(), getHeight(), size_ratio_ * 3.0f);
 }
 
@@ -73,12 +73,12 @@ void SynthSection::setSizeRatio(float ratio) {
     sub_section.second->setSizeRatio(ratio);
 }
 
-void SynthSection::paintKnobShadows(Graphics& g) {
+void SynthSection::paintKnobShadows(juce::Graphics& g) {
   for (auto& slider : slider_lookup_)
     slider.second->drawShadow(g);
 }
 
-void SynthSection::paintChildrenBackgrounds(Graphics& g) {
+void SynthSection::paintChildrenBackgrounds(juce::Graphics& g) {
   for (auto& sub_section : sub_sections_)
     paintChildBackground(g, sub_section.second);
 
@@ -86,7 +86,7 @@ void SynthSection::paintChildrenBackgrounds(Graphics& g) {
     paintOpenGLBackground(g, open_gl_component);
 }
 
-void SynthSection::paintChildBackground(Graphics& g, SynthSection* child) {
+void SynthSection::paintChildBackground(juce::Graphics& g, SynthSection* child) {
   g.saveState();
   g.reduceClipRegion(child->getBounds());
   g.setOrigin(child->getPosition());
@@ -94,7 +94,7 @@ void SynthSection::paintChildBackground(Graphics& g, SynthSection* child) {
   g.restoreState();
 }
 
-void SynthSection::paintOpenGLBackground(Graphics &g, OpenGLComponent* open_gl_component) {
+void SynthSection::paintOpenGLBackground(juce::Graphics &g, OpenGLComponent* open_gl_component) {
   g.saveState();
   g.reduceClipRegion(open_gl_component->getBounds());
   g.setOrigin(open_gl_component->getPosition());
@@ -102,7 +102,7 @@ void SynthSection::paintOpenGLBackground(Graphics &g, OpenGLComponent* open_gl_c
   g.restoreState();
 }
 
-void SynthSection::initOpenGLComponents(OpenGLContext& open_gl_context) {
+void SynthSection::initOpenGLComponents(juce::OpenGLContext& open_gl_context) {
   for (auto& open_gl_component : open_gl_components_)
     open_gl_component->init(open_gl_context);
 
@@ -110,7 +110,7 @@ void SynthSection::initOpenGLComponents(OpenGLContext& open_gl_context) {
     sub_section.second->initOpenGLComponents(open_gl_context);
 }
 
-void SynthSection::renderOpenGLComponents(OpenGLContext& open_gl_context, bool animate) {
+void SynthSection::renderOpenGLComponents(juce::OpenGLContext& open_gl_context, bool animate) {
   for (auto& open_gl_component : open_gl_components_)
     open_gl_component->render(open_gl_context, animate);
 
@@ -118,7 +118,7 @@ void SynthSection::renderOpenGLComponents(OpenGLContext& open_gl_context, bool a
     sub_section.second->renderOpenGLComponents(open_gl_context, animate);
 }
 
-void SynthSection::destroyOpenGLComponents(OpenGLContext& open_gl_context) {
+void SynthSection::destroyOpenGLComponents(juce::OpenGLContext& open_gl_context) {
   for (auto& open_gl_component : open_gl_components_)
     open_gl_component->destroy(open_gl_context);
 
@@ -126,7 +126,7 @@ void SynthSection::destroyOpenGLComponents(OpenGLContext& open_gl_context) {
     sub_section.second->destroyOpenGLComponents(open_gl_context);
 }
 
-void SynthSection::sliderValueChanged(Slider* moved_slider) {
+void SynthSection::sliderValueChanged(juce::Slider* moved_slider) {
   std::string name = moved_slider->getName().toStdString();
   SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
   if (parent)
@@ -145,7 +145,7 @@ void SynthSection::guiChanged(SynthButton* button) {
     setActive(activator_->getToggleStateValue().getValue());
 }
 
-void SynthSection::addButton(Button* button, bool show) {
+void SynthSection::addButton(juce::Button* button, bool show) {
   button_lookup_[button->getName().toStdString()] = button;
   all_buttons_[button->getName().toStdString()] = button;
   button->addListener(this);
@@ -174,7 +174,7 @@ void SynthSection::addSubSection(SynthSection* sub_section, bool show) {
   std::map<std::string, SynthSlider*> sub_sliders = sub_section->getAllSliders();
   all_sliders_.insert(sub_sliders.begin(), sub_sliders.end());
 
-  std::map<std::string, Button*> sub_buttons = sub_section->getAllButtons();
+  std::map<std::string, juce::Button*> sub_buttons = sub_section->getAllButtons();
   all_buttons_.insert(sub_buttons.begin(), sub_buttons.end());
 
   std::map<std::string, ModulationButton*> sub_mod_buttons = sub_section->getAllModulationButtons();
@@ -211,13 +211,13 @@ float SynthSection::getModButtonWidth() {
   return size_ratio_ * MODULATION_BUTTON_WIDTH;
 }
 
-void SynthSection::drawTextForComponent(Graphics &g, String text, Component *component, int space) {
+void SynthSection::drawTextForComponent(juce::Graphics &g, juce::String text, Component *component, int space) {
   float room = size_ratio_ * 30.0f;
   float height = size_ratio_ * 10.0f;
   float adjust_space = size_ratio_ * space;
   g.drawText(text, component->getX() - room,
              component->getY() + component->getHeight() + adjust_space,
-             component->getWidth() + 2 * room, height, Justification::centred, false);
+             component->getWidth() + 2 * room, height, juce::Justification::centred, false);
 }
 
 void SynthSection::setActive(bool active) {
@@ -236,7 +236,7 @@ void SynthSection::setAllValues(mopo::control_map& controls) {
   for (auto& slider : all_sliders_) {
     if (controls.count(slider.first)) {
       slider.second->setValue(controls[slider.first]->value(),
-                              NotificationType::dontSendNotification);
+                              juce::NotificationType::dontSendNotification);
       slider.second->valueChanged();
     }
   }
@@ -244,7 +244,7 @@ void SynthSection::setAllValues(mopo::control_map& controls) {
   for (auto& button : all_buttons_) {
     if (controls.count(button.first)) {
       bool toggle = controls[button.first]->value();
-      button.second->setToggleState(toggle, NotificationType::sendNotificationSync);
+      button.second->setToggleState(toggle, juce::NotificationType::sendNotificationSync);
     }
   }
 
@@ -252,7 +252,7 @@ void SynthSection::setAllValues(mopo::control_map& controls) {
 }
 
 void SynthSection::setValue(const std::string& name, mopo::mopo_float value,
-                            NotificationType notification) {
+                            juce::NotificationType notification) {
   if (all_sliders_.count(name)) {
     all_sliders_[name]->setValue(value, notification);
     all_sliders_[name]->notifyGuis();

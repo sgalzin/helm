@@ -21,29 +21,29 @@
 
 class SynthSlider;
 
-class ModulationLookAndFeel : public LookAndFeel_V3 {
+class ModulationLookAndFeel : public juce::LookAndFeel_V3 {
   public:
-    void drawLinearSlider(Graphics& g, int x, int y, int width, int height,
+    void drawLinearSlider(juce::Graphics& g, int x, int y, int width, int height,
                           float slider_pos, float min, float max,
-                          const Slider::SliderStyle style, Slider& slider) override;
+                          const juce::Slider::SliderStyle style, juce::Slider& slider) override;
 
-    void drawLinearSliderThumb(Graphics& g, int x, int y, int width, int height,
+    void drawLinearSliderThumb(juce::Graphics& g, int x, int y, int width, int height,
                                float slider_pos, float min, float max,
-                               const Slider::SliderStyle style, Slider& slider) override;
+                               const juce::Slider::SliderStyle style, juce::Slider& slider) override;
 
-    void drawTextModulation(Graphics& g, Slider& slider, float percent);
+    void drawTextModulation(juce::Graphics& g, juce::Slider& slider, float percent);
 
-    void drawRotarySlider(Graphics& g, int x, int y, int width, int height,
+    void drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height,
                           float slider_t, float start_angle, float end_angle,
-                          Slider& slider) override;
+                          juce::Slider& slider) override;
 
-    void drawToggleButton(Graphics& g, ToggleButton& button,
+    void drawToggleButton(juce::Graphics& g, juce::ToggleButton& button,
                           bool hover, bool is_down) override;
 
-    int getSliderPopupPlacement(Slider& slider) override;
+    int getSliderPopupPlacement(juce::Slider& slider) override;
 
-    Font getPopupMenuFont() override;
-    Font getSliderPopupFont(Slider& slider) override;
+    juce::Font getPopupMenuFont() override;
+    juce::Font getSliderPopupFont(juce::Slider& slider) override;
 
     static ModulationLookAndFeel* instance() {
       static ModulationLookAndFeel instance;

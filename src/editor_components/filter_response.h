@@ -24,7 +24,7 @@
 #include "state_variable_filter.h"
 #include "synth_slider.h"
 
-class FilterResponse : public Component, SynthSlider::SliderListener {
+class FilterResponse : public juce::Component, SynthSlider::SliderListener {
   public:
     FilterResponse(int resolution);
     ~FilterResponse();
@@ -32,7 +32,7 @@ class FilterResponse : public Component, SynthSlider::SliderListener {
     float getPercentForMidiNote(float midi_note);
     void resetResponsePath();
     void computeFilterCoefficients();
-    void setFilterSettingsFromPosition(Point<int> position);
+    void setFilterSettingsFromPosition(juce::Point<int> position);
     void guiChanged(SynthSlider* slider) override;
 
     void setResonanceSlider(SynthSlider* slider);
@@ -41,16 +41,16 @@ class FilterResponse : public Component, SynthSlider::SliderListener {
     void setFilterShelfSlider(SynthSlider* slider);
     void setStyle(mopo::StateVariableFilter::Styles style);
 
-    void paint(Graphics& g) override;
-    void paintBackground(Graphics& g);
+    void paint(juce::Graphics& g) override;
+    void paintBackground(juce::Graphics& g);
     void resized() override;
-    void mouseDown(const MouseEvent& e) override;
-    void mouseDrag(const MouseEvent& e) override;
+    void mouseDown(const juce::MouseEvent& e) override;
+    void mouseDrag(const juce::MouseEvent& e) override;
 
     void setActive(bool active);
 
   private:
-    Path filter_response_path_;
+    juce::Path filter_response_path_;
     int resolution_;
     mopo::StateVariableFilter::Styles style_;
     bool active_;
@@ -65,7 +65,7 @@ class FilterResponse : public Component, SynthSlider::SliderListener {
     SynthSlider* cutoff_slider_;
     SynthSlider* resonance_slider_;
 
-    Image background_;
+    juce::Image background_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FilterResponse)
 };

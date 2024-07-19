@@ -20,7 +20,7 @@
 #include "JuceHeader.h"
 #include <set>
 
-class Overlay : public Component {
+class Overlay : public juce::Component {
   public:
     class Listener {
       public:
@@ -33,7 +33,7 @@ class Overlay : public Component {
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Listener)
     };
 
-    Overlay(String name) : Component(name), size_ratio_(1.0f) { }
+    Overlay(juce::String name) : Component(name), size_ratio_(1.0f) { }
     virtual ~Overlay() { }
 
     void setVisible(bool should_be_visible) override {

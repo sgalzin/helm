@@ -62,7 +62,7 @@ OpenGLModulationManager::OpenGLModulationManager(
     addChildComponent(overlay);
     overlay_lookup_[name] = overlay;
     overlay->setName(name);
-    Rectangle<int> local_bounds = mod_button.second->getBoundsInParent();
+    juce::Rectangle<int> local_bounds = mod_button.second->getBoundsInParent();
     overlay->setBounds(mod_button.second->getParentComponent()->localAreaToGlobal(local_bounds));
   }
 
@@ -93,7 +93,7 @@ OpenGLModulationManager::OpenGLModulationManager(
       addChildComponent(meter);
       meter_lookup_[name] = meter;
       meter->setName(name);
-      Rectangle<int> local_bounds = slider.second->getBoundsInParent();
+      juce::Rectangle<int> local_bounds = slider.second->getBoundsInParent();
       meter->setBounds(slider.second->getParentComponent()->localAreaToGlobal(local_bounds));
     }
 
@@ -123,11 +123,11 @@ OpenGLModulationManager::~OpenGLModulationManager() {
     delete meter.second;
   for (auto& overlay : overlay_lookup_)
     delete overlay.second;
-  for (Slider* slider : owned_sliders_)
+  for (juce::Slider* slider : owned_sliders_)
     delete slider;
 }
 
-void OpenGLModulationManager::paint(Graphics& g) {
+void OpenGLModulationManager::paint(juce::Graphics& g) {
 }
 
 void OpenGLModulationManager::resized() {
@@ -138,7 +138,7 @@ void OpenGLModulationManager::resized() {
   // Update modulation slider locations.
   for (auto& slider : slider_lookup_) {
     SynthSlider* model = slider_model_lookup_[slider.first];
-    Point<float> local_top_left = getLocalPoint(model, Point<float>(0.0f, 0.0f));
+    juce::Point<float> local_top_left = getLocalPoint(model, juce::Point<float>(0.0f, 0.0f));
     slider.second->setVisible(model->isVisible());
     slider.second->setBounds(local_top_left.x, local_top_left.y,
                              model->getWidth(), model->getHeight());
@@ -146,8 +146,8 @@ void OpenGLModulationManager::resized() {
 
   // Update modulation meter locations.
   for (auto& meter : meter_lookup_) {
-    Slider* model = slider_model_lookup_[meter.first];
-    Point<float> local_top_left = getLocalPoint(model, Point<float>(0.0f, 0.0f));
+    juce::Slider* model = slider_model_lookup_[meter.first];
+    juce::Point<float> local_top_left = getLocalPoint(model, juce::Point<float>(0.0f, 0.0f));
     meter.second->setBounds(local_top_left.x, local_top_left.y,
                             model->getWidth(), model->getHeight());
     if (parent) {
@@ -160,7 +160,7 @@ void OpenGLModulationManager::resized() {
   // Update modulation highlight overlay locations.
   for (auto& overlay : overlay_lookup_) {
     ModulationButton* model = modulation_buttons_[overlay.first];
-    Point<float> local_top_left = getLocalPoint(model, Point<float>(0.0f, 0.0f));
+    juce::Point<float> local_top_left = getLocalPoint(model, juce::Point<float>(0.0f, 0.0f));
     overlay.second->setBounds(local_top_left.x, local_top_left.y,
                               model->getWidth(), model->getHeight());
   }
@@ -172,8 +172,8 @@ void OpenGLModulationManager::buttonClicked(juce::Button *clicked_button) {
   std::string name = clicked_button->getName().toStdString();
   if (clicked_button->getToggleState()) {
     if (current_modulator_ != "") {
-      Button* modulator = modulation_buttons_[current_modulator_];
-      modulator->setToggleState(false, NotificationType::dontSendNotification);
+      juce::Button* modulator = modulation_buttons_[current_modulator_];
+      modulator->setToggleState(false, juce::NotificationType::dontSendNotification);
     }
     changeModulator(name);
   }
@@ -191,7 +191,7 @@ void OpenGLModulationManager::sliderValueChanged(juce::Slider *moved_slider) {
 
 void OpenGLModulationManager::modulationDisconnected(mopo::ModulationConnection* connection, bool last) {
   if (connection->source == current_modulator_) {
-    Slider* slider = slider_lookup_[connection->destination];
+    juce::Slider* slider = slider_lookup_[connection->destination];
     slider->setValue(slider->getDoubleClickReturnValue());
   }
 
@@ -199,39 +199,39 @@ void OpenGLModulationManager::modulationDisconnected(mopo::ModulationConnection*
   meter_lookup_[connection->destination]->setVisible(!last);
 }
 
-void OpenGLModulationManager::init(OpenGLContext& open_gl_context) {
+void OpenGLModulationManager::init(juce::OpenGLContext& open_gl_context) {
   open_gl_context.extensions.glGenBuffers(1, &vertex_buffer_);
-  open_gl_context.extensions.glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ARRAY_BUFFER, vertex_buffer_);
 
   int num_meters = slider_model_lookup_.size();
   GLsizeiptr vert_size = static_cast<GLsizeiptr>(num_meters * FLOATS_PER_METER * sizeof(float));
-  open_gl_context.extensions.glBufferData(GL_ARRAY_BUFFER, vert_size,
-                                          vertices_, GL_STATIC_DRAW);
+  open_gl_context.extensions.glBufferData(juce::gl::GL_ARRAY_BUFFER, vert_size,
+                                          vertices_, juce::gl::GL_STATIC_DRAW);
 
   open_gl_context.extensions.glGenBuffers(1, &triangle_buffer_);
-  open_gl_context.extensions.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangle_buffer_);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ELEMENT_ARRAY_BUFFER, triangle_buffer_);
 
   GLsizeiptr tri_size = static_cast<GLsizeiptr>(num_meters * INDICES_PER_METER * sizeof(int));
-  open_gl_context.extensions.glBufferData(GL_ELEMENT_ARRAY_BUFFER, tri_size,
-                                          triangles_, GL_STATIC_DRAW);
+  open_gl_context.extensions.glBufferData(juce::gl::GL_ELEMENT_ARRAY_BUFFER, tri_size,
+                                          triangles_, juce::gl::GL_STATIC_DRAW);
 
   const char* vertex_shader = Shaders::getShader(Shaders::kModulationVertex);
   const char* fragment_shader = Shaders::getShader(Shaders::kModulationFragment);
 
-  shader_ = new OpenGLShaderProgram(open_gl_context);
+  shader_ = new juce::OpenGLShaderProgram(open_gl_context);
 
-  if (shader_->addVertexShader(OpenGLHelpers::translateVertexShaderToV3(vertex_shader)) &&
-      shader_->addFragmentShader(OpenGLHelpers::translateFragmentShaderToV3(fragment_shader)) &&
+  if (shader_->addVertexShader(juce::OpenGLHelpers::translateVertexShaderToV3(vertex_shader)) &&
+      shader_->addFragmentShader(juce::OpenGLHelpers::translateFragmentShaderToV3(fragment_shader)) &&
       shader_->link()) {
     shader_->use();
-    position_ = new OpenGLShaderProgram::Attribute(*shader_, "position");
-    coordinates_ = new OpenGLShaderProgram::Attribute(*shader_, "coordinates");
-    range_ = new OpenGLShaderProgram::Attribute(*shader_, "range");
-    radius_uniform_ = new OpenGLShaderProgram::Uniform(*shader_, "radius");
+    position_ = new juce::OpenGLShaderProgram::Attribute(*shader_, "position");
+    coordinates_ = new juce::OpenGLShaderProgram::Attribute(*shader_, "coordinates");
+    range_ = new juce::OpenGLShaderProgram::Attribute(*shader_, "range");
+    radius_uniform_ = new juce::OpenGLShaderProgram::Uniform(*shader_, "radius");
   }
 }
 
-void OpenGLModulationManager::render(OpenGLContext& open_gl_context, bool animate) {
+void OpenGLModulationManager::render(juce::OpenGLContext& open_gl_context, bool animate) {
   if (!animate)
     return;
 
@@ -241,42 +241,42 @@ void OpenGLModulationManager::render(OpenGLContext& open_gl_context, bool animat
       meter.second->updateDrawing();
   }
 
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  juce::gl::glEnable(juce::gl::GL_BLEND);
+  juce::gl::glBlendFunc(juce::gl::GL_SRC_ALPHA, juce::gl::GL_ONE_MINUS_SRC_ALPHA);
   setViewPort(open_gl_context);
 
   shader_->use();
   radius_uniform_->set(0.9f);
 
-  open_gl_context.extensions.glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ARRAY_BUFFER, vertex_buffer_);
 
   int num_meters = slider_model_lookup_.size();
   GLsizeiptr vert_size = static_cast<GLsizeiptr>(num_meters * FLOATS_PER_METER * sizeof(float));
-  open_gl_context.extensions.glBufferData(GL_ARRAY_BUFFER, vert_size,
-                                          vertices_, GL_STATIC_DRAW);
-  open_gl_context.extensions.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangle_buffer_);
+  open_gl_context.extensions.glBufferData(juce::gl::GL_ARRAY_BUFFER, vert_size,
+                                          vertices_, juce::gl::GL_STATIC_DRAW);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ELEMENT_ARRAY_BUFFER, triangle_buffer_);
 
   if (position_ != nullptr) {
-    open_gl_context.extensions.glVertexAttribPointer(position_->attributeID, 2, GL_FLOAT,
-                                                     GL_FALSE, 6 * sizeof(float), 0);
+    open_gl_context.extensions.glVertexAttribPointer(position_->attributeID, 2, juce::gl::GL_FLOAT,
+                                                     juce::gl::GL_FALSE, 6 * sizeof(float), 0);
     open_gl_context.extensions.glEnableVertexAttribArray(position_->attributeID);
   }
 
   if (coordinates_ != nullptr) {
-    open_gl_context.extensions.glVertexAttribPointer(coordinates_->attributeID, 2, GL_FLOAT,
-                                                     GL_FALSE, 6 * sizeof(float),
+    open_gl_context.extensions.glVertexAttribPointer(coordinates_->attributeID, 2, juce::gl::GL_FLOAT,
+                                                     juce::gl::GL_FALSE, 6 * sizeof(float),
                                                      (GLvoid*)(2 * sizeof(float)));
     open_gl_context.extensions.glEnableVertexAttribArray(coordinates_->attributeID);
   }
 
   if (range_ != nullptr) {
-    open_gl_context.extensions.glVertexAttribPointer(range_->attributeID, 2, GL_FLOAT,
-                                                     GL_FALSE, 6 * sizeof(float),
+    open_gl_context.extensions.glVertexAttribPointer(range_->attributeID, 2, juce::gl::GL_FLOAT,
+                                                     juce::gl::GL_FALSE, 6 * sizeof(float),
                                                      (GLvoid*)(4 * sizeof(float)));
     open_gl_context.extensions.glEnableVertexAttribArray(range_->attributeID);
   }
 
-  glDrawElements(GL_TRIANGLES, num_meters * INDICES_PER_METER, GL_UNSIGNED_INT, 0);
+  juce::gl::glDrawElements(juce::gl::GL_TRIANGLES, num_meters * INDICES_PER_METER, juce::gl::GL_UNSIGNED_INT, 0);
 
   if (position_ != nullptr)
     open_gl_context.extensions.glDisableVertexAttribArray(position_->attributeID);
@@ -287,11 +287,11 @@ void OpenGLModulationManager::render(OpenGLContext& open_gl_context, bool animat
   if (range_ != nullptr)
     open_gl_context.extensions.glDisableVertexAttribArray(range_->attributeID);
 
-  open_gl_context.extensions.glBindBuffer(GL_ARRAY_BUFFER, 0);
-  open_gl_context.extensions.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ARRAY_BUFFER, 0);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void OpenGLModulationManager::destroy(OpenGLContext& open_gl_context) {
+void OpenGLModulationManager::destroy(juce::OpenGLContext& open_gl_context) {
   shader_ = nullptr;
   position_ = nullptr;
   coordinates_ = nullptr;
@@ -379,7 +379,7 @@ void OpenGLModulationManager::setSliderValues() {
         break;
       }
     }
-    slider.second->setValue(value, NotificationType::dontSendNotification);
+    slider.second->setValue(value, juce::NotificationType::dontSendNotification);
     slider.second->repaint();
   }
 }

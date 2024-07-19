@@ -24,14 +24,14 @@
 
 class BpmSection : public SynthSection {
   public:
-    BpmSection(String name);
+    BpmSection(juce::String name);
     ~BpmSection();
 
-    void paintBackground(Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
     void resized() override;
 
   private:
-    ScopedPointer<SynthSlider> bpm_;
+    juce::ScopedPointer<SynthSlider> bpm_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BpmSection)
 };

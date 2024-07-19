@@ -17,10 +17,10 @@
 #include "fonts.h"
 
 Fonts::Fonts() {
-  proportional_regular_ = Font(Typeface::createSystemTypefaceFor(
+  proportional_regular_ = juce::Font(juce::Typeface::createSystemTypefaceFor(
       BinaryData::RobotoRegular_ttf, BinaryData::RobotoRegular_ttfSize));
-  proportional_light_ = Font(Typeface::createSystemTypefaceFor(
+  proportional_light_ = juce::Font(juce::Typeface::createSystemTypefaceFor(
       BinaryData::RobotoLight_ttf, BinaryData::RobotoLight_ttfSize));
-  monospace_ = Font(Typeface::createSystemTypefaceFor(
+  monospace_ = juce::Font(juce::Typeface::createSystemTypefaceFor(
       BinaryData::DroidSansMono_ttf, BinaryData::DroidSansMono_ttfSize));
 }

@@ -21,7 +21,7 @@
 #include "mopo.h"
 #include "helm_common.h"
 
-class ValueBridge : public AudioProcessorParameter {
+class ValueBridge : public juce::AudioProcessorParameter {
   public:
     class Listener {
       public:
@@ -57,19 +57,19 @@ class ValueBridge : public AudioProcessorParameter {
       return convertToPluginValue(details_.default_value);
     }
 
-    String getName(int maximumStringLength) const override {
+    juce::String getName(int maximumStringLength) const override {
       return name_.substring(0, maximumStringLength);
     }
 
-    String getLabel() const override {
+    juce::String getLabel() const override {
       return "";
     }
 
-    String getText(float value, int maximumStringLength) const override {
-      return String(getSkewedValue()).substring(0, maximumStringLength);
+    juce::String getText(float value, int maximumStringLength) const override {
+      return juce::String(getSkewedValue()).substring(0, maximumStringLength);
     }
 
-    float getValueForText(const String &text) const override {
+    float getValueForText(const juce::String &text) const override {
       return text.getFloatValue();
     }
 
@@ -113,7 +113,7 @@ class ValueBridge : public AudioProcessorParameter {
       }
     }
 
-    String name_;
+    juce::String name_;
     mopo::ValueDetails details_;
     mopo::mopo_float span_;
     mopo::Value* value_;

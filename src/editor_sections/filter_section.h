@@ -26,13 +26,13 @@
 
 class FilterSection : public SynthSection {
   public:
-    FilterSection(String name);
+    FilterSection(juce::String name);
     ~FilterSection();
 
-    void paintBackground(Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
     void resized() override;
     void reset() override;
-    void sliderValueChanged(Slider* changed_slider) override;
+    void sliderValueChanged(juce::Slider* changed_slider) override;
 
     void resizeLowPass(float x, float y, float width, float height);
     void resizeHighPass(float x, float y, float width, float height);
@@ -41,19 +41,19 @@ class FilterSection : public SynthSection {
     void resetResponse();
 
   private:
-    ScopedPointer<SynthButton> filter_on_;
-    ScopedPointer<FilterSelector> filter_shelf_;
-    ScopedPointer<SynthSlider> cutoff_;
-    ScopedPointer<SynthSlider> resonance_;
-    ScopedPointer<SynthSlider> blend_;
-    ScopedPointer<FilterResponse> filter_response_;
-    ScopedPointer<SynthSlider> fil_env_depth_;
-    ScopedPointer<SynthSlider> keytrack_;
-    ScopedPointer<SynthSlider> filter_style_;
-    ScopedPointer<SynthSlider> drive_;
+    juce::ScopedPointer<SynthButton> filter_on_;
+    juce::ScopedPointer<FilterSelector> filter_shelf_;
+    juce::ScopedPointer<SynthSlider> cutoff_;
+    juce::ScopedPointer<SynthSlider> resonance_;
+    juce::ScopedPointer<SynthSlider> blend_;
+    juce::ScopedPointer<FilterResponse> filter_response_;
+    juce::ScopedPointer<SynthSlider> fil_env_depth_;
+    juce::ScopedPointer<SynthSlider> keytrack_;
+    juce::ScopedPointer<SynthSlider> filter_style_;
+    juce::ScopedPointer<SynthSlider> drive_;
 
-    Path low_pass_;
-    Path high_pass_;
+    juce::Path low_pass_;
+    juce::Path high_pass_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FilterSection)
 };

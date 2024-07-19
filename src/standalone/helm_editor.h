@@ -27,7 +27,7 @@
 #include "synth_base.h"
 #include "synth_gui_interface.h"
 
-class HelmEditor : public AudioAppComponent,
+class HelmEditor : public juce::AudioAppComponent,
                    public SynthBase,
                    public SynthGuiInterface {
   public:
@@ -36,23 +36,23 @@ class HelmEditor : public AudioAppComponent,
 
     // AudioAppComponent
     void prepareToPlay(int buffer_size, double sample_rate) override;
-    void getNextAudioBlock(const AudioSourceChannelInfo& buffer) override;
+    void getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer) override;
     void releaseResources() override;
-    void paint(Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
 
     // SynthBase
-    const CriticalSection& getCriticalSection() override { return critical_section_; }
+    const juce::CriticalSection& getCriticalSection() override { return critical_section_; }
     SynthGuiInterface* getGuiInterface() override { return this; }
 
     // SynthGuiInterface
-    AudioDeviceManager* getAudioDeviceManager() override { return &deviceManager; }
+    juce::AudioDeviceManager* getAudioDeviceManager() override { return &deviceManager; }
 
     void animate(bool animate);
 
   private:
-    ScopedPointer<HelmComputerKeyboard> computer_keyboard_;
-    CriticalSection critical_section_;
+    juce::ScopedPointer<HelmComputerKeyboard> computer_keyboard_;
+    juce::CriticalSection critical_section_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(HelmEditor)
 };

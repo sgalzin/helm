@@ -25,7 +25,7 @@ class SynthGuiInterface {
     SynthGuiInterface(SynthBase* synth, bool use_gui = true);
     virtual ~SynthGuiInterface() { }
 
-    virtual AudioDeviceManager* getAudioDeviceManager() { return nullptr; }
+    virtual juce::AudioDeviceManager* getAudioDeviceManager() { return nullptr; }
 
     SynthBase* getSynth() { return synth_; }
     virtual void updateFullGui();
@@ -34,12 +34,12 @@ class SynthGuiInterface {
     void setFocus();
     void notifyChange();
     void notifyFresh();
-    void externalPatchLoaded(File patch);
+    void externalPatchLoaded(juce::File patch);
     void setGuiSize(int width, int height);
 
   protected:
     SynthBase* synth_;
-    ScopedPointer<FullInterface> gui_;
+    juce::ScopedPointer<FullInterface> gui_;
 };
 
 #endif // SYNTH_GUI_INTERFACE_H

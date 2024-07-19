@@ -22,7 +22,7 @@
 #include "helm_common.h"
 #include "formant_manager.h"
 
-class FormantResponse : public Component, SliderListener {
+class FormantResponse : public juce::Component, juce::Slider::Listener {
   public:
     FormantResponse(int resolution);
     ~FormantResponse();
@@ -30,34 +30,34 @@ class FormantResponse : public Component, SliderListener {
     float getPercentForMidiNote(float midi_note);
     void resetResponsePath();
     void computeFilterCoefficients();
-    void sliderValueChanged(Slider* moved_slider) override;
+    void sliderValueChanged(juce::Slider* moved_slider) override;
 
-    void setResonanceSliders(std::vector<Slider*> sliders);
-    void setCutoffSliders(std::vector<Slider*> sliders);
-    void setGainSliders(std::vector<Slider*> sliders);
+    void setResonanceSliders(std::vector<juce::Slider*> sliders);
+    void setCutoffSliders(std::vector<juce::Slider*> sliders);
+    void setGainSliders(std::vector<juce::Slider*> sliders);
 
-    void paint(Graphics& g) override;
-    void paintBackground(Graphics& g);
+    void paint(juce::Graphics& g) override;
+    void paintBackground(juce::Graphics& g);
     void resized() override;
 
-    void mouseMove(const MouseEvent& e) override;
+    void mouseMove(const juce::MouseEvent& e) override;
 
   private:
-    Path filter_response_path_;
+    juce::Path filter_response_path_;
     int resolution_;
 
     mopo::FormantManager formant_filter_;
 
-    std::vector<Slider*> cutoff_sliders_;
-    std::vector<Slider*> resonance_sliders_;
-    std::vector<Slider*> gain_sliders_;
+    std::vector<juce::Slider*> cutoff_sliders_;
+    std::vector<juce::Slider*> resonance_sliders_;
+    std::vector<juce::Slider*> gain_sliders_;
 
     float midi_;
     float frequency_;
     float response_;
     float decibels_;
 
-    Image background_;
+    juce::Image background_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FormantResponse)
 };

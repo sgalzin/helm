@@ -22,40 +22,40 @@
 #include "wave.h"
 #include "helm_common.h"
 
-class WaveViewer : public Component, public Timer, public Slider::Listener {
+class WaveViewer : public juce::Component, public juce::Timer, public juce::Slider::Listener {
   public:
     WaveViewer(int resolution);
     ~WaveViewer();
 
     void timerCallback() override;
-    void setWaveSlider(Slider* slider);
-    void setAmplitudeSlider(Slider* slider);
+    void setWaveSlider(juce::Slider* slider);
+    void setAmplitudeSlider(juce::Slider* slider);
     void drawRandom();
     void drawSmoothRandom();
     void resetWavePath();
-    void sliderValueChanged(Slider* sliderThatWasMoved) override;
+    void sliderValueChanged(juce::Slider* sliderThatWasMoved) override;
     void showRealtimeFeedback(bool show_feedback = true);
     void setControlRate(bool control_rate = true) { is_control_rate_ = control_rate; }
 
-    void paint(Graphics& g) override;
-    void paintBackground(Graphics& g);
+    void paint(juce::Graphics& g) override;
+    void paintBackground(juce::Graphics& g);
     void resized() override;
-    void mouseDown(const MouseEvent& e) override;
+    void mouseDown(const juce::MouseEvent& e) override;
 
   private:
     float phaseToX(float phase);
     float getRatio();
 
-    Slider* wave_slider_;
-    Slider* amplitude_slider_;
+    juce::Slider* wave_slider_;
+    juce::Slider* amplitude_slider_;
     mopo::Output* wave_phase_;
     mopo::Output* wave_amp_;
-    Path wave_path_;
+    juce::Path wave_path_;
     bool is_control_rate_;
     int resolution_;
     float phase_;
     float amp_;
-    Image background_;
+    juce::Image background_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WaveViewer)
 };

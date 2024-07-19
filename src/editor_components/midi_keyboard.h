@@ -20,14 +20,14 @@
 
 #include "JuceHeader.h"
 
-class MidiKeyboard : public MidiKeyboardComponent {
+class MidiKeyboard : public juce::MidiKeyboardComponent {
   public:
-    MidiKeyboard(MidiKeyboardState& state, Orientation orientation);
+    MidiKeyboard(juce::MidiKeyboardState& state, Orientation orientation);
 
-    virtual void drawBlackNote(int midiNoteNumber, Graphics& g,
-                               Rectangle<float> area,
+    virtual void drawBlackNote(int midiNoteNumber, juce::Graphics& g,
+                               juce::Rectangle<float> area,
                                bool isDown, bool isOver,
-                               Colour noteFillColour) override;
+                               juce::Colour noteFillColour) override;
 
   private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MidiKeyboard)

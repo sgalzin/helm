@@ -22,7 +22,7 @@
 
 class FullInterface;
 
-class SynthButton : public ToggleButton {
+class SynthButton : public juce::ToggleButton {
   public:
     class ButtonListener {
       public:
@@ -30,22 +30,22 @@ class SynthButton : public ToggleButton {
         virtual void guiChanged(SynthButton* button) { }
     };
 
-    SynthButton(String name);
+    SynthButton(juce::String name);
 
     void setStringLookup(const std::string* lookup) {
       string_lookup_ = lookup;
     }
     const std::string* getStringLookup() const { return string_lookup_; }
-    String getTextFromValue(bool value);
+    juce::String getTextFromValue(bool value);
 
     void setActive(bool active = true);
     bool isActive() const { return active_; }
 
     void handlePopupResult(int result);
 
-    virtual void mouseDown(const MouseEvent& e) override;
-    virtual void mouseUp(const MouseEvent& e) override;
-    virtual void mouseEnter(const MouseEvent& e) override;
+    virtual void mouseDown(const juce::MouseEvent& e) override;
+    virtual void mouseUp(const juce::MouseEvent& e) override;
+    virtual void mouseEnter(const juce::MouseEvent& e) override;
 
     void addButtonListener(ButtonListener* listener);
 

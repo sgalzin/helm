@@ -23,14 +23,14 @@
 
 class WaveSelector : public SynthSlider {
   public:
-    WaveSelector(String name);
+    WaveSelector(juce::String name);
 
-    void paint(Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
 
-    void mouseEvent(const MouseEvent& e);
-    void mouseDown(const MouseEvent& e) override;
-    void mouseDrag(const MouseEvent& e) override;
+    void mouseEvent(const juce::MouseEvent& e);
+    void mouseDown(const juce::MouseEvent& e) override;
+    void mouseDrag(const juce::MouseEvent& e) override;
 
   private:
     void resizeSin(float x, float y, float width, float height);
@@ -40,18 +40,18 @@ class WaveSelector : public SynthSlider {
     void resizeUpSaw(float x, float y, float width, float height);
     void resizeNoise(float x, float y, float width, float height);
 
-    Path sine_;
-    Path triangle_;
-    Path square_;
-    Path down_saw_;
-    Path up_saw_;
-    Path three_step_;
-    Path four_step_;
-    Path eight_step_;
-    Path three_pyramid_;
-    Path five_pyramid_;
-    Path nine_pyramid_;
-    Path noise_;
+    juce::Path sine_;
+    juce::Path triangle_;
+    juce::Path square_;
+    juce::Path down_saw_;
+    juce::Path up_saw_;
+    juce::Path three_step_;
+    juce::Path four_step_;
+    juce::Path eight_step_;
+    juce::Path three_pyramid_;
+    juce::Path five_pyramid_;
+    juce::Path nine_pyramid_;
+    juce::Path noise_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WaveSelector)
 };

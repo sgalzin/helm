@@ -42,13 +42,13 @@ GraphicalEnvelope::GraphicalEnvelope() {
 
 GraphicalEnvelope::~GraphicalEnvelope() { }
 
-void GraphicalEnvelope::paint(Graphics& g) {
-  static const PathStrokeType stroke(1.5f, PathStrokeType::beveled, PathStrokeType::rounded);
-  static const DropShadow shadow(Colour(0xbb000000), 5, Point<int>(0, 0));
+void GraphicalEnvelope::paint(juce::Graphics& g) {
+  static const juce::PathStrokeType stroke(1.5f, juce::PathStrokeType::beveled, juce::PathStrokeType::rounded);
+  static const juce::DropShadow shadow(juce::Colour(0xbb000000), 5, juce::Point<int>(0, 0));
 
-  g.fillAll(Colour(0xff424242));
+  g.fillAll(juce::Colour(0xff424242));
 
-  g.setColour(Colour(0xff4a4a4a));
+  g.setColour(juce::Colour(0xff4a4a4a));
   for (int x = 0; x < getWidth(); x += GRID_CELL_WIDTH)
     g.drawLine(x, 0, x, getHeight());
   for (int y = 0; y < getHeight(); y += GRID_CELL_WIDTH)
@@ -58,7 +58,7 @@ void GraphicalEnvelope::paint(Graphics& g) {
   g.setColour(Colors::graph_fill);
   g.fillPath(envelope_line_);
 
-  g.setColour(Colour(0xff505050));
+  g.setColour(juce::Colour(0xff505050));
   g.drawLine(getAttackX(), 0.0f, getAttackX(), getHeight());
   g.drawLine(getDecayX(), getSustainY(), getDecayX(), getHeight());
 
@@ -73,27 +73,27 @@ void GraphicalEnvelope::paint(Graphics& g) {
   else if (release_hover_)
     hover_line_x = getReleaseX();
 
-  g.setColour(Colour(0xbbffffff));
+  g.setColour(juce::Colour(0xbbffffff));
   g.fillRect(hover_line_x - 0.5f, 0.0f, 1.0f, 1.0f * getHeight());
 
   if (sustain_hover_) {
     if (mouse_down_) {
-      g.setColour(Colour(0x11ffffff));
+      g.setColour(juce::Colour(0x11ffffff));
       g.fillEllipse(getDecayX() - 20.0, getSustainY() - 20.0, 40.0, 40.0);
     }
 
-    g.setColour(Colour(0xbbffffff));
+    g.setColour(juce::Colour(0xbbffffff));
     g.drawEllipse(getDecayX() - 7.0, getSustainY() - 7.0, 14.0, 14.0, 1.0);
   }
   else if (mouse_down_) {
-    g.setColour(Colour(0x11ffffff));
+    g.setColour(juce::Colour(0x11ffffff));
     g.fillRect(hover_line_x - 10.0f, 0.0f, 20.0f, 1.0f * getHeight());
   }
 
   g.setColour(Colors::modulation);
   g.fillEllipse(getDecayX() - MARKER_WIDTH / 2.0f, getSustainY() - MARKER_WIDTH / 2.0f,
                 MARKER_WIDTH, MARKER_WIDTH);
-  g.setColour(Colour(0xff000000));
+  g.setColour(juce::Colour(0xff000000));
   g.fillEllipse(getDecayX() - MARKER_WIDTH / 4.0f, getSustainY() - MARKER_WIDTH / 4.0f,
                 MARKER_WIDTH / 2.0f, MARKER_WIDTH / 2.0f);
 }
@@ -102,7 +102,7 @@ void GraphicalEnvelope::resized() {
   resetEnvelopeLine();
 }
 
-void GraphicalEnvelope::mouseMove(const MouseEvent& e) {
+void GraphicalEnvelope::mouseMove(const juce::MouseEvent& e) {
   float x = e.getPosition().x;
   float attack_delta = fabs(x - getAttackX());
   float decay_delta = fabs(x - getDecayX());
@@ -125,7 +125,7 @@ void GraphicalEnvelope::mouseMove(const MouseEvent& e) {
   }
 }
 
-void GraphicalEnvelope::mouseExit(const MouseEvent& e) {
+void GraphicalEnvelope::mouseExit(const juce::MouseEvent& e) {
   attack_hover_ = false;
   decay_hover_ = false;
   sustain_hover_ = false;
@@ -133,12 +133,12 @@ void GraphicalEnvelope::mouseExit(const MouseEvent& e) {
   repaint();
 }
 
-void GraphicalEnvelope::mouseDown(const MouseEvent& e) {
+void GraphicalEnvelope::mouseDown(const juce::MouseEvent& e) {
   mouse_down_ = true;
   repaint();
 }
 
-void GraphicalEnvelope::mouseDrag(const MouseEvent& e) {
+void GraphicalEnvelope::mouseDrag(const juce::MouseEvent& e) {
   if (attack_hover_)
     setAttackX(e.getPosition().x);
   else if (decay_hover_)
@@ -155,7 +155,7 @@ void GraphicalEnvelope::mouseDrag(const MouseEvent& e) {
   }
 }
 
-void GraphicalEnvelope::mouseUp(const MouseEvent& e) {
+void GraphicalEnvelope::mouseUp(const juce::MouseEvent& e) {
   mouse_down_ = false;
   repaint();
 }

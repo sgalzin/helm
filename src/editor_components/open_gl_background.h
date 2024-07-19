@@ -25,29 +25,29 @@ class OpenGLBackground {
     OpenGLBackground();
     virtual ~OpenGLBackground();
 
-    void updateBackgroundImage(Image background);
-    virtual void init(OpenGLContext& open_gl_context);
-    virtual void render(OpenGLContext& open_gl_context);
-    virtual void destroy(OpenGLContext& open_gl_context);
+    void updateBackgroundImage(juce::Image background);
+    virtual void init(juce::OpenGLContext& open_gl_context);
+    virtual void render(juce::OpenGLContext& open_gl_context);
+    virtual void destroy(juce::OpenGLContext& open_gl_context);
 
-    OpenGLShaderProgram* shader() { return image_shader_; }
-    OpenGLShaderProgram::Uniform* texture_uniform() { return texture_uniform_; }
+    juce::OpenGLShaderProgram* shader() { return image_shader_; }
+    juce::OpenGLShaderProgram::Uniform* texture_uniform() { return texture_uniform_; }
 
-    void bind(OpenGLContext& open_gl_context);
-    void enableAttributes(OpenGLContext& open_gl_context);
-    void disableAttributes(OpenGLContext& open_gl_context);
+    void bind(juce::OpenGLContext& open_gl_context);
+    void enableAttributes(juce::OpenGLContext& open_gl_context);
+    void disableAttributes(juce::OpenGLContext& open_gl_context);
 
   private:
-    ScopedPointer<OpenGLShaderProgram> image_shader_;
-    ScopedPointer<OpenGLShaderProgram::Uniform> texture_uniform_;
-    ScopedPointer<OpenGLShaderProgram::Attribute> position_;
-    ScopedPointer<OpenGLShaderProgram::Attribute> texture_coordinates_;
+    juce::ScopedPointer<juce::OpenGLShaderProgram> image_shader_;
+    juce::ScopedPointer<juce::OpenGLShaderProgram::Uniform> texture_uniform_;
+    juce::ScopedPointer<juce::OpenGLShaderProgram::Attribute> position_;
+    juce::ScopedPointer<juce::OpenGLShaderProgram::Attribute> texture_coordinates_;
 
     float vertices_[16];
 
-    OpenGLTexture background_;
+    juce::OpenGLTexture background_;
     bool new_background_;
-    Image background_image_;
+    juce::Image background_image_;
 
     GLuint vertex_buffer_;
     GLuint triangle_buffer_;

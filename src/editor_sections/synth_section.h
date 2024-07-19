@@ -27,35 +27,35 @@
 class OpenGLComponent;
 class SynthSlider;
 
-class SynthSection : public Component, public Slider::Listener,
-                     public Button::Listener, public SynthButton::ButtonListener {
+class SynthSection : public juce::Component, public juce::Slider::Listener,
+                     public juce::Button::Listener, public SynthButton::ButtonListener {
   public:
-    SynthSection(String name) : Component(name), activator_(nullptr), size_ratio_(1.0f) { }
+    SynthSection(juce::String name) : Component(name), activator_(nullptr), size_ratio_(1.0f) { }
 
     // Drawing.
     virtual void reset();
     virtual void resized() override;
-    virtual void paint(Graphics& g) override;
-    virtual void paintBackground(Graphics& g);
-    virtual void paintContainer(Graphics& g);
+    virtual void paint(juce::Graphics& g) override;
+    virtual void paintBackground(juce::Graphics& g);
+    virtual void paintContainer(juce::Graphics& g);
     virtual void setSizeRatio(float ratio);
-    void paintKnobShadows(Graphics& g);
-    void drawTextForComponent(Graphics& g, String text, Component* component, int space = 4);
+    void paintKnobShadows(juce::Graphics& g);
+    void drawTextForComponent(juce::Graphics& g, juce::String text, Component* component, int space = 4);
 
-    void paintChildrenBackgrounds(Graphics& g);
-    void paintChildBackground(Graphics& g, SynthSection* child);
-    void paintOpenGLBackground(Graphics& g, OpenGLComponent* child);
-    void initOpenGLComponents(OpenGLContext& open_gl_context);
-    void renderOpenGLComponents(OpenGLContext& open_gl_context, bool animate);
-    void destroyOpenGLComponents(OpenGLContext& open_gl_context);
+    void paintChildrenBackgrounds(juce::Graphics& g);
+    void paintChildBackground(juce::Graphics& g, SynthSection* child);
+    void paintOpenGLBackground(juce::Graphics& g, OpenGLComponent* child);
+    void initOpenGLComponents(juce::OpenGLContext& open_gl_context);
+    void renderOpenGLComponents(juce::OpenGLContext& open_gl_context, bool animate);
+    void destroyOpenGLComponents(juce::OpenGLContext& open_gl_context);
 
     // Widget Listeners.
-    virtual void sliderValueChanged(Slider* moved_slider) override;
-    virtual void buttonClicked(Button* clicked_button) override;
+    virtual void sliderValueChanged(juce::Slider* moved_slider) override;
+    virtual void buttonClicked(juce::Button* clicked_button) override;
     virtual void guiChanged(SynthButton* button) override;
 
     std::map<std::string, SynthSlider*> getAllSliders() { return all_sliders_; }
-    std::map<std::string, Button*> getAllButtons() { return all_buttons_; }
+    std::map<std::string, juce::Button*> getAllButtons() { return all_buttons_; }
     std::map<std::string, ModulationButton*> getAllModulationButtons() {
       return all_modulation_buttons_;
     }
@@ -64,10 +64,10 @@ class SynthSection : public Component, public Slider::Listener,
     virtual void animate(bool animate = true);
     virtual void setAllValues(mopo::control_map& controls);
     virtual void setValue(const std::string& name, mopo::mopo_float value,
-                          NotificationType notification = sendNotification);
+                          juce::NotificationType notification = juce::sendNotification);
 
   protected:
-    void addButton(Button* button, bool show = true);
+    void addButton(juce::Button* button, bool show = true);
     void addModulationButton(ModulationButton* button, bool show = true);
     void addSlider(SynthSlider* slider, bool show = true);
     void addSubSection(SynthSection* section, bool show = true);
@@ -82,15 +82,15 @@ class SynthSection : public Component, public Slider::Listener,
     std::set<OpenGLComponent*> open_gl_components_;
 
     std::map<std::string, SynthSlider*> slider_lookup_;
-    std::map<std::string, Button*> button_lookup_;
+    std::map<std::string, juce::Button*> button_lookup_;
     std::map<std::string, ModulationButton*> modulation_buttons_;
 
     std::map<std::string, SynthSlider*> all_sliders_;
-    std::map<std::string, Button*> all_buttons_;
+    std::map<std::string, juce::Button*> all_buttons_;
     std::map<std::string, ModulationButton*> all_modulation_buttons_;
-    ToggleButton* activator_;
+    juce::ToggleButton* activator_;
 
-    Image background_;
+    juce::Image background_;
     float size_ratio_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SynthSection)

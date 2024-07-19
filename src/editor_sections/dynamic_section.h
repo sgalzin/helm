@@ -24,16 +24,16 @@
 
 class DynamicSection : public SynthSection {
   public:
-    DynamicSection(String name);
+    DynamicSection(juce::String name);
     ~DynamicSection();
 
-    void paintBackground(Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
     void resized() override;
 
   private:
-    ScopedPointer<SynthSlider> portamento_;
-    ScopedPointer<SynthSlider> portamento_type_;
-    ScopedPointer<ToggleButton> legato_;
+    juce::ScopedPointer<SynthSlider> portamento_;
+    juce::ScopedPointer<SynthSlider> portamento_type_;
+    juce::ScopedPointer<juce::ToggleButton> legato_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DynamicSection)
 };

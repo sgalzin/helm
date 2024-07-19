@@ -16,8 +16,8 @@
 
 #include "border_bounds_constrainer.h"
 
-void BorderBoundsConstrainer::checkBounds(Rectangle<int>& bounds, const Rectangle<int>& previous,
-                                          const Rectangle<int>& limits,
+void BorderBoundsConstrainer::checkBounds(juce::Rectangle<int>& bounds, const juce::Rectangle<int>& previous,
+                                          const juce::Rectangle<int>& limits,
                                           bool stretching_top, bool stretching_left,
                                           bool stretching_bottom, bool stretching_right) {
 #if JUCE_MAC

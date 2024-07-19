@@ -21,38 +21,38 @@
 
 class DefaultLookAndFeel : public juce::LookAndFeel_V3 {
   public:
-    void drawLinearSlider(Graphics& g, int x, int y, int width, int height,
+    void drawLinearSlider(juce::Graphics& g, int x, int y, int width, int height,
                           float slider_pos, float min, float max,
-                          const Slider::SliderStyle style, Slider& slider) override;
+                          const juce::Slider::SliderStyle style, juce::Slider& slider) override;
 
-    void drawLinearSliderThumb(Graphics& g, int x, int y, int width, int height,
+    void drawLinearSliderThumb(juce::Graphics& g, int x, int y, int width, int height,
                                float slider_pos, float min, float max,
-                               const Slider::SliderStyle style, Slider& slider) override;
+                               const juce::Slider::SliderStyle style, juce::Slider& slider) override;
 
-    virtual void drawRotarySlider(Graphics& g, int x, int y, int width, int height,
+    virtual void drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height,
                                   float slider_t, float start_angle, float end_angle,
-                                  Slider& slider) override;
+                                  juce::Slider& slider) override;
 
-    virtual void drawToggleButton(Graphics& g, ToggleButton& button,
+    virtual void drawToggleButton(juce::Graphics& g, juce::ToggleButton& button,
                                   bool hover, bool is_down) override;
 
-    void drawButtonBackground(Graphics& g, Button& button,
-                              const Colour &backgroundColour,
+    void drawButtonBackground(juce::Graphics& g, juce::Button& button,
+                              const juce::Colour &backgroundColour,
                               bool hover,
                               bool is_down) override;
 
-    void drawButtonText(Graphics& g, TextButton& button,
+    void drawButtonText(juce::Graphics& g, juce::TextButton& button,
                         bool hover, bool is_down) override;
 
-    void fillHorizontalRect(Graphics& g, float x1, float x2, float height);
-    void fillVerticalRect(Graphics& g, float y1, float y2, float width);
-    void fillSplitHorizontalRect(Graphics& g, float x1, float x2, float height, Colour fill_color);
-    void fillSplitVerticalRect(Graphics& g, float y1, float y2, float width, Colour fill_color);
+    void fillHorizontalRect(juce::Graphics& g, float x1, float x2, float height);
+    void fillVerticalRect(juce::Graphics& g, float y1, float y2, float width);
+    void fillSplitHorizontalRect(juce::Graphics& g, float x1, float x2, float height, juce::Colour fill_color);
+    void fillSplitVerticalRect(juce::Graphics& g, float y1, float y2, float width, juce::Colour fill_color);
 
-    int getSliderPopupPlacement(Slider& slider) override;
+    int getSliderPopupPlacement(juce::Slider& slider) override;
 
-    Font getPopupMenuFont() override;
-    Font getSliderPopupFont(Slider& slider) override;
+    juce::Font getPopupMenuFont() override;
+    juce::Font getSliderPopupFont(juce::Slider& slider) override;
 
     static DefaultLookAndFeel* instance() {
       static DefaultLookAndFeel instance;

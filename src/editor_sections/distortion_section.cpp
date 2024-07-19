@@ -24,18 +24,18 @@
 #define TEXT_WIDTH 58
 #define TEXT_HEIGHT 16
 
-DistortionSection::DistortionSection(String name) : SynthSection(name) {
+DistortionSection::DistortionSection(juce::String name) : SynthSection(name) {
   addSlider(type_ = new TextSelector("distortion_type"));
-  type_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  type_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   type_->setStringLookup(mopo::strings::distortion_types_short);
   type_->setLookAndFeel(TextLookAndFeel::instance());
   type_->setLongStringLookup(mopo::strings::distortion_types_long);
 
   addSlider(drive_ = new SynthSlider("distortion_drive"));
-  drive_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  drive_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
 
   addSlider(mix_ = new SynthSlider("distortion_mix"));
-  mix_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  mix_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
 
   addButton(on_ = new SynthButton("distortion_on"));
   setActivator(on_);
@@ -48,7 +48,7 @@ DistortionSection::~DistortionSection() {
   mix_ = nullptr;
 }
 
-void DistortionSection::paintBackground(Graphics& g) {
+void DistortionSection::paintBackground(juce::Graphics& g) {
   SynthSection::paintBackground(g);
   int knob_width = getStandardKnobSize();
 
@@ -59,7 +59,7 @@ void DistortionSection::paintBackground(Graphics& g) {
              type_->getBounds().getX() - size_ratio_ * 5.0f,
              drive_->getBounds().getY() + knob_width + size_ratio_ * 4,
              type_->getBounds().getWidth() + size_ratio_ * 10.0f,
-             size_ratio_ * 10.0f, Justification::centred, false);
+             size_ratio_ * 10.0f, juce::Justification::centred, false);
   drawTextForComponent(g, TRANS("DRIVE"), drive_);
   drawTextForComponent(g, TRANS("MIX"), mix_);
 }

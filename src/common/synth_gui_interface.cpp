@@ -43,7 +43,7 @@ void SynthGuiInterface::updateGuiControl(const std::string& name, mopo::mopo_flo
   if (gui_ == nullptr)
     return;
 
-  gui_->setValue(name, value, NotificationType::dontSendNotification);
+  gui_->setValue(name, value, juce::NotificationType::dontSendNotification);
 }
 
 mopo::mopo_float SynthGuiInterface::getControlValue(const std::string& name) {
@@ -71,7 +71,7 @@ void SynthGuiInterface::notifyFresh() {
   gui_->notifyFresh();
 }
 
-void SynthGuiInterface::externalPatchLoaded(File patch) {
+void SynthGuiInterface::externalPatchLoaded(juce::File patch) {
   if (gui_ == nullptr)
     return;
 
@@ -82,7 +82,7 @@ void SynthGuiInterface::setGuiSize(int width, int height) {
   if (gui_ == nullptr)
     return;
 
-  Rectangle<int> bounds = gui_->getBounds();
+  juce::Rectangle<int> bounds = gui_->getBounds();
   bounds.setWidth(width);
   bounds.setHeight(height);
   bounds.setX(bounds.getX() + (bounds.getWidth() - width) / 2);

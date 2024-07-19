@@ -21,18 +21,18 @@
 #include "synth_slider.h"
 
 TextLookAndFeel::TextLookAndFeel() {
-  setColour(ComboBox::backgroundColourId, Colors::background);
-  setColour(ComboBox::arrowColourId, Colour(0xff888888));
-  setColour(ComboBox::outlineColourId, Colour(0xff888888));
-  setColour(ComboBox::textColourId, Colors::control_label_text);
-  setColour(Label::textColourId, Colour(0xffaaaaaa));
-  setColour(ListBox::backgroundColourId, Colors::background);
-  setColour(ListBox::textColourId, Colour(0xffaaaaaa));
+  setColour(juce::ComboBox::backgroundColourId, Colors::background);
+  setColour(juce::ComboBox::arrowColourId, juce::Colour(0xff888888));
+  setColour(juce::ComboBox::outlineColourId, juce::Colour(0xff888888));
+  setColour(juce::ComboBox::textColourId, Colors::control_label_text);
+  setColour(juce::Label::textColourId, juce::Colour(0xffaaaaaa));
+  setColour(juce::ListBox::backgroundColourId, Colors::background);
+  setColour(juce::ListBox::textColourId, juce::Colour(0xffaaaaaa));
 }
 
-void TextLookAndFeel::drawRotarySlider(Graphics& g, int x, int y, int width, int height,
+void TextLookAndFeel::drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height,
                                        float slider_t, float start_angle, float end_angle,
-                                       Slider& slider) {
+                                       juce::Slider& slider) {
   static const float text_percentage = 0.7f;
   static const int mod_buffer = 5;
 
@@ -41,64 +41,64 @@ void TextLookAndFeel::drawRotarySlider(Graphics& g, int x, int y, int width, int
   if (s_slider)
     active = s_slider->isActive();
 
-  g.setColour(Colour(0xff333333));
+  g.setColour(juce::Colour(0xff333333));
   g.fillRect(x + mod_buffer, y, width - 2 * mod_buffer, height);
 
   if (active)
-    g.setColour(Colour(0xff565656));
+    g.setColour(juce::Colour(0xff565656));
   else
-    g.setColour(Colour(0xff333333));
+    g.setColour(juce::Colour(0xff333333));
   g.drawRect(slider.getLocalBounds());
 
   if (active)
-    g.setColour(Colours::white);
+    g.setColour(juce::Colours::white);
   else
-    g.setColour(Colour(0xff555555));
+    g.setColour(juce::Colour(0xff555555));
 
   g.setFont(Fonts::instance()->monospace().withPointHeight(height * text_percentage));
   g.drawText(slider.getTextFromValue(slider.getValue()),
-             x, y, width, height, Justification::centred, false);
+             x, y, width, height, juce::Justification::centred, false);
 }
 
-void TextLookAndFeel::drawToggleButton(Graphics& g, ToggleButton& button,
+void TextLookAndFeel::drawToggleButton(juce::Graphics& g, juce::ToggleButton& button,
                                        bool hover, bool is_down) {
   static const float text_percentage = 0.7f;
 
   if (button.getToggleState())
-    g.setColour(Colour(0xffffc400));
+    g.setColour(juce::Colour(0xffffc400));
   else
-    g.setColour(Colour(0xff313131));
+    g.setColour(juce::Colour(0xff313131));
   g.fillRect(button.getLocalBounds());
 
-  g.setColour(Colours::white);
+  g.setColour(juce::Colours::white);
   int height = button.getHeight();
   g.setFont(Fonts::instance()->monospace().withPointHeight(height * text_percentage));
   g.drawText(button.getButtonText(), 0, 0,
-             button.getWidth(), button.getHeight(), Justification::centred);
+             button.getWidth(), button.getHeight(), juce::Justification::centred);
 
-  g.setColour(Colour(0xff565656));
+  g.setColour(juce::Colour(0xff565656));
   g.drawRect(button.getLocalBounds());
 
   if (is_down) {
-    g.setColour(Colour(0x11000000));
+    g.setColour(juce::Colour(0x11000000));
     g.fillRect(button.getLocalBounds());
   }
   else if (hover) {
-    g.setColour(Colour(0x11ffffff));
+    g.setColour(juce::Colour(0x11ffffff));
     g.fillRect(button.getLocalBounds());
   }
 }
 
-void TextLookAndFeel::drawTickBox(Graphics& g, Component& component,
+void TextLookAndFeel::drawTickBox(juce::Graphics& g, juce::Component& component,
                                   float x, float y, float w, float h, bool ticked,
                                   bool enabled, bool mouse_over, bool button_down) {
   float border_width = 1.5f;
-  g.setColour(Colour(0xffbbbbbb));
+  g.setColour(juce::Colour(0xffbbbbbb));
   g.drawRect(x + border_width, y + border_width,
              w - 2 * border_width, h - 2 * border_width, border_width);
 
   if (ticked) {
-    g.setColour(Colour(0xffffd740));
+    g.setColour(juce::Colour(0xffffd740));
     g.fillRect(x + 3 * border_width, y + 3 * border_width,
                w - 6 * border_width, h - 6 * border_width);
   }

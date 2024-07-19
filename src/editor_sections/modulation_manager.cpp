@@ -55,7 +55,7 @@ ModulationManager::ModulationManager(
     addChildComponent(overlay);
     overlay_lookup_[name] = overlay;
     overlay->setName(name);
-    Rectangle<int> local_bounds = mod_button.second->getBoundsInParent();
+    juce::Rectangle<int> local_bounds = mod_button.second->getBoundsInParent();
     overlay->setBounds(mod_button.second->getParentComponent()->localAreaToGlobal(local_bounds));
   }
 
@@ -74,7 +74,7 @@ ModulationManager::ModulationManager(
       addChildComponent(meter);
       meter_lookup_[name] = meter;
       meter->setName(name);
-      Rectangle<int> local_bounds = slider.second->getBoundsInParent();
+      juce::Rectangle<int> local_bounds = slider.second->getBoundsInParent();
       meter->setBounds(slider.second->getParentComponent()->localAreaToGlobal(local_bounds));
     }
 
@@ -102,11 +102,11 @@ ModulationManager::~ModulationManager() {
     delete meter.second;
   for (auto overlay : overlay_lookup_)
     delete overlay.second;
-  for (Slider* slider : owned_sliders_)
+  for (juce::Slider* slider : owned_sliders_)
     delete slider;
 }
 
-void ModulationManager::paint(Graphics& g) {
+void ModulationManager::paint(juce::Graphics& g) {
 }
 
 void ModulationManager::resized() {
@@ -117,7 +117,7 @@ void ModulationManager::resized() {
   // Update modulation slider locations.
   for (auto slider : slider_lookup_) {
     SynthSlider* model = slider_model_lookup_[slider.first];
-    Point<float> local_top_left = getLocalPoint(model, Point<float>(0.0f, 0.0f));
+    juce::Point<float> local_top_left = getLocalPoint(model, juce::Point<float>(0.0f, 0.0f));
     slider.second->setVisible(model->isVisible());
     slider.second->setBounds(local_top_left.x, local_top_left.y,
                              model->getWidth(), model->getHeight());
@@ -125,8 +125,8 @@ void ModulationManager::resized() {
 
   // Update modulation meter locations.
   for (auto meter : meter_lookup_) {
-    Slider* model = slider_model_lookup_[meter.first];
-    Point<float> local_top_left = getLocalPoint(model, Point<float>(0.0f, 0.0f));
+    juce::Slider* model = slider_model_lookup_[meter.first];
+    juce::Point<float> local_top_left = getLocalPoint(model, juce::Point<float>(0.0f, 0.0f));
     meter.second->setBounds(local_top_left.x, local_top_left.y,
                             model->getWidth(), model->getHeight());
     if (parent) {
@@ -138,7 +138,7 @@ void ModulationManager::resized() {
   // Update modulation highlight overlay locations.
   for (auto overlay : overlay_lookup_) {
     ModulationButton* model = modulation_buttons_[overlay.first];
-    Point<float> local_top_left = getLocalPoint(model, Point<float>(0.0f, 0.0f));
+    juce::Point<float> local_top_left = getLocalPoint(model, juce::Point<float>(0.0f, 0.0f));
     overlay.second->setBounds(local_top_left.x, local_top_left.y,
                               model->getWidth(), model->getHeight());
   }
@@ -150,8 +150,8 @@ void ModulationManager::buttonClicked(juce::Button *clicked_button) {
   std::string name = clicked_button->getName().toStdString();
   if (clicked_button->getToggleState()) {
     if (current_modulator_ != "") {
-      Button* modulator = modulation_buttons_[current_modulator_];
-      modulator->setToggleState(false, NotificationType::dontSendNotification);
+      juce::Button* modulator = modulation_buttons_[current_modulator_];
+      modulator->setToggleState(false, juce::NotificationType::dontSendNotification);
     }
     changeModulator(name);
   }
@@ -169,7 +169,7 @@ void ModulationManager::sliderValueChanged(juce::Slider *moved_slider) {
 
 void ModulationManager::modulationDisconnected(mopo::ModulationConnection* connection, bool last) {
   if (connection->source == current_modulator_) {
-    Slider* slider = slider_lookup_[connection->destination];
+    juce::Slider* slider = slider_lookup_[connection->destination];
     slider->setValue(slider->getDoubleClickReturnValue());
   }
 
@@ -275,7 +275,7 @@ void ModulationManager::setSliderValues() {
         break;
       }
     }
-    slider.second->setValue(value, NotificationType::dontSendNotification);
+    slider.second->setValue(value, juce::NotificationType::dontSendNotification);
     slider.second->repaint();
   }
 }

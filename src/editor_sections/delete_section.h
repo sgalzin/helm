@@ -21,37 +21,37 @@
 #include "JuceHeader.h"
 #include "overlay.h"
 
-class DeleteSection : public Overlay, public Button::Listener {
+class DeleteSection : public Overlay, public juce::Button::Listener {
   public:
     class Listener {
       public:
         virtual ~Listener() { }
 
-        virtual void fileDeleted(File save_file) = 0;
+        virtual void fileDeleted(juce::File save_file) = 0;
     };
 
-    DeleteSection(String name);
+    DeleteSection(juce::String name);
     ~DeleteSection() { }
-    void paint(Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
 
-    void mouseUp(const MouseEvent& e) override;
-    void buttonClicked(Button* clicked_button) override;
+    void mouseUp(const juce::MouseEvent& e) override;
+    void buttonClicked(juce::Button* clicked_button) override;
 
-    void setFileToDelete(File file) { file_ = file; }
+    void setFileToDelete(juce::File file) { file_ = file; }
 
-    Rectangle<int> getDeleteRect();
+    juce::Rectangle<int> getDeleteRect();
 
     void addDeleteListener(Listener* listener) { listeners_.add(listener); }
     void removeDeleteListener(Listener* listener) { listeners_.removeAllInstancesOf(listener); }
 
   private:
-    File file_;
+    juce::File file_;
 
-    ScopedPointer<TextButton> delete_button_;
-    ScopedPointer<TextButton> cancel_button_;
+    juce::ScopedPointer<juce::TextButton> delete_button_;
+    juce::ScopedPointer<juce::TextButton> cancel_button_;
 
-    Array<Listener*> listeners_;
+    juce::Array<Listener*> listeners_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DeleteSection)
 };

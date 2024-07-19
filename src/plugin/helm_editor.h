@@ -22,12 +22,12 @@
 #include "full_interface.h"
 #include "synth_gui_interface.h"
 
-class HelmEditor : public AudioProcessorEditor, public SynthGuiInterface {
+class HelmEditor : public juce::AudioProcessorEditor, public SynthGuiInterface {
   public:
     HelmEditor(HelmPlugin&);
 
     // AudioProcessorEditor
-    void paint(Graphics&) override;
+    void paint(juce::Graphics&) override;
     void resized() override;
     void visibilityChanged() override;
     void focusGained(FocusChangeType cause) override;
@@ -43,7 +43,7 @@ class HelmEditor : public AudioProcessorEditor, public SynthGuiInterface {
 
     HelmPlugin& helm_;
     bool was_animating_;
-    ComponentBoundsConstrainer constrainer_;
+    juce::ComponentBoundsConstrainer constrainer_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(HelmEditor)
 };

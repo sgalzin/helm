@@ -31,22 +31,22 @@ HelmEditor::HelmEditor(bool use_gui) : SynthGuiInterface(this, use_gui) {
 
   setAudioChannels(0, mopo::NUM_CHANNELS);
 
-  AudioDeviceManager::AudioDeviceSetup setup;
+  juce::AudioDeviceManager::AudioDeviceSetup setup;
   deviceManager.getAudioDeviceSetup(setup);
   setup.sampleRate = mopo::DEFAULT_SAMPLE_RATE;
   deviceManager.initialise(0, mopo::NUM_CHANNELS, nullptr, true, "", &setup);
 
   if (deviceManager.getCurrentAudioDevice() == nullptr) {
-    const OwnedArray<AudioIODeviceType>& device_types = deviceManager.getAvailableDeviceTypes();
+    const juce::OwnedArray<juce::AudioIODeviceType>& device_types = deviceManager.getAvailableDeviceTypes();
 
-    for (AudioIODeviceType* device_type : device_types) {
+    for (juce::AudioIODeviceType* device_type : device_types) {
       deviceManager.setCurrentAudioDeviceType(device_type->getTypeName(), true);
       if (deviceManager.getCurrentAudioDevice())
         break;
     }
   }
 
-  const StringArray all_midi_ins(MidiInput::getDevices());
+  const juce::StringArray all_midi_ins(juce::MidiInput::getDevices());
 
   for (int i = 0; i < all_midi_ins.size(); ++i)
     deviceManager.setMidiInputEnabled(all_midi_ins[i], true);
@@ -81,15 +81,15 @@ void HelmEditor::prepareToPlay(int buffer_size, double sample_rate) {
   midi_manager_->setSampleRate(sample_rate);
 }
 
-void HelmEditor::getNextAudioBlock(const AudioSourceChannelInfo& buffer) {
-  ScopedLock lock(getCriticalSection());
+void HelmEditor::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer) {
+  juce::ScopedLock lock(getCriticalSection());
 
   int num_samples = buffer.buffer->getNumSamples();
   int synth_samples = std::min(num_samples, MAX_BUFFER_PROCESS);
 
   processControlChanges();
   processModulationChanges();
-  MidiBuffer midi_messages;
+  juce::MidiBuffer midi_messages;
   midi_manager_->removeNextBlockOfMessages(midi_messages, num_samples);
   processMidi(midi_messages);
   processKeyboardEvents(midi_messages, num_samples);
@@ -104,7 +104,7 @@ void HelmEditor::getNextAudioBlock(const AudioSourceChannelInfo& buffer) {
 void HelmEditor::releaseResources() {
 }
 
-void HelmEditor::paint(Graphics& g) {
+void HelmEditor::paint(juce::Graphics& g) {
 }
 
 void HelmEditor::resized() {

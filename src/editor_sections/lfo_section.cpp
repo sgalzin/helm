@@ -27,39 +27,39 @@
 #define TEXT_HEIGHT 16
 #define TEXT_WIDTH 42
 
-LfoSection::LfoSection(String name, std::string value_prepend, bool retrigger, bool can_animate) :
+LfoSection::LfoSection(juce::String name, std::string value_prepend, bool retrigger, bool can_animate) :
     SynthSection(name), can_animate_(can_animate) {
   static const int TEMPO_DRAG_SENSITIVITY = 150;
 
   retrigger_ = new RetriggerSelector(value_prepend + "_retrigger");
-  retrigger_->setSliderStyle(Slider::LinearBar);
+  retrigger_->setSliderStyle(juce::Slider::LinearBar);
   retrigger_->setStringLookup(mopo::strings::freq_retrigger_styles);
   if (retrigger)
     addSlider(retrigger_);
 
   addSlider(amplitude_ = new SynthSlider(value_prepend + "_amplitude"));
-  amplitude_->setSliderStyle(Slider::LinearBarVertical);
+  amplitude_->setSliderStyle(juce::Slider::LinearBarVertical);
   amplitude_->setBipolar();
   amplitude_->snapToValue(true, 0.0);
 
   addSlider(frequency_ = new SynthSlider(value_prepend + "_frequency"));
-  frequency_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  frequency_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   frequency_->setLookAndFeel(TextLookAndFeel::instance());
 
   addSlider(tempo_ = new SynthSlider(value_prepend + "_tempo"));
-  tempo_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  tempo_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   tempo_->setStringLookup(mopo::strings::synced_frequencies);
   tempo_->setLookAndFeel(TextLookAndFeel::instance());
   tempo_->setMouseDragSensitivity(TEMPO_DRAG_SENSITIVITY);
 
   addSlider(sync_ = new TempoSelector(value_prepend + "_sync"));
-  sync_->setSliderStyle(Slider::LinearBar);
+  sync_->setSliderStyle(juce::Slider::LinearBar);
   sync_->setTempoSlider(tempo_);
   sync_->setFreeSlider(frequency_);
   sync_->setStringLookup(mopo::strings::freq_sync_styles);
 
   addSlider(wave_selector_ = new WaveSelector(value_prepend + "_waveform"));
-  wave_selector_->setSliderStyle(Slider::LinearBar);
+  wave_selector_->setSliderStyle(juce::Slider::LinearBar);
   wave_selector_->setStringLookup(mopo::strings::waveforms);
 
   addOpenGLComponent(wave_viewer_ = new OpenGLWaveViewer(WAVE_VIEWER_RESOLUTION));
@@ -80,8 +80,8 @@ LfoSection::~LfoSection() {
   sync_ = nullptr;
 }
 
-void LfoSection::paintBackground(Graphics& g) {
-  static const DropShadow component_shadow(Colour(0x88000000), 2, Point<int>(0, 1));
+void LfoSection::paintBackground(juce::Graphics& g) {
+  static const juce::DropShadow component_shadow(juce::Colour(0x88000000), 2, juce::Point<int>(0, 1));
 
   SynthSection::paintBackground(g);
   g.setColour(Colors::control_label_text);
@@ -94,7 +94,7 @@ void LfoSection::paintBackground(Graphics& g) {
     g.drawText(TRANS("FREQUENCY"),
                retrigger_->getBounds().getX(), frequency_->getBounds().getBottom() + text_buffer,
                frequency_->getBounds().getWidth() + 2 * text_slider_height, text_height + 1,
-               Justification::centred, false);
+               juce::Justification::centred, false);
   }
   else {
     float extra_bump = size_ratio_ * 5.0f;
@@ -103,7 +103,7 @@ void LfoSection::paintBackground(Graphics& g) {
                frequency_->getBounds().getBottom() + text_buffer,
                frequency_->getBounds().getWidth() + text_slider_height + 2 * extra_bump,
                text_height + 1,
-               Justification::centred, false);
+               juce::Justification::centred, false);
   }
 
   component_shadow.drawForRectangle(g, wave_viewer_->getBounds());

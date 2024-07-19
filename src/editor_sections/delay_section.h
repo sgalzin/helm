@@ -26,19 +26,19 @@
 
 class DelaySection : public SynthSection {
   public:
-    DelaySection(String name);
+    DelaySection(juce::String name);
     ~DelaySection();
 
-    void paintBackground(Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
     void resized() override;
 
   private:
-    ScopedPointer<SynthButton> on_;
-    ScopedPointer<SynthSlider> frequency_;
-    ScopedPointer<SynthSlider> tempo_;
-    ScopedPointer<TempoSelector> sync_;
-    ScopedPointer<SynthSlider> feedback_;
-    ScopedPointer<SynthSlider> dry_wet_;
+    juce::ScopedPointer<SynthButton> on_;
+    juce::ScopedPointer<SynthSlider> frequency_;
+    juce::ScopedPointer<SynthSlider> tempo_;
+    juce::ScopedPointer<TempoSelector> sync_;
+    juce::ScopedPointer<SynthSlider> feedback_;
+    juce::ScopedPointer<SynthSlider> dry_wet_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DelaySection)
 };

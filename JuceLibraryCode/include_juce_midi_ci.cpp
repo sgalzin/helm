@@ -5,5 +5,4 @@
 
 */
 
-#include "AppConfig.h"
-#include <juce_audio_plugin_client_RTAS.r>
+#include <juce_midi_ci/juce_midi_ci.cpp>

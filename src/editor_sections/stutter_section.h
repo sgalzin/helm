@@ -26,23 +26,23 @@
 
 class StutterSection : public SynthSection {
   public:
-    StutterSection(String name);
+    StutterSection(juce::String name);
     ~StutterSection();
 
-    void paintBackground(Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
     void resized() override;
 
   private:
-    ScopedPointer<SynthSlider> stutter_frequency_;
-    ScopedPointer<SynthSlider> stutter_tempo_;
-    ScopedPointer<TempoSelector> stutter_sync_;
+    juce::ScopedPointer<SynthSlider> stutter_frequency_;
+    juce::ScopedPointer<SynthSlider> stutter_tempo_;
+    juce::ScopedPointer<TempoSelector> stutter_sync_;
 
-    ScopedPointer<SynthSlider> resample_frequency_;
-    ScopedPointer<SynthSlider> resample_tempo_;
-    ScopedPointer<TempoSelector> resample_sync_;
+    juce::ScopedPointer<SynthSlider> resample_frequency_;
+    juce::ScopedPointer<SynthSlider> resample_tempo_;
+    juce::ScopedPointer<TempoSelector> resample_sync_;
 
-    ScopedPointer<SynthSlider> stutter_softness_;
-    ScopedPointer<SynthButton> on_;
+    juce::ScopedPointer<SynthSlider> stutter_softness_;
+    juce::ScopedPointer<SynthButton> on_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(StutterSection)
 };

@@ -21,14 +21,14 @@
 
 #define SLIDER_WIDTH 10
 
-FormantSection::FormantSection(String name) : SynthSection(name) {
+FormantSection::FormantSection(juce::String name) : SynthSection(name) {
   addSlider(x_ = new SynthSlider("formant_x"));
-  x_->setSliderStyle(Slider::LinearBar);
-  x_->setPopupPlacement(BubbleComponent::below, 0);
+  x_->setSliderStyle(juce::Slider::LinearBar);
+  x_->setPopupPlacement(juce::BubbleComponent::below, 0);
 
   addSlider(y_ = new SynthSlider("formant_y"));
-  y_->setSliderStyle(Slider::LinearBarVertical);
-  y_->setPopupPlacement(BubbleComponent::right, 0);
+  y_->setSliderStyle(juce::Slider::LinearBarVertical);
+  y_->setPopupPlacement(juce::BubbleComponent::right, 0);
 
   addAndMakeVisible(xy_pad_ = new XYPad());
   xy_pad_->setXSlider(x_);
@@ -45,8 +45,8 @@ FormantSection::~FormantSection() {
   xy_pad_ = nullptr;
 }
 
-void FormantSection::paintBackground(Graphics& g) {
-  static const DropShadow component_shadow(Colour(0x88000000), 2, Point<int>(0, 1));
+void FormantSection::paintBackground(juce::Graphics& g) {
+  static const juce::DropShadow component_shadow(juce::Colour(0x88000000), 2, juce::Point<int>(0, 1));
   SynthSection::paintBackground(g);
   component_shadow.drawForRectangle(g, xy_pad_->getBounds());
 }

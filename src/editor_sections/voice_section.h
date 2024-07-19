@@ -24,16 +24,16 @@
 
 class VoiceSection : public SynthSection {
   public:
-    VoiceSection(String name);
+    VoiceSection(juce::String name);
     ~VoiceSection();
 
-    void paintBackground(Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
     void resized() override;
 
   private:
-    ScopedPointer<SynthSlider> polyphony_;
-    ScopedPointer<SynthSlider> pitch_bend_;
-    ScopedPointer<SynthSlider> velocity_track_;
+    juce::ScopedPointer<SynthSlider> polyphony_;
+    juce::ScopedPointer<SynthSlider> pitch_bend_;
+    juce::ScopedPointer<SynthSlider> velocity_track_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(VoiceSection)
 };

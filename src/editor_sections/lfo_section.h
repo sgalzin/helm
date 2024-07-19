@@ -28,24 +28,24 @@
 
 class LfoSection : public SynthSection {
   public:
-    LfoSection(String name, std::string value_preprend, bool retrigger, bool can_animate = false);
+    LfoSection(juce::String name, std::string value_preprend, bool retrigger, bool can_animate = false);
     ~LfoSection();
 
-    void paintBackground(Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
     void resized() override;
     void reset() override;
 
   private:
     bool can_animate_;
-    ScopedPointer<OpenGLWaveViewer> wave_viewer_;
-    ScopedPointer<WaveSelector> wave_selector_;
+    juce::ScopedPointer<OpenGLWaveViewer> wave_viewer_;
+    juce::ScopedPointer<WaveSelector> wave_selector_;
 
-    ScopedPointer<RetriggerSelector> retrigger_;
-    ScopedPointer<SynthSlider> amplitude_;
-    ScopedPointer<SynthSlider> frequency_;
-    ScopedPointer<SynthSlider> tempo_;
-    ScopedPointer<TempoSelector> sync_;
-    ScopedPointer<ModulationButton> modulation_button_;
+    juce::ScopedPointer<RetriggerSelector> retrigger_;
+    juce::ScopedPointer<SynthSlider> amplitude_;
+    juce::ScopedPointer<SynthSlider> frequency_;
+    juce::ScopedPointer<SynthSlider> tempo_;
+    juce::ScopedPointer<TempoSelector> sync_;
+    juce::ScopedPointer<ModulationButton> modulation_button_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LfoSection)
 };

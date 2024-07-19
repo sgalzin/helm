@@ -21,23 +21,23 @@
 #include "JuceHeader.h"
 #include "synth_slider.h"
 
-class XYPad : public Component, public SynthSlider::SliderListener {
+class XYPad : public juce::Component, public SynthSlider::SliderListener {
   public:
     XYPad();
     ~XYPad();
 
     void guiChanged(SynthSlider* moved_slider) override;
-    void setSlidersFromPosition(Point<int> position);
+    void setSlidersFromPosition(juce::Point<int> position);
 
     void setXSlider(SynthSlider* slider);
     void setYSlider(SynthSlider* slider);
 
-    void paint(Graphics& g) override;
-    void paintBackground(Graphics& g);
+    void paint(juce::Graphics& g) override;
+    void paintBackground(juce::Graphics& g);
     void resized() override;
-    void mouseDown(const MouseEvent& e) override;
-    void mouseDrag(const MouseEvent& e) override;
-    void mouseUp(const MouseEvent& e) override;
+    void mouseDown(const juce::MouseEvent& e) override;
+    void mouseDrag(const juce::MouseEvent& e) override;
+    void mouseUp(const juce::MouseEvent& e) override;
 
     void setActive(bool active = true);
 
@@ -47,7 +47,7 @@ class XYPad : public Component, public SynthSlider::SliderListener {
     bool mouse_down_;
     bool active_;
 
-    Image background_;
+    juce::Image background_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(XYPad)
 };

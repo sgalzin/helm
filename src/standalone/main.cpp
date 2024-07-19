@@ -19,11 +19,11 @@
 #include "helm_editor.h"
 #include "load_save.h"
 
-class HelmApplication : public JUCEApplication {
+class HelmApplication : public juce::JUCEApplication {
   public:
-    class MainWindow : public DocumentWindow,
+    class MainWindow : public juce::DocumentWindow,
                        public ApplicationCommandTarget,
-                       private AsyncUpdater {
+                       private juce::AsyncUpdater {
     public:
       enum PatchCommands {
         kSave = 0x5001,
@@ -31,8 +31,8 @@ class HelmApplication : public JUCEApplication {
         kOpen,
       };
 
-      MainWindow(String name, bool visible = true) :
-          DocumentWindow(name, Colours::lightgrey, DocumentWindow::allButtons, visible) {
+      MainWindow(juce::String name, bool visible = true) :
+          DocumentWindow(name, juce::Colours::lightgrey, DocumentWindow::allButtons, visible) {
         editor_ = new HelmEditor(visible);
         if (visible) {
           editor_->animate(LoadSave::shouldAnimateWidgets());
@@ -61,7 +61,7 @@ class HelmApplication : public JUCEApplication {
         JUCEApplication::getInstance()->systemRequestedQuit();
       }
 
-      bool loadFile(File file) {
+      bool loadFile(juce::File file) {
         bool success = editor_->loadFromFile(file);
         if (success)
           editor_->externalPatchLoaded(file);
@@ -72,32 +72,33 @@ class HelmApplication : public JUCEApplication {
         return findFirstTargetParentComponent();
       }
 
-      void getAllCommands(Array<CommandID>& commands) override {
+      void getAllCommands(juce::Array<juce::CommandID>& commands) override {
         commands.add(kSave);
         commands.add(kSaveAs);
         commands.add(kOpen);
       }
 
-      void getCommandInfo(const CommandID commandID, ApplicationCommandInfo& result) override {
+      void getCommandInfo(const juce::CommandID commandID, juce::ApplicationCommandInfo& result) override {
         if (commandID == kSave) {
           result.setInfo(TRANS("Save"), TRANS("Saves the current patch"), "Application", 0);
-          result.defaultKeypresses.add(KeyPress('s', ModifierKeys::commandModifier, 0));
+          result.defaultKeypresses.add(juce::KeyPress('s', juce::ModifierKeys::commandModifier, 0));
         }
         else if (commandID == kSaveAs) {
           result.setInfo(TRANS("Save As"), TRANS("Saves patch to a new file"), "Application", 0);
-          ModifierKeys modifier = ModifierKeys::commandModifier | ModifierKeys::shiftModifier;
-          result.defaultKeypresses.add(KeyPress('s', modifier, 0));
+          juce::ModifierKeys modifier = juce::ModifierKeys::commandModifier | juce::ModifierKeys::shiftModifier;
+          result.defaultKeypresses.add(juce::KeyPress('s', modifier, 0));
         }
         else if (commandID == kOpen) {
           result.setInfo(TRANS("Open"), TRANS("Opens a patch"), "Application", 0);
-          result.defaultKeypresses.add(KeyPress('o', ModifierKeys::commandModifier, 0));
+          result.defaultKeypresses.add(juce::KeyPress('o', juce::ModifierKeys::commandModifier, 0));
         }
       }
 
       void open() {
-        File active_file = editor_->getActiveFile();
-        FileChooser open_box("Open Patch", File(),
-                             String("*.") + mopo::PATCH_EXTENSION);
+        juce::File active_file = editor_->getActiveFile();
+        juce::FileChooser open_box("Open Patch", juce::File(),
+                             juce::String("*.") + mopo::PATCH_EXTENSION);
+
         if (open_box.browseForFileToOpen())
           loadFile(open_box.getResult());
       }
@@ -127,7 +128,7 @@ class HelmApplication : public JUCEApplication {
       }
 
       void handleAsyncUpdate() override {
-        command_manager_ = new ApplicationCommandManager();
+        command_manager_ = new juce::ApplicationCommandManager();
         command_manager_->registerAllCommandsForTarget(JUCEApplication::getInstance());
         command_manager_->registerAllCommandsForTarget(this);
         addKeyListener(command_manager_->getKeyMappings());
@@ -145,39 +146,39 @@ class HelmApplication : public JUCEApplication {
     private:
       JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainWindow)
       HelmEditor* editor_;
-      ScopedPointer<ApplicationCommandManager> command_manager_;
+      juce::ScopedPointer<juce::ApplicationCommandManager> command_manager_;
       BorderBoundsConstrainer constrainer_;
     };
 
     HelmApplication() { }
 
-    const String getApplicationName() override { return ProjectInfo::projectName; }
-    const String getApplicationVersion() override { return ProjectInfo::versionString; }
+    const juce::String getApplicationName() override { return ProjectInfo::projectName; }
+    const juce::String getApplicationVersion() override { return ProjectInfo::versionString; }
     bool moreThanOneInstanceAllowed() override { return true; }
 
-    void initialise(const String& command_line) override {
-      String command = " " + command_line + " ";
+    void initialise(const juce::String& command_line) override {
+      juce::String command = " " + command_line + " ";
       if (command.contains(" --version ") || command.contains(" -v ")) {
-        std::cout << getApplicationName() << " " << getApplicationVersion() << newLine;
+        std::cout << getApplicationName() << " " << getApplicationVersion() << juce::newLine;
         quit();
       }
       else if (command.contains(" --help ") || command.contains(" -h ")) {
-        std::cout << "Usage:" << newLine;
-        std::cout << "  " << getApplicationName().toLowerCase() << " [OPTION...]" << newLine << newLine;
-        std::cout << getApplicationName() << " polyphonic, semi-modular synthesizer." << newLine << newLine;
-        std::cout << "Help Options:" << newLine;
-        std::cout << "  -h, --help                          Show help options" << newLine << newLine;
-        std::cout << "Application Options:" << newLine;
-        std::cout << "  -v, --version                       Show version information and exit" << newLine;
-        std::cout << "  --headless                          Run without graphical interface." << newLine << newLine;
+        std::cout << "Usage:" << juce::newLine;
+        std::cout << "  " << getApplicationName().toLowerCase() << " [OPTION...]" << juce::newLine << juce::newLine;
+        std::cout << getApplicationName() << " polyphonic, semi-modular synthesizer." << juce::newLine << juce::newLine;
+        std::cout << "Help Options:" << juce::newLine;
+        std::cout << "  -h, --help                          Show help options" << juce::newLine << juce::newLine;
+        std::cout << "Application Options:" << juce::newLine;
+        std::cout << "  -v, --version                       Show version information and exit" << juce::newLine;
+        std::cout << "  --headless                          Run without graphical interface." << juce::newLine << juce::newLine;
         quit();
       }
       else {
         bool visible = !command.contains(" --headless ");
         main_window_ = new MainWindow(getApplicationName(), visible);
 
-        StringArray args = getCommandLineParameterArray();
-        File file;
+        juce::StringArray args = getCommandLineParameterArray();
+        juce::File file;
 
         for (int i = 0; i < args.size(); ++i) {
           if (args[i] != "" && args[i][0] != '-' && loadFromCommandLine(args[i]))
@@ -186,11 +187,11 @@ class HelmApplication : public JUCEApplication {
       }
     }
 
-    bool loadFromCommandLine(const String& command_line) {
-      String file_path = command_line;
+    bool loadFromCommandLine(const juce::String& command_line) {
+      juce::String file_path = command_line;
       if (file_path[0] == '"' && file_path[file_path.length() - 1] == '"')
         file_path = command_line.substring(1, command_line.length() - 1);
-      File file = File::getCurrentWorkingDirectory().getChildFile(file_path);
+      juce::File file = juce::File::getCurrentWorkingDirectory().getChildFile(file_path);
       if (file.exists())
         return main_window_->loadFile(file);
       return false;
@@ -204,12 +205,12 @@ class HelmApplication : public JUCEApplication {
       quit();
     }
 
-    void anotherInstanceStarted(const String& command_line) override {
+    void anotherInstanceStarted(const juce::String& command_line) override {
       loadFromCommandLine(command_line);
     }
 
   private:
-    ScopedPointer<MainWindow> main_window_;
+    juce::ScopedPointer<MainWindow> main_window_;
 };
 
 START_JUCE_APPLICATION(HelmApplication)

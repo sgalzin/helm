@@ -30,16 +30,16 @@ class OpenGLOscilloscope : public OpenGLComponent {
 
     void setOutputMemory(const float* memory) { output_memory_ = memory; }
 
-    void init(OpenGLContext& open_gl_context) override;
-    void render(OpenGLContext& open_gl_context, bool animate = true) override;
-    void destroy(OpenGLContext& open_gl_context) override;
-    void paintBackground(Graphics& g) override;
+    void init(juce::OpenGLContext& open_gl_context) override;
+    void render(juce::OpenGLContext& open_gl_context, bool animate = true) override;
+    void destroy(juce::OpenGLContext& open_gl_context) override;
+    void paintBackground(juce::Graphics& g) override;
 
   private:
-    void drawLines(OpenGLContext& open_gl_context);
+    void drawLines(juce::OpenGLContext& open_gl_context);
 
-    ScopedPointer<OpenGLShaderProgram> shader_;
-    ScopedPointer<OpenGLShaderProgram::Attribute> position_;
+    juce::ScopedPointer<juce::OpenGLShaderProgram> shader_;
+    juce::ScopedPointer<juce::OpenGLShaderProgram::Attribute> position_;
 
     const float* output_memory_;
     float* line_data_;

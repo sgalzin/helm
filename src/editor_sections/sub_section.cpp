@@ -25,16 +25,16 @@
 #define WAVE_SELECTOR_WIDTH 10
 #define WAVE_SECTION_WIDTH 100
 
-SubSection::SubSection(String name) : SynthSection(name) {
+SubSection::SubSection(juce::String name) : SynthSection(name) {
   addSlider(wave_selector_ = new WaveSelector("sub_waveform"));
-  wave_selector_->setSliderStyle(Slider::LinearBar);
+  wave_selector_->setSliderStyle(juce::Slider::LinearBar);
   wave_selector_->setStringLookup(mopo::strings::waveforms);
 
   addAndMakeVisible(wave_viewer_ = new WaveViewer(WAVE_VIEWER_RESOLUTION));
   wave_viewer_->setWaveSlider(wave_selector_);
 
   addSlider(shuffle_ = new SynthSlider("sub_shuffle"));
-  shuffle_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  shuffle_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
 
   addButton(sub_octave_ = new SynthButton("sub_octave"));
   sub_octave_->setLookAndFeel(TextLookAndFeel::instance());
@@ -46,7 +46,7 @@ SubSection::~SubSection() {
   wave_selector_ = nullptr;
 }
 
-void SubSection::paintBackground(Graphics& g) {
+void SubSection::paintBackground(juce::Graphics& g) {
   SynthSection::paintBackground(g);
 
   g.setColour(Colors::control_label_text);

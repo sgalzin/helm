@@ -19,28 +19,28 @@
 #define TYPE_WIDTH 18.0f
 #define TYPE_PADDING_Y 3.0f
 
-FilterSelector::FilterSelector(String name) : SynthSlider(name) { }
+FilterSelector::FilterSelector(juce::String name) : SynthSlider(name) { }
 
-void FilterSelector::paint(Graphics& g) {
-  static const PathStrokeType stroke(1.000f, PathStrokeType::curved, PathStrokeType::rounded);
+void FilterSelector::paint(juce::Graphics& g) {
+  static const juce::PathStrokeType stroke(1.000f, juce::PathStrokeType::curved, juce::PathStrokeType::rounded);
 
   int selected = getValue();
   int num_types = getMaximum() - getMinimum() + 1;
   float cell_width = float(getWidth()) / num_types;
 
-  g.setColour(Colour(0xff222222));
+  g.setColour(juce::Colour(0xff222222));
   g.fillRect(getLocalBounds());
 
-  g.setColour(Colour(0xff424242));
+  g.setColour(juce::Colour(0xff424242));
   g.fillRect(selected * cell_width, 0.0f, cell_width, float(getHeight()));
 
-  g.setColour(selected == 0 ? Colour(0xffffffff) : Colour(0xffaaaaaa));
+  g.setColour(selected == 0 ? juce::Colour(0xffffffff) : juce::Colour(0xffaaaaaa));
   g.strokePath(low_shelf_, stroke);
 
-  g.setColour(selected == 1 ? Colour(0xffffffff) : Colour(0xffaaaaaa));
+  g.setColour(selected == 1 ? juce::Colour(0xffffffff) : juce::Colour(0xffaaaaaa));
   g.strokePath(band_shelf_, stroke);
 
-  g.setColour(selected == 2 ? Colour(0xffffffff) : Colour(0xffaaaaaa));
+  g.setColour(selected == 2 ? juce::Colour(0xffffffff) : juce::Colour(0xffaaaaaa));
   g.strokePath(high_shelf_, stroke);
 }
 

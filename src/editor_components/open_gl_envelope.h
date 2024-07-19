@@ -38,22 +38,22 @@ class OpenGLEnvelope : public OpenGLComponent, public SynthSlider::SliderListene
     void setReleaseSlider(SynthSlider* release_slider);
 
     void resized() override;
-    void mouseMove(const MouseEvent& e) override;
-    void mouseExit(const MouseEvent& e) override;
-    void mouseDown(const MouseEvent& e) override;
-    void mouseDrag(const MouseEvent& e) override;
-    void mouseUp(const MouseEvent& e) override;
+    void mouseMove(const juce::MouseEvent& e) override;
+    void mouseExit(const juce::MouseEvent& e) override;
+    void mouseDown(const juce::MouseEvent& e) override;
+    void mouseDrag(const juce::MouseEvent& e) override;
+    void mouseUp(const juce::MouseEvent& e) override;
 
-    void init(OpenGLContext& open_gl_context) override;
-    void render(OpenGLContext& open_gl_context, bool animate = true) override;
-    void destroy(OpenGLContext& open_gl_context) override;
-    void paintBackground(Graphics& g) override { }
+    void init(juce::OpenGLContext& open_gl_context) override;
+    void render(juce::OpenGLContext& open_gl_context, bool animate = true) override;
+    void destroy(juce::OpenGLContext& open_gl_context) override;
+    void paintBackground(juce::Graphics& g) override { }
 
   private:
-    void drawPosition(OpenGLContext& open_gl_context);
+    void drawPosition(juce::OpenGLContext& open_gl_context);
     void paintPositionImage();
     void paintBackground();
-    Point<float> valuesToPosition(float phase, float amp);
+    juce::Point<float> valuesToPosition(float phase, float amp);
 
     float getAttackX();
     float getDecayX();
@@ -70,7 +70,7 @@ class OpenGLEnvelope : public OpenGLComponent, public SynthSlider::SliderListene
     bool sustain_hover_;
     bool release_hover_;
     bool mouse_down_;
-    Path envelope_line_;
+    juce::Path envelope_line_;
 
     mopo::Output* envelope_phase_;
     mopo::Output* envelope_amp_;
@@ -82,10 +82,10 @@ class OpenGLEnvelope : public OpenGLComponent, public SynthSlider::SliderListene
 
     OpenGLBackground background_;
 
-    Image position_image_;
-    Image background_image_;
-    OpenGLTexture position_texture_;
-    ScopedPointer<OpenGLShaderProgram::Uniform> texture_;
+    juce::Image position_image_;
+    juce::Image background_image_;
+    juce::OpenGLTexture position_texture_;
+    juce::ScopedPointer<juce::OpenGLShaderProgram::Uniform> texture_;
 
     float* position_vertices_;
     int* position_triangles_;

@@ -17,6 +17,7 @@
 #include "formant_response.h"
 
 #include "fonts.h"
+#include "helm_voice_handler.h"
 #include "midi_lookup.h"
 #include "utils.h"
 
@@ -41,50 +42,50 @@ FormantResponse::FormantResponse(int resolution) : midi_(0.0f), frequency_(0.0f)
 
 FormantResponse::~FormantResponse() { }
 
-void FormantResponse::paintBackground(Graphics& g) {
-  g.fillAll(Colour(0xff424242));
+void FormantResponse::paintBackground(juce::Graphics& g) {
+  g.fillAll(juce::Colour(0xff424242));
 
-  g.setColour(Colour(0xff4a4a4a));
+  g.setColour(juce::Colour(0xff4a4a4a));
   for (int x = 0; x < getWidth(); x += GRID_CELL_WIDTH)
     g.drawLine(x, 0, x, getHeight());
   for (int y = 0; y < getHeight(); y += GRID_CELL_WIDTH)
     g.drawLine(0, y, getWidth(), y);
 }
 
-void FormantResponse::paint(Graphics& g) {
-  static const PathStrokeType stroke(1.5f, PathStrokeType::beveled, PathStrokeType::rounded);
+void FormantResponse::paint(juce::Graphics& g) {
+  static const juce::PathStrokeType stroke(1.5f, juce::PathStrokeType::beveled, juce::PathStrokeType::rounded);
 
   g.drawImage(background_,
               0, 0, getWidth(), getHeight(),
               0, 0, background_.getWidth(), background_.getHeight());
 
-  g.setColour(Colour(0xff03a9f4));
+  g.setColour(juce::Colour(0xff03a9f4));
   g.strokePath(filter_response_path_, stroke);
 
-  g.setFont(Fonts::getInstance()->proportional_regular().withPointHeight(16.0f));
-  g.drawText("MIDI", 0, 0, 100, 20, Justification::left);
-  g.drawText(String(midi_), 100, 0, 400, 20, Justification::left);
-  g.drawText("Frequency", 0, 20, 100, 20, Justification::left);
-  g.drawText(String(frequency_), 100, 20, 400, 20, Justification::left);
-  g.drawText("Response", 0, 40, 100, 20, Justification::left);
-  g.drawText(String(response_), 100, 40, 400, 20, Justification::left);
-  g.drawText("Decibels", 0, 60, 100, 20, Justification::left);
-  g.drawText(String(decibels_), 100, 60, 400, 20, Justification::left);
+  g.setFont(Fonts::instance()->proportional_regular().withPointHeight(16.0f));
+  g.drawText("MIDI", 0, 0, 100, 20, juce::Justification::left);
+  g.drawText(juce::String(midi_), 100, 0, 400, 20, juce::Justification::left);
+  g.drawText("Frequency", 0, 20, 100, 20, juce::Justification::left);
+  g.drawText(juce::String(frequency_), 100, 20, 400, 20, juce::Justification::left);
+  g.drawText("Response", 0, 40, 100, 20, juce::Justification::left);
+  g.drawText(juce::String(response_), 100, 40, 400, 20, juce::Justification::left);
+  g.drawText("Decibels", 0, 60, 100, 20, juce::Justification::left);
+  g.drawText(juce::String(decibels_), 100, 60, 400, 20, juce::Justification::left);
 }
 
 void FormantResponse::resized() {
-  const Desktop::Displays::Display& display = Desktop::getInstance().getDisplays().getMainDisplay();
+  const juce::Displays::Display& display = juce::Desktop::getInstance().getDisplays().getMainDisplay();
   float scale = display.scale;
-  background_ = Image(Image::ARGB, scale * getWidth(), scale * getHeight(), true);
-  Graphics g(background_);
-  g.addTransform(AffineTransform::scale(scale, scale));
+  background_ = juce::Image(juce::Image::ARGB, scale * getWidth(), scale * getHeight(), true);
+  juce::Graphics g(background_);
+  g.addTransform(juce::AffineTransform::scale(scale, scale));
   paintBackground(g);
 
   computeFilterCoefficients();
   resetResponsePath();
 }
 
-void FormantResponse::mouseMove(const MouseEvent& e) {
+void FormantResponse::mouseMove(const juce::MouseEvent& e) {
   if (cutoff_sliders_.empty())
     return;
   
@@ -148,41 +149,44 @@ void FormantResponse::computeFilterCoefficients() {
   for (int i = 0; i < formant_filter_.num_formants(); ++i) {
     double frequency = mopo::utils::midiNoteToFrequency(cutoff_sliders_[i]->getValue());
     double resonance = mopo::utils::magnitudeToQ(resonance_sliders_[i]->getValue());
-    double decibels = INTERPOLATE(MIN_GAIN_DB, MAX_GAIN_DB, gain_sliders_[i]->getValue());
+    // double decibels = INTERPOLATE(MIN_GAIN_DB, MAX_GAIN_DB, gain_sliders_[i]->getValue()); // TODO check that below mopo::utils::interpolate does what was intended, I have no idea why the original does not compile in this project...
+    double decibels = mopo::utils::interpolate(static_cast<double>(MIN_GAIN_DB), static_cast<double>(MAX_GAIN_DB), gain_sliders_[i]->getValue()); // TODO check if we want to use double rather than float
     double gain = mopo::utils::dbToGain(decibels);
 
-    formant_filter_.getFormant(i)->computeCoefficients(mopo::Filter::kGainedBandPass,
-                                                       frequency, resonance, gain);
+    // formant_filter_.getFormant(i)->computeCoefficients(mopo::Filter::kGainedBandPass,
+    //                                                    frequency, resonance, gain);
+    formant_filter_.getFormant(i)->computeCoefficients(mopo::BiquadFilter::kGainedBandPass,
+                                                       frequency, resonance, gain); // TODO check that BiquadFilter is what is meant here, I have no idea why the original does not compile in this project...
   }
   resetResponsePath();
 }
 
-void FormantResponse::sliderValueChanged(Slider* moved_slider) {
+void FormantResponse::sliderValueChanged(juce::Slider* moved_slider) {
   computeFilterCoefficients();
   repaint();
 }
 
-void FormantResponse::setResonanceSliders(std::vector<Slider*> sliders) {
+void FormantResponse::setResonanceSliders(std::vector<juce::Slider*> sliders) {
   resonance_sliders_ = sliders;
-  for (Slider* slider : sliders)
+  for (juce::Slider* slider : sliders)
     slider->addListener(this);
 
   computeFilterCoefficients();
   repaint();
 }
 
-void FormantResponse::setCutoffSliders(std::vector<Slider*> sliders) {
+void FormantResponse::setCutoffSliders(std::vector<juce::Slider*> sliders) {
   cutoff_sliders_ = sliders;
-  for (Slider* slider : sliders)
+  for (juce::Slider* slider : sliders)
     slider->addListener(this);
 
   computeFilterCoefficients();
   repaint();
 }
 
-void FormantResponse::setGainSliders(std::vector<Slider*> sliders) {
+void FormantResponse::setGainSliders(std::vector<juce::Slider*> sliders) {
   gain_sliders_ = sliders;
-  for (Slider* slider : sliders)
+  for (juce::Slider* slider : sliders)
     slider->addListener(this);
 
   computeFilterCoefficients();

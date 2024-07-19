@@ -70,11 +70,11 @@ void ModulationSlider::sliderValueChanged(Slider* moved_slider) {
 void ModulationSlider::mouseDown(const juce::MouseEvent &e) {
   if (e.mods.isPopupMenu()) {
     if (getValue() != 0.0) {
-      PopupMenu m;
+      juce::PopupMenu m;
       m.setLookAndFeel(DefaultLookAndFeel::instance());
       m.addItem(kClearModulation, "Clear Modulation");
-      m.showMenuAsync(PopupMenu::Options(),
-                      ModalCallbackFunction::forComponent(sliderPopupCallback, this));
+      m.showMenuAsync(juce::PopupMenu::Options(),
+                      juce::ModalCallbackFunction::forComponent(sliderPopupCallback, this));
     }
   }
   else

@@ -17,7 +17,7 @@
 #ifndef MIDI_MANAGER_H
 #define MIDI_MANAGER_H
 
-#include "JuceHeader.h"
+#include <JuceHeader.h>
 #include "common.h"
 #include "helm_common.h"
 #include <string>
@@ -29,7 +29,7 @@ namespace mopo {
   class HelmEngine;
 } // namespace mopo
 
-class MidiManager : public MidiInputCallback {
+class MidiManager : public juce::MidiInputCallback {
   public:
     typedef std::map<int, std::map<std::string, const mopo::ValueDetails*>> midi_map;
 
@@ -38,32 +38,32 @@ class MidiManager : public MidiInputCallback {
         virtual ~Listener() { }
         virtual void valueChangedThroughMidi(const std::string& name,
                                              mopo::mopo_float value) = 0;
-        virtual void patchChangedThroughMidi(File patch) = 0;
+        virtual void patchChangedThroughMidi(juce::File patch) = 0;
     };
 
-    MidiManager(SynthBase* synth, MidiKeyboardState* keyboard_state,
-                std::map<std::string, String>* gui_state, Listener* listener = nullptr);
+    MidiManager(SynthBase* synth, juce::MidiKeyboardState* keyboard_state,
+                std::map<std::string, juce::String>* gui_state, Listener* listener = nullptr);
     virtual ~MidiManager();
 
     void armMidiLearn(std::string name);
     void cancelMidiLearn();
     void clearMidiLearn(const std::string& name);
     void midiInput(int control, mopo::mopo_float value);
-    void processMidiMessage(const MidiMessage &midi_message, int sample_position = 0);
+    void processMidiMessage(const juce::MidiMessage &midi_message, int sample_position = 0);
     bool isMidiMapped(const std::string& name) const;
 
     void setSampleRate(double sample_rate);
-    void removeNextBlockOfMessages(MidiBuffer& buffer, int num_samples);
-    void replaceKeyboardMessages(MidiBuffer& buffer, int num_samples);
+    void removeNextBlockOfMessages(juce::MidiBuffer& buffer, int num_samples);
+    void replaceKeyboardMessages(juce::MidiBuffer& buffer, int num_samples);
 
     midi_map getMidiLearnMap() { return midi_learn_map_; }
     void setMidiLearnMap(midi_map midi_learn_map) { midi_learn_map_ = midi_learn_map; }
 
     // MidiInputCallback
-    void handleIncomingMidiMessage(MidiInput *source, const MidiMessage &midi_message) override;
+    void handleIncomingMidiMessage(juce::MidiInput *source, const juce::MidiMessage &midi_message) override;
 
-    struct PatchLoadedCallback : public CallbackMessage {
-      PatchLoadedCallback(Listener* lis, File pat) : listener(lis), patch(pat) { }
+    struct PatchLoadedCallback : public juce::CallbackMessage {
+      PatchLoadedCallback(Listener* lis, juce::File pat) : listener(lis), patch(pat) { }
 
       void messageCallback() override {
         if (listener)
@@ -71,15 +71,15 @@ class MidiManager : public MidiInputCallback {
       }
 
       Listener* listener;
-      File patch;
+      juce::File patch;
     };
 
   protected:
     SynthBase* synth_;
     mopo::HelmEngine* engine_;
-    MidiKeyboardState* keyboard_state_;
-    MidiMessageCollector midi_collector_;
-    std::map<std::string, String>* gui_state_;
+    juce::MidiKeyboardState* keyboard_state_;
+    juce::MidiMessageCollector midi_collector_;
+    std::map<std::string, juce::String>* gui_state_;
     Listener* listener_;
     int current_bank_;
     int current_folder_;

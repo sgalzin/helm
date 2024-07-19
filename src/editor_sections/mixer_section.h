@@ -23,17 +23,17 @@
 
 class MixerSection : public SynthSection {
   public:
-    MixerSection(String name);
+    MixerSection(juce::String name);
     ~MixerSection();
 
-    void paintBackground(Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
     void resized() override;
 
   private:
-    ScopedPointer<SynthSlider> osc_1_;
-    ScopedPointer<SynthSlider> osc_2_;
-    ScopedPointer<SynthSlider> sub_;
-    ScopedPointer<SynthSlider> noise_;
+    juce::ScopedPointer<SynthSlider> osc_1_;
+    juce::ScopedPointer<SynthSlider> osc_2_;
+    juce::ScopedPointer<SynthSlider> sub_;
+    juce::ScopedPointer<SynthSlider> noise_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MixerSection)
 };

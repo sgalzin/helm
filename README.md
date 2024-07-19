@@ -1,3 +1,18 @@
+## sgalzin fork of Helm
+
+### Release 0.9.1 "rebirth"
+This fork of Helm has the following changes:
+
+* Compiles with JUCE v8.0.0 (using CMake on linux, for other systems mileage may vary).
+
+#### Motivation
+
+While trying to add a few things from my wishlist, I encountered difficulties compiling the plugin. My first step is therefore to minimally transform the code
+in order to compile using the current version of JUCE. This was achieved using CMake on Linux. At this point, I am a beginner at all this, so getting this to
+compile in the first place was a challenge, so I do not know if the Projucer or the other building systems configured in the original files still work.
+
+---
+
 ## Helm
 Helm is a free, cross-platform, polyphonic synthesizer that runs on GNU/Linux, Mac, and Windows as a standalone program and as a LV2/VST/AU/AAX plugin. Release is in beta so there are outstanding bugs. Please send any bugs found to matthewtytel@gmail.com
 

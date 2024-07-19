@@ -35,7 +35,7 @@ class SynthBase : public MidiManager::Listener {
 
     void valueChanged(const std::string& name, mopo::mopo_float value);
     void valueChangedThroughMidi(const std::string& name, mopo::mopo_float value) override;
-    void patchChangedThroughMidi(File patch) override;
+    void patchChangedThroughMidi(juce::File patch) override;
     void valueChangedExternal(const std::string& name, mopo::mopo_float value);
     void valueChangedInternal(const std::string& name, mopo::mopo_float value);
     void changeModulationAmount(const std::string& source, const std::string& destination,
@@ -52,11 +52,11 @@ class SynthBase : public MidiManager::Listener {
     mopo::Output* getModSource(const std::string& name);
 
     void loadInitPatch();
-    bool loadFromFile(File patch);
+    bool loadFromFile(juce::File patch);
     bool exportToFile();
-    bool saveToFile(File patch);
+    bool saveToFile(juce::File patch);
     bool saveToActiveFile();
-    File getActiveFile() { return active_file_; }
+    juce::File getActiveFile() { return active_file_; }
 
     virtual void beginChangeGesture(const std::string& name) { }
     virtual void endChangeGesture(const std::string& name) { }
@@ -67,20 +67,20 @@ class SynthBase : public MidiManager::Listener {
     void clearMidiLearn(const std::string& name);
     bool isMidiMapped(const std::string& name);
 
-    void setAuthor(String author);
-    void setPatchName(String patch_name);
-    void setFolderName(String folder_name);
-    String getAuthor();
-    String getPatchName();
-    String getFolderName();
+    void setAuthor(juce::String author);
+    void setPatchName(juce::String patch_name);
+    void setFolderName(juce::String folder_name);
+    juce::String getAuthor();
+    juce::String getPatchName();
+    juce::String getFolderName();
 
     mopo::control_map& getControls() { return controls_; }
     mopo::HelmEngine* getEngine() { return &engine_; }
-    MidiKeyboardState* getKeyboardState() { return keyboard_state_; }
+    juce::MidiKeyboardState* getKeyboardState() { return keyboard_state_; }
     const float* getOutputMemory() { return output_memory_; }
     mopo::ModulationConnectionBank& getModulationBank() { return modulation_bank_; }
 
-    struct ValueChangedCallback : public CallbackMessage {
+    struct ValueChangedCallback : public juce::CallbackMessage {
       ValueChangedCallback(SynthBase* listener, std::string name, mopo::mopo_float val) :
           listener(listener), control_name(name), value(val) { }
 
@@ -92,10 +92,10 @@ class SynthBase : public MidiManager::Listener {
     };
 
   protected:
-    virtual const CriticalSection& getCriticalSection() = 0;
+    virtual const juce::CriticalSection& getCriticalSection() = 0;
     virtual SynthGuiInterface* getGuiInterface() = 0;
-    var saveToVar(String author);
-    void loadFromVar(var state);
+    juce::var saveToVar(juce::String author);
+    void loadFromVar(juce::var state);
     mopo::ModulationConnection* getConnection(const std::string& source,
                                               const std::string& destination);
 
@@ -107,9 +107,9 @@ class SynthBase : public MidiManager::Listener {
       return modulation_change_queue_.try_dequeue(change);
     }
 
-    void processAudio(AudioSampleBuffer* buffer, int channels, int samples, int offset);
-    void processMidi(MidiBuffer& buffer, int start_sample = 0, int end_sample = 0);
-    void processKeyboardEvents(MidiBuffer& buffer, int num_samples);
+    void processAudio(juce::AudioSampleBuffer* buffer, int channels, int samples, int offset);
+    void processMidi(juce::MidiBuffer& buffer, int start_sample = 0, int end_sample = 0);
+    void processKeyboardEvents(juce::MidiBuffer& buffer, int num_samples);
     void processControlChanges();
     void processModulationChanges();
     void updateMemoryOutput(int samples, const mopo::mopo_float* left,
@@ -117,10 +117,10 @@ class SynthBase : public MidiManager::Listener {
 
     mopo::ModulationConnectionBank modulation_bank_;
     mopo::HelmEngine engine_;
-    ScopedPointer<MidiManager> midi_manager_;
-    ScopedPointer<MidiKeyboardState> keyboard_state_;
+    juce::ScopedPointer<MidiManager> midi_manager_;
+    juce::ScopedPointer<juce::MidiKeyboardState> keyboard_state_;
 
-    File active_file_;
+    juce::File active_file_;
     float output_memory_[2 * mopo::MEMORY_RESOLUTION];
     float output_memory_write_[2 * mopo::MEMORY_RESOLUTION];
     mopo::mopo_float last_played_note_;
@@ -129,7 +129,7 @@ class SynthBase : public MidiManager::Listener {
     mopo::mopo_float memory_input_offset_;
     int memory_index_;
 
-    std::map<std::string, String> save_info_;
+    std::map<std::string, juce::String> save_info_;
     mopo::control_map controls_;
     std::set<mopo::ModulationConnection*> mod_connections_;
     moodycamel::ConcurrentQueue<mopo::control_change> value_change_queue_;

@@ -56,20 +56,20 @@ OpenGLWaveViewer::~OpenGLWaveViewer() {
 }
 
 void OpenGLWaveViewer::paintBackground() {
-  static const DropShadow shadow(Colour(0xbb000000), 5, Point<int>(0, 0));
+  static const juce::DropShadow shadow(juce::Colour(0xbb000000), 5, juce::Point<int>(0, 0));
 
   if (getWidth() <= 0 || getHeight() <= 0)
     return;
 
-  const Desktop::Displays::Display& display = Desktop::getInstance().getDisplays().getMainDisplay();
+  const juce::Displays::Display& display = juce::Desktop::getInstance().getDisplays().getMainDisplay();
   float scale = display.scale;
-  background_image_ = Image(Image::ARGB, scale * getWidth(), scale * getHeight(), true);
-  Graphics g(background_image_);
-  g.addTransform(AffineTransform::scale(scale, scale));
+  background_image_ = juce::Image(juce::Image::ARGB, scale * getWidth(), scale * getHeight(), true);
+  juce::Graphics g(background_image_);
+  g.addTransform(juce::AffineTransform::scale(scale, scale));
 
-  g.fillAll(Colour(0xff424242));
+  g.fillAll(juce::Colour(0xff424242));
 
-  g.setColour(Colour(0xff4a4a4a));
+  g.setColour(juce::Colour(0xff4a4a4a));
   for (int x = 0; x < getWidth(); x += GRID_CELL_WIDTH)
     g.drawLine(x, 0, x, getHeight());
   for (int y = 0; y < getHeight(); y += GRID_CELL_WIDTH)
@@ -82,32 +82,32 @@ void OpenGLWaveViewer::paintBackground() {
 
   g.setColour(Colors::modulation);
   float line_width = 1.5f * getHeight() / 75.0f;
-  PathStrokeType stroke(line_width, PathStrokeType::beveled, PathStrokeType::rounded);
+  juce::PathStrokeType stroke(line_width, juce::PathStrokeType::beveled, juce::PathStrokeType::rounded);
   g.strokePath(wave_path_, stroke);
 
   background_.updateBackgroundImage(background_image_);
 }
 
 void OpenGLWaveViewer::paintPositionImage() {
-  int min_image_width = roundToInt(2 * MARKER_WIDTH);
+  int min_image_width = juce::roundToInt(2 * MARKER_WIDTH);
   int image_width = mopo::utils::nextPowerOfTwo(min_image_width);
   int marker_width = MARKER_WIDTH;
-  int image_height = roundToInt(2 * IMAGE_HEIGHT);
-  position_image_ = Image(Image::ARGB, image_width, image_height, true);
-  Graphics g(position_image_);
+  int image_height = juce::roundToInt(2 * IMAGE_HEIGHT);
+  position_image_ = juce::Image(juce::Image::ARGB, image_width, image_height, true);
+  juce::Graphics g(position_image_);
 
-  g.setColour(Colour(0x77ffffff));
+  g.setColour(juce::Colour(0x77ffffff));
   g.fillRect(image_width / 2.0f - 0.5f, 0.0f, 1.0f, 1.0f * image_height);
 
   g.setColour(Colors::modulation);
   g.fillEllipse(image_width / 2 - marker_width / 2, image_height / 2 - marker_width / 2,
                 marker_width, marker_width);
-  g.setColour(Colour(0xff000000));
+  g.setColour(juce::Colour(0xff000000));
   g.fillEllipse(image_width / 2 - marker_width / 4, image_height / 2 - marker_width / 4,
                 marker_width / 2, marker_width / 2);
 }
 
-void OpenGLWaveViewer::mouseDown(const MouseEvent& e) {
+void OpenGLWaveViewer::mouseDown(const juce::MouseEvent& e) {
   if (wave_slider_) {
     int current_value = wave_slider_->getValue();
     if (e.mods.isRightButtonDown())
@@ -230,27 +230,27 @@ float OpenGLWaveViewer::phaseToX(float phase) {
   return phase * getWidth();
 }
 
-void OpenGLWaveViewer::init(OpenGLContext& open_gl_context) {
+void OpenGLWaveViewer::init(juce::OpenGLContext& open_gl_context) {
   paintPositionImage();
 
   open_gl_context.extensions.glGenBuffers(1, &vertex_buffer_);
-  open_gl_context.extensions.glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ARRAY_BUFFER, vertex_buffer_);
 
   GLsizeiptr vert_size = static_cast<GLsizeiptr>(static_cast<size_t>(16 * sizeof(float)));
-  open_gl_context.extensions.glBufferData(GL_ARRAY_BUFFER, vert_size,
-                                          position_vertices_, GL_STATIC_DRAW);
+  open_gl_context.extensions.glBufferData(juce::gl::GL_ARRAY_BUFFER, vert_size,
+                                          position_vertices_, juce::gl::GL_STATIC_DRAW);
 
   open_gl_context.extensions.glGenBuffers(1, &triangle_buffer_);
-  open_gl_context.extensions.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangle_buffer_);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ELEMENT_ARRAY_BUFFER, triangle_buffer_);
 
   GLsizeiptr tri_size = static_cast<GLsizeiptr>(static_cast<size_t>(6 * sizeof(float)));
-  open_gl_context.extensions.glBufferData(GL_ELEMENT_ARRAY_BUFFER, tri_size,
-                                          position_triangles_, GL_STATIC_DRAW);
+  open_gl_context.extensions.glBufferData(juce::gl::GL_ELEMENT_ARRAY_BUFFER, tri_size,
+                                          position_triangles_, juce::gl::GL_STATIC_DRAW);
 
   background_.init(open_gl_context);
 }
 
-void OpenGLWaveViewer::drawPosition(OpenGLContext& open_gl_context) {
+void OpenGLWaveViewer::drawPosition(juce::OpenGLContext& open_gl_context) {
   if (position_texture_.getWidth() != position_image_.getWidth())
     position_texture_.loadImage(position_image_);
 
@@ -261,14 +261,14 @@ void OpenGLWaveViewer::drawPosition(OpenGLContext& open_gl_context) {
   float padding = getRatio() * PADDING;
   float y = (getHeight() - 2 * padding) * wave_amp_->buffer[0] / getHeight();
 
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+  juce::gl::glEnable(juce::gl::GL_BLEND);
+  juce::gl::glBlendFunc(juce::gl::GL_ONE, juce::gl::GL_ONE_MINUS_SRC_ALPHA);
 
   int draw_width = getWidth();
   int draw_height = getHeight();
 
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  juce::gl::glTexParameteri(juce::gl::GL_TEXTURE_2D, juce::gl::GL_TEXTURE_WRAP_S, juce::gl::GL_CLAMP_TO_EDGE);
+  juce::gl::glTexParameteri(juce::gl::GL_TEXTURE_2D, juce::gl::GL_TEXTURE_WRAP_T, juce::gl::GL_CLAMP_TO_EDGE);
 
   float ratio = getHeight() / 75.0f;
 
@@ -283,15 +283,15 @@ void OpenGLWaveViewer::drawPosition(OpenGLContext& open_gl_context) {
   position_vertices_[12] = x + position_width;
   position_vertices_[13] = y + position_height;
 
-  open_gl_context.extensions.glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ARRAY_BUFFER, vertex_buffer_);
   GLsizeiptr vert_size = static_cast<GLsizeiptr>(static_cast<size_t>(16 * sizeof(float)));
-  open_gl_context.extensions.glBufferData(GL_ARRAY_BUFFER, vert_size,
-                                          position_vertices_, GL_STATIC_DRAW);
+  open_gl_context.extensions.glBufferData(juce::gl::GL_ARRAY_BUFFER, vert_size,
+                                          position_vertices_, juce::gl::GL_STATIC_DRAW);
 
-  open_gl_context.extensions.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangle_buffer_);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ELEMENT_ARRAY_BUFFER, triangle_buffer_);
   position_texture_.bind();
 
-  open_gl_context.extensions.glActiveTexture(GL_TEXTURE0);
+  open_gl_context.extensions.glActiveTexture(juce::gl::GL_TEXTURE0);
 
   if (background_.texture_uniform() != nullptr)
     background_.texture_uniform()->set(0);
@@ -299,17 +299,17 @@ void OpenGLWaveViewer::drawPosition(OpenGLContext& open_gl_context) {
   background_.shader()->use();
 
   background_.enableAttributes(open_gl_context);
-  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+  juce::gl::glDrawElements(juce::gl::GL_TRIANGLES, 6, juce::gl::GL_UNSIGNED_INT, 0);
   background_.disableAttributes(open_gl_context);
 
   position_texture_.unbind();
 
-  open_gl_context.extensions.glBindBuffer(GL_ARRAY_BUFFER, 0);
-  open_gl_context.extensions.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ARRAY_BUFFER, 0);
+  open_gl_context.extensions.glBindBuffer(juce::gl::GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void OpenGLWaveViewer::render(OpenGLContext& open_gl_context, bool animate) {
-  MOPO_ASSERT(glGetError() == GL_NO_ERROR);
+void OpenGLWaveViewer::render(juce::OpenGLContext& open_gl_context, bool animate) {
+  MOPO_ASSERT(juce::gl::glGetError() == juce::gl::GL_NO_ERROR);
 
   setViewPort(open_gl_context);
 
@@ -318,10 +318,10 @@ void OpenGLWaveViewer::render(OpenGLContext& open_gl_context, bool animate) {
   if (animate)
     drawPosition(open_gl_context);
 
-  MOPO_ASSERT(glGetError() == GL_NO_ERROR);
+  MOPO_ASSERT(juce::gl::glGetError() == juce::gl::GL_NO_ERROR);
 }
 
-void OpenGLWaveViewer::destroy(OpenGLContext& open_gl_context) {
+void OpenGLWaveViewer::destroy(juce::OpenGLContext& open_gl_context) {
   position_texture_.release();
 
   texture_ = nullptr;

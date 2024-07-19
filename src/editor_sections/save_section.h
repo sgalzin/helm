@@ -22,29 +22,29 @@
 #include "file_list_box_model.h"
 #include "overlay.h"
 
-class SaveSection : public Overlay, public TextEditor::Listener,
-                    public FileListBoxModel::Listener, public Button::Listener {
+class SaveSection : public Overlay, public juce::TextEditor::Listener,
+                    public FileListBoxModel::Listener, public juce::Button::Listener {
   public:
     class Listener {
       public:
         virtual ~Listener() { }
 
-        virtual void fileSaved(File save_file) = 0;
+        virtual void fileSaved(juce::File save_file) = 0;
     };
 
-    SaveSection(String name);
+    SaveSection(juce::String name);
     ~SaveSection() { }
-    void paint(Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
     void visibilityChanged() override;
 
-    void textEditorReturnKeyPressed(TextEditor& editor) override;
+    void textEditorReturnKeyPressed(juce::TextEditor& editor) override;
     void selectedFilesChanged(FileListBoxModel* list_box) override;
-    void buttonClicked(Button* clicked_button) override;
-    void mouseUp(const MouseEvent& e) override;
+    void buttonClicked(juce::Button* clicked_button) override;
+    void mouseUp(const juce::MouseEvent& e) override;
 
-    Rectangle<int> getSaveRect();
-    void setSaveRect(Rectangle<int> rectangle) { active_rect_ = rectangle; }
+    juce::Rectangle<int> getSaveRect();
+    void setSaveRect(juce::Rectangle<int> rectangle) { active_rect_ = rectangle; }
 
     void setListener(Listener* listener) { listener_ = listener; }
 
@@ -55,22 +55,22 @@ class SaveSection : public Overlay, public TextEditor::Listener,
     void rescanBanks();
     void rescanFolders();
 
-    ScopedPointer<TextEditor> patch_name_;
-    ScopedPointer<TextEditor> author_;
-    ScopedPointer<TextEditor> add_bank_name_;
-    ScopedPointer<TextEditor> add_folder_name_;
+    juce::ScopedPointer<juce::TextEditor> patch_name_;
+    juce::ScopedPointer<juce::TextEditor> author_;
+    juce::ScopedPointer<juce::TextEditor> add_bank_name_;
+    juce::ScopedPointer<juce::TextEditor> add_folder_name_;
 
-    ScopedPointer<ListBox> banks_view_;
-    ScopedPointer<ListBox> folders_view_;
-    ScopedPointer<FileListBoxModel> banks_model_;
-    ScopedPointer<FileListBoxModel> folders_model_;
+    juce::ScopedPointer<juce::ListBox> banks_view_;
+    juce::ScopedPointer<juce::ListBox> folders_view_;
+    juce::ScopedPointer<FileListBoxModel> banks_model_;
+    juce::ScopedPointer<FileListBoxModel> folders_model_;
 
-    ScopedPointer<TextButton> save_button_;
-    ScopedPointer<TextButton> cancel_button_;
-    ScopedPointer<TextButton> add_bank_button_;
-    ScopedPointer<TextButton> add_folder_button_;
+    juce::ScopedPointer<juce::TextButton> save_button_;
+    juce::ScopedPointer<juce::TextButton> cancel_button_;
+    juce::ScopedPointer<juce::TextButton> add_bank_button_;
+    juce::ScopedPointer<juce::TextButton> add_folder_button_;
 
-    Rectangle<int> active_rect_;
+    juce::Rectangle<int> active_rect_;
 
     Listener* listener_;
 

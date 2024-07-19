@@ -26,17 +26,17 @@
 
 class DistortionSection : public SynthSection {
   public:
-    DistortionSection(String name);
+    DistortionSection(juce::String name);
     ~DistortionSection();
 
-    void paintBackground(Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
     void resized() override;
 
   private:
-    ScopedPointer<SynthButton> on_;
-    ScopedPointer<TextSelector> type_;
-    ScopedPointer<SynthSlider> drive_;
-    ScopedPointer<SynthSlider> mix_;
+    juce::ScopedPointer<SynthButton> on_;
+    juce::ScopedPointer<TextSelector> type_;
+    juce::ScopedPointer<SynthSlider> drive_;
+    juce::ScopedPointer<SynthSlider> mix_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DistortionSection)
 };

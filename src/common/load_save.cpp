@@ -29,7 +29,7 @@
 
 namespace {
 
-  String createPatchLicense(String author) {
+  juce::String createPatchLicense(juce::String author) {
     return "Patch (c) by " + author +
            ".  This patch is licensed under a " +
            "Creative Commons Attribution 4.0 International License.  " +
@@ -37,30 +37,30 @@ namespace {
            "work.  If not, see <http://creativecommons.org/licenses/by/4.0/>.";
   }
 
-  const String DEFAULT_USER_FOLDERS[] = { "Lead", "Keys", "Pad", "Bass", "SFX" };
+  const juce::String DEFAULT_USER_FOLDERS[] = { "Lead", "Keys", "Pad", "Bass", "SFX" };
 
   static const int MS_PER_DAY = 1000 * 60 * 60 * 24;
 
   int getDaysSinceEpoch() {
-    int64 ms_since_epoch = Time::currentTimeMillis();
+    juce::int64 ms_since_epoch = juce::Time::currentTimeMillis();
     return ms_since_epoch / MS_PER_DAY;
   }
 } // namespace
 
-var LoadSave::stateToVar(SynthBase* synth,
-                         std::map<std::string, String>& save_info,
-                         const CriticalSection& critical_section) {
+juce::var LoadSave::stateToVar(SynthBase* synth,
+                         std::map<std::string, juce::String>& save_info,
+                         const juce::CriticalSection& critical_section) {
   mopo::control_map controls = synth->getControls();
-  DynamicObject* settings_object = new DynamicObject();
+  juce::DynamicObject* settings_object = new juce::DynamicObject();
 
-  ScopedLock lock(critical_section);
+  juce::ScopedLock lock(critical_section);
   for (auto& control : controls)
-    settings_object->setProperty(String(control.first), control.second->value());
+    settings_object->setProperty(juce::String(control.first), control.second->value());
 
   std::set<mopo::ModulationConnection*> modulations = synth->getModulationConnections();
-  Array<var> modulation_states;
+  juce::Array<juce::var> modulation_states;
   for (mopo::ModulationConnection* connection: modulations) {
-    DynamicObject* mod_object = new DynamicObject();
+    juce::DynamicObject* mod_object = new juce::DynamicObject();
     mod_object->setProperty("source", connection->source.c_str());
     mod_object->setProperty("destination", connection->destination.c_str());
     mod_object->setProperty("amount", connection->amount.value());
@@ -69,8 +69,8 @@ var LoadSave::stateToVar(SynthBase* synth,
 
   settings_object->setProperty("modulations", modulation_states);
 
-  DynamicObject* state_object = new DynamicObject();
-  String author = save_info["author"];
+  juce::DynamicObject* state_object = new juce::DynamicObject();
+  juce::String author = save_info["author"];
   state_object->setProperty("license", createPatchLicense(author));
   state_object->setProperty("synth_version", ProjectInfo::versionString);
   state_object->setProperty("patch_name", save_info["patch_name"]);
@@ -81,10 +81,10 @@ var LoadSave::stateToVar(SynthBase* synth,
 }
 
 void LoadSave::loadControls(SynthBase* synth,
-                            const NamedValueSet& properties) {
+                            const juce::NamedValueSet& properties) {
   mopo::control_map controls = synth->getControls();
   for (auto& control : controls) {
-    String name = control.first;
+    juce::String name = control.first;
     if (properties.contains(name)) {
       mopo::mopo_float value = properties[name];
       control.second->set(value);
@@ -97,12 +97,12 @@ void LoadSave::loadControls(SynthBase* synth,
 }
 
 void LoadSave::loadModulations(SynthBase* synth,
-                               const Array<var>* modulations) {
+                               const juce::Array<juce::var>* modulations) {
   synth->clearModulations();
-  var* modulation = modulations->begin();
+  const juce::var* modulation = modulations->begin();
 
   for (; modulation != modulations->end(); ++modulation) {
-    DynamicObject* mod = modulation->getDynamicObject();
+    juce::DynamicObject* mod = modulation->getDynamicObject();
     std::string source = mod->getProperty("source").toString().toStdString();
     std::string destination = mod->getProperty("destination").toString().toStdString();
     mopo::ModulationConnection* connection = synth->getModulationBank().get(source, destination);
@@ -111,8 +111,8 @@ void LoadSave::loadModulations(SynthBase* synth,
 }
 
 
-void LoadSave::loadSaveState(std::map<std::string, String>& state,
-                             const NamedValueSet& properties) {
+void LoadSave::loadSaveState(std::map<std::string, juce::String>& state,
+                             const juce::NamedValueSet& properties) {
   if (properties.contains("author"))
     state["author"] = properties["author"];
   if (properties.contains("patch_name"))
@@ -121,7 +121,7 @@ void LoadSave::loadSaveState(std::map<std::string, String>& state,
     state["folder_name"] = properties["folder_name"];
 }
 
-void LoadSave::initSynth(SynthBase* synth, std::map<std::string, String>& save_info) {
+void LoadSave::initSynth(SynthBase* synth, std::map<std::string, juce::String>& save_info) {
   synth->clearModulations();
 
   mopo::control_map controls = synth->getControls();
@@ -136,30 +136,30 @@ void LoadSave::initSynth(SynthBase* synth, std::map<std::string, String>& save_i
 }
 
 void LoadSave::varToState(SynthBase* synth,
-                          std::map<std::string, String>& save_info,
-                          var state) {
+                          std::map<std::string, juce::String>& save_info,
+                          juce::var state) {
   if (!state.isObject())
     return;
 
-  DynamicObject* object_state = state.getDynamicObject();
-  NamedValueSet properties = object_state->getProperties();
+  juce::DynamicObject* object_state = state.getDynamicObject();
+  juce::NamedValueSet properties = object_state->getProperties();
 
   // Version 0.4.1 was the last build before we saved the version number.
-  String version = "0.4.1";
+  juce::String version = "0.4.1";
   if (properties.contains("synth_version"))
     version = properties["synth_version"];
 
   // After 0.4.1 there was a patch file restructure.
   if (compareVersionStrings(version, "0.4.1") <= 0) {
-    NamedValueSet new_properties;
+    juce::NamedValueSet new_properties;
     new_properties.set("settings", object_state);
     properties = new_properties;
   }
 
-  var settings = properties["settings"];
-  DynamicObject* settings_object = settings.getDynamicObject();
-  NamedValueSet settings_properties = settings_object->getProperties();
-  Array<var>* modulations = settings_properties["modulations"].getArray();
+  juce::var settings = properties["settings"];
+  juce::DynamicObject* settings_object = settings.getDynamicObject();
+  juce::NamedValueSet settings_properties = settings_object->getProperties();
+  juce::Array<juce::var>* modulations = settings_properties["modulations"].getArray();
 
   // After 0.5.0 mixer was added and osc_mix was removed. And scaling of oscillators was changed.
   if (compareVersionStrings(version, "0.5.0") <= 0) {
@@ -173,25 +173,25 @@ void LoadSave::varToState(SynthBase* synth,
     }
 
     // Fix modulation routing.
-    var* modulation = modulations->begin();
-    Array<var> old_modulations;
-    Array<DynamicObject*> new_modulations;
+    juce::var* modulation = modulations->begin();
+    juce::Array<juce::var> old_modulations;
+    juce::Array<juce::DynamicObject*> new_modulations;
     for (; modulation != modulations->end(); ++modulation) {
-      DynamicObject* mod = modulation->getDynamicObject();
-      String destination = mod->getProperty("destination").toString();
+      juce::DynamicObject* mod = modulation->getDynamicObject();
+      juce::String destination = mod->getProperty("destination").toString();
 
       if (destination == "osc_mix") {
-        String source = mod->getProperty("source").toString();
+        juce::String source = mod->getProperty("source").toString();
         mopo::mopo_float amount = mod->getProperty("amount");
         old_modulations.add(mod);
 
-        DynamicObject* osc_1_mod = new DynamicObject();
+        juce::DynamicObject* osc_1_mod = new juce::DynamicObject();
         osc_1_mod->setProperty("source", source);
         osc_1_mod->setProperty("destination", "osc_1_volume");
         osc_1_mod->setProperty("amount", -amount);
         new_modulations.add(osc_1_mod);
 
-        DynamicObject* osc_2_mod = new DynamicObject();
+        juce::DynamicObject* osc_2_mod = new juce::DynamicObject();
         osc_2_mod->setProperty("source", source);
         osc_2_mod->setProperty("destination", "osc_2_volume");
         osc_2_mod->setProperty("amount", amount);
@@ -199,10 +199,10 @@ void LoadSave::varToState(SynthBase* synth,
       }
     }
 
-    for (var old_modulation : old_modulations)
+    for (juce::var old_modulation : old_modulations)
       modulations->removeFirstMatchingValue(old_modulation);
 
-    for (DynamicObject* modulation : new_modulations)
+    for (juce::DynamicObject* modulation : new_modulations)
       modulations->add(modulation);
   }
 
@@ -280,13 +280,13 @@ void LoadSave::varToState(SynthBase* synth,
     }
 
     // Move modulating saturation to distortion.
-    var* modulation = modulations->begin();
+    juce::var* modulation = modulations->begin();
     for (; modulation != modulations->end(); ++modulation) {
-      DynamicObject* mod = modulation->getDynamicObject();
-      String destination = mod->getProperty("destination").toString();
+      juce::DynamicObject* mod = modulation->getDynamicObject();
+      juce::String destination = mod->getProperty("destination").toString();
 
       if (destination == "filter_saturation") {
-        String source = mod->getProperty("source").toString();
+        juce::String source = mod->getProperty("source").toString();
         mod->setProperty("destination", "distortion_drive");
       }
     }
@@ -329,36 +329,36 @@ void LoadSave::varToState(SynthBase* synth,
   loadSaveState(save_info, properties);
 }
 
-String LoadSave::getAuthor(var state) {
+juce::String LoadSave::getAuthor(juce::var state) {
   if (!state.isObject())
     return "";
 
-  DynamicObject* object_state = state.getDynamicObject();
-  NamedValueSet properties = object_state->getProperties();
+  juce::DynamicObject* object_state = state.getDynamicObject();
+  juce::NamedValueSet properties = object_state->getProperties();
   if (properties.contains("author"))
     return properties["author"];
   return "";
 }
 
-String LoadSave::getLicense(var state) {
+juce::String LoadSave::getLicense(juce::var state) {
   if (!state.isObject())
     return "";
 
-  DynamicObject* object_state = state.getDynamicObject();
-  NamedValueSet properties = object_state->getProperties();
+  juce::DynamicObject* object_state = state.getDynamicObject();
+  juce::NamedValueSet properties = object_state->getProperties();
   if (properties.contains("license"))
     return properties["license"];
   return "";
 }
 
-File LoadSave::getConfigFile() {
-  PropertiesFile::Options config_options;
+juce::File LoadSave::getConfigFile() {
+  juce::PropertiesFile::Options config_options;
   config_options.applicationName = "Helm";
   config_options.osxLibrarySubFolder = "Application Support";
   config_options.filenameSuffix = "config";
 
 #ifdef LINUX
-  config_options.folderName = "." + String(ProjectInfo::projectName).toLowerCase();
+  config_options.folderName = "." + juce::String(ProjectInfo::projectName).toLowerCase();
 #else
   config_options.folderName = String(ProjectInfo::projectName).toLowerCase();
 #endif
@@ -366,86 +366,86 @@ File LoadSave::getConfigFile() {
   return config_options.getDefaultFile();
 }
 
-var LoadSave::getConfigVar() {
-  File config_file = getConfigFile();
+juce::var LoadSave::getConfigVar() {
+  juce::File config_file = getConfigFile();
 
-  var config_state;
-  if (!JSON::parse(config_file.loadFileAsString(), config_state).wasOk())
-    return var();
+  juce::var config_state;
+  if (!juce::JSON::parse(config_file.loadFileAsString(), config_state).wasOk())
+    return juce::var();
 
   if (!config_state.isObject())
-    return var();
+    return juce::var();
 
   return config_state;
 }
 
-void LoadSave::saveVarToConfig(var config_state) {
+void LoadSave::saveVarToConfig(juce::var config_state) {
   if (!isInstalled())
     return;
 
-  File config_file = getConfigFile();
+  juce::File config_file = getConfigFile();
 
   if (!config_file.exists())
     config_file.create();
-  config_file.replaceWithText(JSON::toString(config_state));
+  config_file.replaceWithText(juce::JSON::toString(config_state));
 }
 
 void LoadSave::saveVersionConfig() {
-  var config_var = getConfigVar();
+  juce::var config_var = getConfigVar();
   if (!config_var.isObject())
-    config_var = new DynamicObject();
+    config_var = new juce::DynamicObject();
 
-  DynamicObject* config_object = config_var.getDynamicObject();
+  juce::DynamicObject* config_object = config_var.getDynamicObject();
   config_object->setProperty("synth_version", ProjectInfo::versionString);
   saveVarToConfig(config_object);
 }
 
 void LoadSave::saveLastAskedForMoney() {
-  var config_var = getConfigVar();
+  juce::var config_var = getConfigVar();
   if (!config_var.isObject())
-    config_var = new DynamicObject();
+    config_var = new juce::DynamicObject();
 
-  DynamicObject* config_object = config_var.getDynamicObject();
+  juce::DynamicObject* config_object = config_var.getDynamicObject();
   config_object->setProperty("day_asked_for_payment", getDaysSinceEpoch());
   saveVarToConfig(config_object);
 }
 
 void LoadSave::saveShouldAskForMoney(bool should_ask) {
-  var config_var = getConfigVar();
+  juce::var config_var = getConfigVar();
   if (!config_var.isObject())
-    config_var = new DynamicObject();
+    config_var = new juce::DynamicObject();
 
-  DynamicObject* config_object = config_var.getDynamicObject();
+  juce::DynamicObject* config_object = config_var.getDynamicObject();
   config_object->setProperty("should_ask_for_payment", should_ask);
   saveVarToConfig(config_object);
 }
 
 void LoadSave::saveUpdateCheckConfig(bool check_for_updates) {
-  var config_var = getConfigVar();
+  juce::var config_var = getConfigVar();
   if (!config_var.isObject())
-    config_var = new DynamicObject();
+    config_var = new juce::DynamicObject();
 
-  DynamicObject* config_object = config_var.getDynamicObject();
+  juce::DynamicObject* config_object = config_var.getDynamicObject();
   config_object->setProperty("check_for_updates", check_for_updates);
   saveVarToConfig(config_object);
 }
 
 void LoadSave::saveAnimateWidgets(bool animate_widgets) {
-  var config_var = getConfigVar();
+  juce::var config_var = getConfigVar();
   if (!config_var.isObject())
-    config_var = new DynamicObject();
+    config_var = new juce::DynamicObject();
 
-  DynamicObject* config_object = config_var.getDynamicObject();
+  juce::DynamicObject* config_object = config_var.getDynamicObject();
   config_object->setProperty("animate_widgets", animate_widgets);
   saveVarToConfig(config_object);
 }
 
 void LoadSave::saveWindowSize(float window_size) {
-  var config_var = getConfigVar();
+  juce::var config_var = getConfigVar();
   if (!config_var.isObject())
-    config_var = new DynamicObject();
+    config_var = new juce::DynamicObject();
 
-  DynamicObject* config_object = config_var.getDynamicObject();
+  juce::DynamicObject* config_object = config_var.getDynamicObject();
   config_object->setProperty("window_size", window_size);
   saveVarToConfig(config_object);
 }
@@ -454,54 +454,54 @@ void LoadSave::saveLayoutConfig(mopo::StringLayout* layout) {
   if (layout == nullptr)
     return;
 
-  var config_var = getConfigVar();
+  juce::var config_var = getConfigVar();
   if (!config_var.isObject())
-    config_var = new DynamicObject();
+    config_var = new juce::DynamicObject();
 
-  DynamicObject* config_object = config_var.getDynamicObject();
-  DynamicObject* layout_object = new DynamicObject();
-  String chromatic_layout;
+  juce::DynamicObject* config_object = config_var.getDynamicObject();
+  juce::DynamicObject* layout_object = new juce::DynamicObject();
+  juce::String chromatic_layout;
   wchar_t up_key = L'\0';
   wchar_t down_key = L'\0';
 
   if (layout) {
-    chromatic_layout = String(layout->getLayout().data());
+    chromatic_layout = juce::String(layout->getLayout().data());
     up_key = layout->getUpKey();
     down_key = layout->getDownKey();
   }
   else {
-    chromatic_layout = String(getComputerKeyboardLayout().data());
+    chromatic_layout = juce::String(getComputerKeyboardLayout().data());
     std::pair<wchar_t, wchar_t> octave_controls = getComputerKeyboardOctaveControls();
     down_key = octave_controls.first;
     up_key = octave_controls.second;
   }
 
   layout_object->setProperty("chromatic_layout", chromatic_layout);
-  layout_object->setProperty("octave_up", String() + up_key);
-  layout_object->setProperty("octave_down", String() + down_key);
+  layout_object->setProperty("octave_up", juce::String() + up_key);
+  layout_object->setProperty("octave_down", juce::String() + down_key);
   config_object->setProperty("keyboard_layout", layout_object);
   saveVarToConfig(config_object);
 }
 
 void LoadSave::saveMidiMapConfig(MidiManager* midi_manager) {
   MidiManager::midi_map midi_learn_map = midi_manager->getMidiLearnMap();
-  var config_var = getConfigVar();
+  juce::var config_var = getConfigVar();
   if (!config_var.isObject())
-    config_var = new DynamicObject();
+    config_var = new juce::DynamicObject();
 
-  DynamicObject* config_object = config_var.getDynamicObject();
+  juce::DynamicObject* config_object = config_var.getDynamicObject();
 
-  Array<var> midi_learn_object;
+  juce::Array<juce::var> midi_learn_object;
   for (auto& midi_mapping : midi_learn_map) {
-    DynamicObject* midi_map_object = new DynamicObject();
-    Array<var> midi_destinations_object;
+    juce::DynamicObject* midi_map_object = new juce::DynamicObject();
+    juce::Array<juce::var> midi_destinations_object;
 
     midi_map_object->setProperty("source", midi_mapping.first);
 
     for (auto& midi_destination : midi_mapping.second) {
-      DynamicObject* midi_destination_object = new DynamicObject();
+      juce::DynamicObject* midi_destination_object = new juce::DynamicObject();
 
-      midi_destination_object->setProperty("destination", String(midi_destination.first));
+      midi_destination_object->setProperty("destination", juce::String(midi_destination.first));
       midi_destination_object->setProperty("min_range", midi_destination.second->min);
       midi_destination_object->setProperty("max_range", midi_destination.second->max);
       midi_destinations_object.add(midi_destination_object);
@@ -516,12 +516,12 @@ void LoadSave::saveMidiMapConfig(MidiManager* midi_manager) {
 }
 
 void LoadSave::loadConfig(MidiManager* midi_manager, mopo::StringLayout* layout) {
-  var config_var = getConfigVar();
+  juce::var config_var = getConfigVar();
   if (!config_var.isObject())
-    config_var = new DynamicObject();
+    config_var = new juce::DynamicObject();
 
-  DynamicObject* config_object = config_var.getDynamicObject();
-  NamedValueSet config_properties = config_object->getProperties();
+  juce::DynamicObject* config_object = config_var.getDynamicObject();
+  juce::NamedValueSet config_properties = config_object->getProperties();
 
   // Computer Keyboard Layout
   if (layout) {
@@ -535,21 +535,21 @@ void LoadSave::loadConfig(MidiManager* midi_manager, mopo::StringLayout* layout)
   if (config_properties.contains("midi_learn")) {
     MidiManager::midi_map midi_learn_map = midi_manager->getMidiLearnMap();
 
-    Array<var>* midi_learn = config_properties["midi_learn"].getArray();
-    var* midi_source = midi_learn->begin();
+    juce::Array<juce::var>* midi_learn = config_properties["midi_learn"].getArray();
+    juce::var* midi_source = midi_learn->begin();
 
     for (; midi_source != midi_learn->end(); ++midi_source) {
-      DynamicObject* source_object = midi_source->getDynamicObject();
+      juce::DynamicObject* source_object = midi_source->getDynamicObject();
       int source = source_object->getProperty("source");
 
       if (source_object->hasProperty("destinations")) {
-        Array<var>* destinations = source_object->getProperty("destinations").getArray();
-        var* midi_destination = destinations->begin();
+        juce::Array<juce::var>* destinations = source_object->getProperty("destinations").getArray();
+        juce::var* midi_destination = destinations->begin();
 
         for (; midi_destination != destinations->end(); ++midi_destination) {
-          DynamicObject* destination_object = midi_destination->getDynamicObject();
+          juce::DynamicObject* destination_object = midi_destination->getDynamicObject();
 
-          String destination_name = destination_object->getProperty("destination").toString();
+          juce::String destination_name = destination_object->getProperty("destination").toString();
           std::string dest = destination_name.toStdString();
           midi_learn_map[source][dest] = &mopo::Parameters::getDetails(dest);
         }
@@ -560,22 +560,22 @@ void LoadSave::loadConfig(MidiManager* midi_manager, mopo::StringLayout* layout)
 }
 
 bool LoadSave::isInstalled() {
-  File factory_bank = getFactoryBankDirectory();
+  juce::File factory_bank = getFactoryBankDirectory();
   return factory_bank.exists();
 }
 
 bool LoadSave::wasUpgraded() {
-  var config_state = getConfigVar();
-  DynamicObject* config_object = config_state.getDynamicObject();
+  juce::var config_state = getConfigVar();
+  juce::DynamicObject* config_object = config_state.getDynamicObject();
   if (!config_state.isObject())
     return true;
 
   if (!config_object->hasProperty("synth_version"))
     return true;
 
-  Array<File> patches;
-  String extension = String("*.") + mopo::PATCH_EXTENSION;
-  getBankDirectory().findChildFiles(patches, File::findFiles, true, extension);
+  juce::Array<juce::File> patches;
+  juce::String extension = juce::String("*.") + mopo::PATCH_EXTENSION;
+  getBankDirectory().findChildFiles(patches, juce::File::findFiles, true, extension);
   if (patches.size() == 0)
     return true;
 
@@ -584,8 +584,8 @@ bool LoadSave::wasUpgraded() {
 }
 
 bool LoadSave::shouldCheckForUpdates() {
-  var config_state = getConfigVar();
-  DynamicObject* config_object = config_state.getDynamicObject();
+  juce::var config_state = getConfigVar();
+  juce::DynamicObject* config_object = config_state.getDynamicObject();
   if (!config_state.isObject())
     return true;
 
@@ -596,8 +596,8 @@ bool LoadSave::shouldCheckForUpdates() {
 }
 
 bool LoadSave::shouldAnimateWidgets() {
-  var config_state = getConfigVar();
-  DynamicObject* config_object = config_state.getDynamicObject();
+  juce::var config_state = getConfigVar();
+  juce::DynamicObject* config_object = config_state.getDynamicObject();
   if (!config_state.isObject())
     return true;
 
@@ -608,8 +608,8 @@ bool LoadSave::shouldAnimateWidgets() {
 }
 
 float LoadSave::loadWindowSize() {
-  var config_state = getConfigVar();
-  DynamicObject* config_object = config_state.getDynamicObject();
+  juce::var config_state = getConfigVar();
+  juce::DynamicObject* config_object = config_state.getDynamicObject();
   if (!config_state.isObject())
     return 1.0f;
 
@@ -619,9 +619,9 @@ float LoadSave::loadWindowSize() {
   return config_object->getProperty("window_size");
 }
 
-String LoadSave::loadVersion() {
-  var config_state = getConfigVar();
-  DynamicObject* config_object = config_state.getDynamicObject();
+juce::String LoadSave::loadVersion() {
+  juce::var config_state = getConfigVar();
+  juce::DynamicObject* config_object = config_state.getDynamicObject();
   if (!config_state.isObject())
     return "";
 
@@ -637,8 +637,8 @@ bool LoadSave::shouldAskForPayment() {
   if (getDidPayInitiallyFile().exists())
     return false;
 
-  var config_state = getConfigVar();
-  DynamicObject* config_object = config_state.getDynamicObject();
+  juce::var config_state = getConfigVar();
+  juce::DynamicObject* config_object = config_state.getDynamicObject();
   if (!config_state.isObject())
     return false;
 
@@ -658,16 +658,16 @@ bool LoadSave::shouldAskForPayment() {
 }
 
 std::wstring LoadSave::getComputerKeyboardLayout() {
-  var config_state = getConfigVar();
+  juce::var config_state = getConfigVar();
 
   if (config_state.isVoid())
     return mopo::DEFAULT_KEYBOARD;
 
-  DynamicObject* config_object = config_state.getDynamicObject();
-  NamedValueSet config_properties = config_object->getProperties();
+  juce::DynamicObject* config_object = config_state.getDynamicObject();
+  juce::NamedValueSet config_properties = config_object->getProperties();
 
   if (config_properties.contains("keyboard_layout")) {
-    DynamicObject* layout = config_properties["keyboard_layout"].getDynamicObject();
+    juce::DynamicObject* layout = config_properties["keyboard_layout"].getDynamicObject();
 
     if (layout->hasProperty("chromatic_layout"))
       return layout->getProperty("chromatic_layout").toString().toWideCharPointer();
@@ -679,15 +679,15 @@ std::wstring LoadSave::getComputerKeyboardLayout() {
 std::pair<wchar_t, wchar_t> LoadSave::getComputerKeyboardOctaveControls() {
   std::pair<wchar_t, wchar_t> octave_controls(mopo::DEFAULT_KEYBOARD_OCTAVE_DOWN,
                                               mopo::DEFAULT_KEYBOARD_OCTAVE_UP);
-  var config_state = getConfigVar();
+  juce::var config_state = getConfigVar();
   if (config_state.isVoid())
     return octave_controls;
 
-  DynamicObject* config_object = config_state.getDynamicObject();
-  NamedValueSet config_properties = config_object->getProperties();
+  juce::DynamicObject* config_object = config_state.getDynamicObject();
+  juce::NamedValueSet config_properties = config_object->getProperties();
 
   if (config_properties.contains("keyboard_layout")) {
-    DynamicObject* layout = config_properties["keyboard_layout"].getDynamicObject();
+    juce::DynamicObject* layout = config_properties["keyboard_layout"].getDynamicObject();
     octave_controls.first = layout->getProperty("octave_down").toString()[0];
     octave_controls.second = layout->getProperty("octave_up").toString()[0];
   }
@@ -695,34 +695,34 @@ std::pair<wchar_t, wchar_t> LoadSave::getComputerKeyboardOctaveControls() {
   return octave_controls;
 }
 
-File LoadSave::getFactoryBankDirectory() {
-  File patch_dir = File("");
+juce::File LoadSave::getFactoryBankDirectory() {
+  juce::File patch_dir = juce::File("");
 #ifdef LINUX
-  patch_dir = File(LINUX_FACTORY_PATCH_DIRECTORY);
+  patch_dir = juce::File(LINUX_FACTORY_PATCH_DIRECTORY);
 #elif defined(__APPLE__)
-  File data_dir = File::getSpecialLocation(File::commonApplicationDataDirectory);
+  juce::File data_dir = juce::File::getSpecialLocation(File::commonApplicationDataDirectory);
   patch_dir = data_dir.getChildFile(String("Audio/Presets/") + "Helm");
 #elif defined(_WIN32)
-  File data_dir = File::getSpecialLocation(File::commonDocumentsDirectory);
+  juce::File data_dir = juce::File::getSpecialLocation(File::commonDocumentsDirectory);
   patch_dir = data_dir.getChildFile("Helm/Patches");
 #endif
 
   return patch_dir;
 }
 
-File LoadSave::getBankDirectory() {
+juce::File LoadSave::getBankDirectory() {
   if (!isInstalled())
-    return File("../../../patches");
+    return juce::File("../../../patches");
 
-  File patch_dir = File("");
+  juce::File patch_dir = juce::File("");
 #ifdef LINUX
-  patch_dir = File(LINUX_BANK_DIRECTORY);
+  patch_dir = juce::File(LINUX_BANK_DIRECTORY);
 #elif defined(__APPLE__)
-  File data_dir = File::getSpecialLocation(File::userApplicationDataDirectory);
+  juce::File data_dir = juce::File::getSpecialLocation(File::userApplicationDataDirectory);
   patch_dir = data_dir.getChildFile(String("Audio/Presets/") + "Helm");
 #elif defined(_WIN32)
-  File documents_dir = File::getSpecialLocation(File::userDocumentsDirectory);
-  File parent_dir = documents_dir.getChildFile("Helm");
+  juce::File documents_dir = juce::File::getSpecialLocation(File::userDocumentsDirectory);
+  juce::File parent_dir = documents_dir.getChildFile("Helm");
   if (!parent_dir.exists())
     parent_dir.createDirectory();
   patch_dir = parent_dir.getChildFile("Patches");
@@ -733,60 +733,60 @@ File LoadSave::getBankDirectory() {
   return patch_dir;
 }
 
-File LoadSave::getUserBankDirectory() {
-  File bank_dir = getBankDirectory();
-  File folder_dir = bank_dir.getChildFile(USER_BANK_NAME);
+juce::File LoadSave::getUserBankDirectory() {
+  juce::File bank_dir = getBankDirectory();
+  juce::File folder_dir = bank_dir.getChildFile(USER_BANK_NAME);
 
   if (!folder_dir.exists()) {
     folder_dir.createDirectory();
-    for (String patch_folder : DEFAULT_USER_FOLDERS)
+    for (juce::String patch_folder : DEFAULT_USER_FOLDERS)
       folder_dir.getChildFile(patch_folder).createDirectory();
   }
   return folder_dir;
 }
 
-File LoadSave::getDidPayInitiallyFile() {
-  File bank_dir = getFactoryBankDirectory();
+juce::File LoadSave::getDidPayInitiallyFile() {
+  juce::File bank_dir = getFactoryBankDirectory();
   return bank_dir.getChildFile(DID_PAY_FILE);
 }
 
-void LoadSave::exportBank(String bank_name) {
-  File banks_dir = getBankDirectory();
-  File bank = banks_dir.getChildFile(bank_name);
-  Array<File> patches;
-  bank.findChildFiles(patches, File::findFiles, true, String("*.") + mopo::PATCH_EXTENSION);
-  ZipFile::Builder zip_builder;
+void LoadSave::exportBank(juce::String bank_name) {
+  juce::File banks_dir = getBankDirectory();
+  juce::File bank = banks_dir.getChildFile(bank_name);
+  juce::Array<juce::File> patches;
+  bank.findChildFiles(patches, juce::File::findFiles, true, juce::String("*.") + mopo::PATCH_EXTENSION);
+  juce::ZipFile::Builder zip_builder;
 
-  for (File patch : patches)
+  for (juce::File patch : patches)
     zip_builder.addFile(patch, 2, patch.getRelativePathFrom(banks_dir));
 
-  FileChooser save_box("Export Bank As", File::getSpecialLocation(File::userHomeDirectory),
-                       String("*.") + EXPORTED_BANK_EXTENSION);
-  if (save_box.browseForFileToSave(true)) {
-    FileOutputStream out_stream(save_box.getResult().withFileExtension(EXPORTED_BANK_EXTENSION));
+  juce::FileChooser save_box("Export Bank As", juce::File::getSpecialLocation(juce::File::userHomeDirectory),
+                       juce::String("*.") + EXPORTED_BANK_EXTENSION);
+  /*if (save_box.browseForFileToSave(true)) {
+    juce::FileOutputStream out_stream(save_box.getResult().withFileExtension(EXPORTED_BANK_EXTENSION));
     double *progress = nullptr;
     zip_builder.writeToStream(out_stream, progress);
-  }
+  }*/
 }
 
 void LoadSave::importBank() {
-  FileChooser open_box("Import Bank", File::getSpecialLocation(File::userHomeDirectory),
-                       String("*.") + EXPORTED_BANK_EXTENSION);
-  if (open_box.browseForFileToOpen()) {
-    ZipFile zip_file(open_box.getResult());
+  juce::FileChooser open_box("Import Bank", juce::File::getSpecialLocation(juce::File::userHomeDirectory),
+                       juce::String("*.") + EXPORTED_BANK_EXTENSION);
+  /*if (open_box.browseForFileToOpen()) {
+    juce::ZipFile zip_file(open_box.getResult());
     zip_file.uncompressTo(getBankDirectory());
-  }
+  }*/
 }
 
-int LoadSave::compareVersionStrings(String a, String b) {
+int LoadSave::compareVersionStrings(juce::String a, juce::String b) {
   a.trim();
   b.trim();
 
   if (a.isEmpty() && b.isEmpty())
     return 0;
 
-  String major_version_a = a.upToFirstOccurrenceOf(".", false, true);
-  String major_version_b = b.upToFirstOccurrenceOf(".", false, true);
+  juce::String major_version_a = a.upToFirstOccurrenceOf(".", false, true);
+  juce::String major_version_b = b.upToFirstOccurrenceOf(".", false, true);
 
   if (!major_version_a.containsOnly("0123456789"))
     major_version_a = "0";
@@ -805,85 +805,85 @@ int LoadSave::compareVersionStrings(String a, String b) {
 }
 
 int LoadSave::getNumPatches() {
-  File bank_directory;
+  juce::File bank_directory;
   bank_directory = getBankDirectory();
 
-  Array<File> patches;
-  bank_directory.findChildFiles(patches, File::findFiles, true,
-                                String("*.") + mopo::PATCH_EXTENSION);
+  juce::Array<juce::File> patches;
+  bank_directory.findChildFiles(patches, juce::File::findFiles, true,
+                                juce::String("*.") + mopo::PATCH_EXTENSION);
   return patches.size();
 }
 
-File LoadSave::getPatchFile(int bank_index, int folder_index, int patch_index) {
+juce::File LoadSave::getPatchFile(int bank_index, int folder_index, int patch_index) {
   static const FileSorterAscending file_sorter;
 
-  File bank_directory = getBankDirectory();
-  Array<File> banks;
-  bank_directory.findChildFiles(banks, File::findDirectories, false);
+  juce::File bank_directory = getBankDirectory();
+  juce::Array<juce::File> banks;
+  bank_directory.findChildFiles(banks, juce::File::findDirectories, false);
   banks.sort(file_sorter);
 
   if (banks.size() == 0)
-    return File();
+    return juce::File();
 
   if (bank_index >= 0) {
-    File bank = banks[std::min(bank_index, banks.size() - 1)];
+    juce::File bank = banks[std::min(bank_index, banks.size() - 1)];
     banks.clear();
     banks.add(bank);
   }
 
-  Array<File> folders;
-  for (File bank : banks) {
-    Array<File> bank_folders;
-    bank.findChildFiles(bank_folders, File::findDirectories, false);
+  juce::Array<juce::File> folders;
+  for (juce::File bank : banks) {
+    juce::Array<juce::File> bank_folders;
+    bank.findChildFiles(bank_folders, juce::File::findDirectories, false);
     bank_folders.sort(file_sorter);
     folders.addArray(bank_folders);
   }
 
   if (folders.size() == 0)
-    return File();
+    return juce::File();
 
   if (folder_index >= 0) {
-    File folder = folders[std::min(folder_index, folders.size() - 1)];
+    juce::File folder = folders[std::min(folder_index, folders.size() - 1)];
     folders.clear();
     folders.add(folder);
   }
 
-  Array<File> patches;
-  for (File folder : folders) {
-    Array<File> folder_patches;
-    folder.findChildFiles(folder_patches, File::findFiles, false,
-                          String("*.") + mopo::PATCH_EXTENSION);
+  juce::Array<juce::File> patches;
+  for (juce::File folder : folders) {
+    juce::Array<juce::File> folder_patches;
+    folder.findChildFiles(folder_patches, juce::File::findFiles, false,
+                          juce::String("*.") + mopo::PATCH_EXTENSION);
     folder_patches.sort(file_sorter);
     patches.addArray(folder_patches);
   }
 
   if (patches.size() == 0 || patch_index < 0)
-    return File();
+    return juce::File();
 
   return patches[std::min(patch_index, patches.size() - 1)];
 }
 
-Array<File> LoadSave::getAllPatches() {
+juce::Array<juce::File> LoadSave::getAllPatches() {
   static const FileSorterAscending file_sorter;
 
-  File bank_directory = getBankDirectory();
-  Array<File> banks;
-  bank_directory.findChildFiles(banks, File::findDirectories, false);
+  juce::File bank_directory = getBankDirectory();
+  juce::Array<juce::File> banks;
+  bank_directory.findChildFiles(banks, juce::File::findDirectories, false);
   banks.sort(file_sorter);
 
-  Array<File> folders;
-  for (File bank : banks) {
-    Array<File> bank_folders;
-    bank.findChildFiles(bank_folders, File::findDirectories, false);
+  juce::Array<juce::File> folders;
+  for (juce::File bank : banks) {
+    juce::Array<juce::File> bank_folders;
+    bank.findChildFiles(bank_folders, juce::File::findDirectories, false);
     bank_folders.sort(file_sorter);
     folders.addArray(bank_folders);
   }
 
-  Array<File> patches;
-  for (File folder : folders) {
-    Array<File> folder_patches;
-    folder.findChildFiles(folder_patches, File::findFiles, false,
-                          String("*.") + mopo::PATCH_EXTENSION);
+  juce::Array<juce::File> patches;
+  for (juce::File folder : folders) {
+    juce::Array<juce::File> folder_patches;
+    folder.findChildFiles(folder_patches, juce::File::findFiles, false,
+                          juce::String("*.") + mopo::PATCH_EXTENSION);
     folder_patches.sort(file_sorter);
     patches.addArray(folder_patches);
   }
@@ -891,16 +891,16 @@ Array<File> LoadSave::getAllPatches() {
   return patches;
 }
 
-File LoadSave::loadPatch(int bank_index, int folder_index, int patch_index,
-                         SynthBase* synth, std::map<std::string, String>& save_info) {
-  File patch = getPatchFile(bank_index, folder_index, patch_index);
+juce::File LoadSave::loadPatch(int bank_index, int folder_index, int patch_index,
+                         SynthBase* synth, std::map<std::string, juce::String>& save_info) {
+  juce::File patch = getPatchFile(bank_index, folder_index, patch_index);
   loadPatchFile(patch, synth, save_info);
   return patch;
 }
 
-void LoadSave::loadPatchFile(File file, SynthBase* synth,
-                             std::map<std::string, String>& save_info) {
-  var parsed_json_state;
-  if (JSON::parse(file.loadFileAsString(), parsed_json_state).wasOk())
+void LoadSave::loadPatchFile(juce::File file, SynthBase* synth,
+                             std::map<std::string, juce::String>& save_info) {
+  juce::var parsed_json_state;
+  if (juce::JSON::parse(file.loadFileAsString(), parsed_json_state).wasOk())
     varToState(synth, save_info, parsed_json_state);
 }

@@ -26,10 +26,10 @@
 
 class StepSequencerSection : public SynthSection {
   public:
-    StepSequencerSection(String name);
+    StepSequencerSection(juce::String name);
     ~StepSequencerSection();
 
-    void paintBackground(Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
     void resized() override;
     void reset() override;
     void animate(bool animate = true) override;
@@ -37,15 +37,15 @@ class StepSequencerSection : public SynthSection {
   private:
     void createStepSequencerSliders();
 
-    std::vector<Slider*> sequencer_sliders_;
-    ScopedPointer<GraphicalStepSequencer> step_sequencer_;
-    ScopedPointer<RetriggerSelector> retrigger_;
-    ScopedPointer<SynthSlider> num_steps_;
-    ScopedPointer<SynthSlider> frequency_;
-    ScopedPointer<SynthSlider> tempo_;
-    ScopedPointer<TempoSelector> sync_;
-    ScopedPointer<SynthSlider> smoothing_;
-    ScopedPointer<ModulationButton> modulation_button_;
+    std::vector<juce::Slider*> sequencer_sliders_;
+    juce::ScopedPointer<GraphicalStepSequencer> step_sequencer_;
+    juce::ScopedPointer<RetriggerSelector> retrigger_;
+    juce::ScopedPointer<SynthSlider> num_steps_;
+    juce::ScopedPointer<SynthSlider> frequency_;
+    juce::ScopedPointer<SynthSlider> tempo_;
+    juce::ScopedPointer<TempoSelector> sync_;
+    juce::ScopedPointer<SynthSlider> smoothing_;
+    juce::ScopedPointer<ModulationButton> modulation_button_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(StepSequencerSection)
 };

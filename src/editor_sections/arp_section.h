@@ -26,20 +26,20 @@
 
 class ArpSection : public SynthSection {
   public:
-    ArpSection(String name);
+    ArpSection(juce::String name);
     ~ArpSection();
 
-    void paintBackground(Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
     void resized() override;
 
   private:
-    ScopedPointer<SynthSlider> frequency_;
-    ScopedPointer<SynthSlider> tempo_;
-    ScopedPointer<TempoSelector> sync_;
-    ScopedPointer<SynthSlider> gate_;
-    ScopedPointer<SynthSlider> octaves_;
-    ScopedPointer<SynthSlider> pattern_;
-    ScopedPointer<SynthButton> on_;
+    juce::ScopedPointer<SynthSlider> frequency_;
+    juce::ScopedPointer<SynthSlider> tempo_;
+    juce::ScopedPointer<TempoSelector> sync_;
+    juce::ScopedPointer<SynthSlider> gate_;
+    juce::ScopedPointer<SynthSlider> octaves_;
+    juce::ScopedPointer<SynthSlider> pattern_;
+    juce::ScopedPointer<SynthButton> on_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ArpSection)
 };

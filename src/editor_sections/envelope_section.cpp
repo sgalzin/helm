@@ -26,23 +26,23 @@
 #define TEXT_WIDTH 10
 #define SLIDER_WIDTH 20
 
-EnvelopeSection::EnvelopeSection(String name, std::string value_prepend) : SynthSection(name) {
+EnvelopeSection::EnvelopeSection(juce::String name, std::string value_prepend) : SynthSection(name) {
 
   addSlider(attack_ = new SynthSlider(value_prepend + "_attack"));
-  attack_->setSliderStyle(Slider::LinearBar);
-  attack_->setPopupPlacement(BubbleComponent::below);
+  attack_->setSliderStyle(juce::Slider::LinearBar);
+  attack_->setPopupPlacement(juce::BubbleComponent::below);
 
   addSlider(decay_ = new SynthSlider(value_prepend + "_decay"));
-  decay_->setSliderStyle(Slider::LinearBar);
-  decay_->setPopupPlacement(BubbleComponent::below);
+  decay_->setSliderStyle(juce::Slider::LinearBar);
+  decay_->setPopupPlacement(juce::BubbleComponent::below);
 
   addSlider(release_ = new SynthSlider(value_prepend + "_release"));
-  release_->setSliderStyle(Slider::LinearBar);
-  release_->setPopupPlacement(BubbleComponent::below);
+  release_->setSliderStyle(juce::Slider::LinearBar);
+  release_->setPopupPlacement(juce::BubbleComponent::below);
 
   addSlider(sustain_ = new SynthSlider(value_prepend + "_sustain"));
-  sustain_->setSliderStyle(Slider::LinearBar);
-  sustain_->setPopupPlacement(BubbleComponent::below);
+  sustain_->setSliderStyle(juce::Slider::LinearBar);
+  sustain_->setPopupPlacement(juce::BubbleComponent::below);
 
   addOpenGLComponent(envelope_ = new OpenGLEnvelope());
   envelope_->setName(value_prepend + "_envelope");
@@ -63,8 +63,8 @@ EnvelopeSection::~EnvelopeSection() {
   release_ = nullptr;
 }
 
-void EnvelopeSection::paintBackground(Graphics& g) {
-  static const DropShadow component_shadow(Colour(0x88000000), 2, Point<int>(0, 1));
+void EnvelopeSection::paintBackground(juce::Graphics& g) {
+  static const juce::DropShadow component_shadow(juce::Colour(0x88000000), 2, juce::Point<int>(0, 1));
 
   int title_width = getTitleWidth();
   int text_width = size_ratio_ * TEXT_WIDTH;
@@ -82,16 +82,16 @@ void EnvelopeSection::paintBackground(Graphics& g) {
 
   g.drawText(TRANS("A"), attack_->getX() - text_width, attack_->getY(),
              text_width, attack_->getHeight(),
-             Justification::centred, true);
+             juce::Justification::centred, true);
   g.drawText(TRANS("D"), decay_->getX() - text_width, decay_->getY(),
              text_width, decay_->getHeight(),
-             Justification::centred, true);
+             juce::Justification::centred, true);
   g.drawText(TRANS("S"), sustain_->getX() - text_width, sustain_->getY(),
              text_width, sustain_->getHeight(),
-             Justification::centred, true);
+             juce::Justification::centred, true);
   g.drawText(TRANS("R"), release_->getX() - text_width, release_->getY(),
              text_width, release_->getHeight(),
-             Justification::centred, true);
+             juce::Justification::centred, true);
 }
 
 void EnvelopeSection::resized() {

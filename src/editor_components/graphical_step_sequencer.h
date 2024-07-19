@@ -23,7 +23,7 @@
 #include "synth_slider.h"
 #include <vector>
 
-class GraphicalStepSequencer : public Component, public Timer, public Slider::Listener,
+class GraphicalStepSequencer : public juce::Component, public juce::Timer, public juce::Slider::Listener,
                                public SynthSlider::SliderListener {
   public:
     GraphicalStepSequencer();
@@ -31,25 +31,25 @@ class GraphicalStepSequencer : public Component, public Timer, public Slider::Li
 
     void timerCallback() override;
     void setNumStepsSlider(SynthSlider* num_steps_slider);
-    void setStepSliders(std::vector<Slider*> sliders);
-    void sliderValueChanged(Slider* moved_slider) override;
+    void setStepSliders(std::vector<juce::Slider*> sliders);
+    void sliderValueChanged(juce::Slider* moved_slider) override;
     void guiChanged(SynthSlider* slider) override;
 
     void resetBackground();
     void showRealtimeFeedback(bool show_feedback = true);
 
-    void paint(Graphics& g) override;
-    void paintBackground(Graphics& g);
+    void paint(juce::Graphics& g) override;
+    void paintBackground(juce::Graphics& g);
     void resized() override;
-    void mouseMove(const MouseEvent& e) override;
-    void mouseExit(const MouseEvent& e) override;
-    void mouseDown(const MouseEvent& e) override;
-    void mouseDrag(const MouseEvent& e) override;
+    void mouseMove(const juce::MouseEvent& e) override;
+    void mouseExit(const juce::MouseEvent& e) override;
+    void mouseDown(const juce::MouseEvent& e) override;
+    void mouseDrag(const juce::MouseEvent& e) override;
 
   private:
-    int getHoveredStep(Point<int> position);
+    int getHoveredStep(juce::Point<int> position);
     void updateHover(int step_index);
-    void changeStep(const MouseEvent& e);
+    void changeStep(const juce::MouseEvent& e);
     void ensureMinSize();
 
     int num_steps_;
@@ -57,10 +57,10 @@ class GraphicalStepSequencer : public Component, public Timer, public Slider::Li
     int last_step_;
     SynthSlider* num_steps_slider_;
     int highlighted_step_;
-    std::vector<Slider*> sequence_;
-    Point<int> last_edit_position_;
+    std::vector<juce::Slider*> sequence_;
+    juce::Point<int> last_edit_position_;
 
-    Image background_;
+    juce::Image background_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GraphicalStepSequencer)
 };

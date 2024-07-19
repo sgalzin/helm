@@ -35,73 +35,73 @@
 #define MULT_LARGE 1.35f
 #define MULT_EXTRA_LARGE 2.0f
 
-AboutSection::AboutSection(String name) : Overlay(name) {
-  developer_link_ = new HyperlinkButton("Matt Tytel", URL("http://tytel.org"));
+AboutSection::AboutSection(juce::String name) : Overlay(name) {
+  developer_link_ = new juce::HyperlinkButton("Matt Tytel", juce::URL("http://tytel.org"));
   developer_link_->setFont(Fonts::instance()->proportional_light().withPointHeight(16.0f),
-                           false, Justification::right);
-  developer_link_->setColour(HyperlinkButton::textColourId, Colour(0xffffd740));
+                           false, juce::Justification::right);
+  developer_link_->setColour(juce::HyperlinkButton::textColourId, juce::Colour(0xffffd740));
   addAndMakeVisible(developer_link_);
 
-  free_software_link_ = new HyperlinkButton(TRANS("Read more about free software"),
-                                            URL("http://www.gnu.org/philosophy/free-sw.html"));
+  free_software_link_ = new juce::HyperlinkButton(TRANS("Read more about free software"),
+                                            juce::URL("http://www.gnu.org/philosophy/free-sw.html"));
   free_software_link_->setFont(Fonts::instance()->proportional_light().withPointHeight(12.0f),
-                               false, Justification::right);
-  free_software_link_->setColour(HyperlinkButton::textColourId, Colour(0xffffd740));
+                               false, juce::Justification::right);
+  free_software_link_->setColour(juce::HyperlinkButton::textColourId, juce::Colour(0xffffd740));
   addAndMakeVisible(free_software_link_);
 
-  check_for_updates_ = new ToggleButton();
+  check_for_updates_ = new juce::ToggleButton();
   check_for_updates_->setToggleState(LoadSave::shouldCheckForUpdates(),
-                                     NotificationType::dontSendNotification);
+                                     juce::NotificationType::dontSendNotification);
   check_for_updates_->setLookAndFeel(TextLookAndFeel::instance());
   check_for_updates_->addListener(this);
   addAndMakeVisible(check_for_updates_);
 
-  animate_ = new ToggleButton();
+  animate_ = new juce::ToggleButton();
   animate_->setToggleState(LoadSave::shouldAnimateWidgets(),
-                           NotificationType::dontSendNotification);
+                           juce::NotificationType::dontSendNotification);
   animate_->setLookAndFeel(TextLookAndFeel::instance());
   animate_->addListener(this);
   addAndMakeVisible(animate_);
 
-  size_button_small_ = new TextButton(String(100 * MULT_SMALL) + "%");
+  size_button_small_ = new juce::TextButton(juce::String(100 * MULT_SMALL) + "%");
   addAndMakeVisible(size_button_small_);
   size_button_small_->addListener(this);
 
-  size_button_normal_ = new TextButton(String("100") + "%");
+  size_button_normal_ = new juce::TextButton(juce::String("100") + "%");
   addAndMakeVisible(size_button_normal_);
   size_button_normal_->addListener(this);
 
-  size_button_large_ = new TextButton(String(100 * MULT_LARGE) + "%");
+  size_button_large_ = new juce::TextButton(juce::String(100 * MULT_LARGE) + "%");
   addAndMakeVisible(size_button_large_);
   size_button_large_->addListener(this);
 
-  size_button_extra_large_ = new TextButton(String(100 * MULT_EXTRA_LARGE) + "%");
+  size_button_extra_large_ = new juce::TextButton(juce::String(100 * MULT_EXTRA_LARGE) + "%");
   addAndMakeVisible(size_button_extra_large_);
   size_button_extra_large_->addListener(this);
 
   size_button_extra_large_->setLookAndFeel(DefaultLookAndFeel::instance());
 }
 
-void AboutSection::paint(Graphics& g) {
-  static const DropShadow shadow(Colour(0xff000000), 5, Point<int>(0, 0));
+void AboutSection::paint(juce::Graphics& g) {
+  static const juce::DropShadow shadow(juce::Colour(0xff000000), 5, juce::Point<int>(0, 0));
 
   g.setColour(Colors::overlay_screen);
   g.fillAll();
 
-  Rectangle<int> info_rect = getInfoRect();
+  juce::Rectangle<int> info_rect = getInfoRect();
   shadow.drawForRectangle(g, info_rect);
-  g.setColour(Colour(0xff303030));
+  g.setColour(juce::Colour(0xff303030));
   g.fillRect(info_rect);
 
   g.saveState();
   g.setOrigin(info_rect.getX() + PADDING_X, info_rect.getY() + PADDING_Y);
-  Image helm_small = ImageCache::getFromMemory(BinaryData::helm_icon_128_1x_png,
+  juce::Image helm_small = juce::ImageCache::getFromMemory(BinaryData::helm_icon_128_1x_png,
                                                BinaryData::helm_icon_128_1x_pngSize);
   shadow.drawForImage(g, helm_small);
 
-  const Desktop::Displays::Display& display = Desktop::getInstance().getDisplays().getMainDisplay();
+  const juce::Displays::Display& display = juce::Desktop::getInstance().getDisplays().getMainDisplay();
   if (display.scale > 1.5) {
-    Image helm = ImageCache::getFromMemory(BinaryData::helm_icon_128_2x_png,
+    juce::Image helm = juce::ImageCache::getFromMemory(BinaryData::helm_icon_128_2x_png,
                                            BinaryData::helm_icon_128_2x_pngSize);
     g.drawImage(helm, 0, 0, 128, 128, 0, 0, 256, 256);
   }
@@ -109,44 +109,44 @@ void AboutSection::paint(Graphics& g) {
     g.drawImage(helm_small, 0, 0, 128, 128, 0, 0, 128, 128);
 
   g.setFont(Fonts::instance()->proportional_regular().withPointHeight(32.0));
-  g.setColour(Colour(0xff2196f3));
+  g.setColour(juce::Colour(0xff2196f3));
   g.drawText(TRANS("HELM"),
              0.0f, 0.0f,
-             info_rect.getWidth() - 2 * PADDING_X, 32.0f, Justification::centredTop);
+             info_rect.getWidth() - 2 * PADDING_X, 32.0f, juce::Justification::centredTop);
 
   g.setFont(Fonts::instance()->proportional_light().withPointHeight(12.0));
-  g.setColour(Colour(0xff666666));
+  g.setColour(juce::Colour(0xff666666));
   g.drawText(TRANS("v") + " " + ProjectInfo::versionString,
              0.0f, 36.0f,
-             info_rect.getWidth() - 2 * PADDING_X, 32.0f, Justification::centredTop);
+             info_rect.getWidth() - 2 * PADDING_X, 32.0f, juce::Justification::centredTop);
 
   g.setFont(Fonts::instance()->proportional_light().withPointHeight(12.0));
   g.drawText(TRANS("Developed by"),
              0.0f, 4.0f,
-             info_rect.getWidth() - 2 * PADDING_X, 20.0f, Justification::right);
+             info_rect.getWidth() - 2 * PADDING_X, 20.0f, juce::Justification::right);
 
-  g.setColour(Colour(0xffaaaaaa));
+  g.setColour(juce::Colour(0xffaaaaaa));
   g.drawText(TRANS("Helm is free software and"),
              0.0f, 62.0,
-             info_rect.getWidth() - 2 * PADDING_X, 20.0f, Justification::topRight);
+             info_rect.getWidth() - 2 * PADDING_X, 20.0f, juce::Justification::topRight);
 
   g.drawText(TRANS("comes with no warranty"),
              0.0f, 76.0f,
-             info_rect.getWidth() - 2 * PADDING_X, 20.0f, Justification::topRight);
+             info_rect.getWidth() - 2 * PADDING_X, 20.0f, juce::Justification::topRight);
 
   g.setFont(Fonts::instance()->proportional_light().withPointHeight(12.0));
   g.drawText(TRANS("Check for updates"),
              0.0f, 141.0f,
              info_rect.getWidth() - 2 * PADDING_X - 1.5 * BUTTON_WIDTH,
-             20.0f, Justification::topRight);
+             20.0f, juce::Justification::topRight);
   g.drawText(TRANS("Animate graphics"),
              0.0f, 141.0f,
              273.0f - PADDING_X - 0.5 * BUTTON_WIDTH,
-             20.0f, Justification::topRight);
+             20.0f, juce::Justification::topRight);
   g.drawText(TRANS("Window size"),
              0.0f, 180.0f,
              155.0f,
-             20.0f, Justification::topRight);
+             20.0f, juce::Justification::topRight);
 
   g.restoreState();
 }
@@ -155,7 +155,7 @@ void AboutSection::resized() {
   static const float software_link_width = 200.0f;
   static const float developer_link_width = 120.0f;
 
-  Rectangle<int> info_rect = getInfoRect();
+  juce::Rectangle<int> info_rect = getInfoRect();
   developer_link_->setBounds(info_rect.getRight() - PADDING_X - developer_link_width,
                              info_rect.getY() + PADDING_Y + 24.0f, developer_link_width, 20.0f);
 
@@ -188,7 +188,7 @@ void AboutSection::resized() {
   }
 }
 
-void AboutSection::mouseUp(const MouseEvent &e) {
+void AboutSection::mouseUp(const juce::MouseEvent &e) {
   if (!getInfoRect().contains(e.getPosition()))
     setVisible(false);
 }
@@ -196,14 +196,14 @@ void AboutSection::mouseUp(const MouseEvent &e) {
 void AboutSection::setVisible(bool should_be_visible) {
   if (should_be_visible && device_selector_.get() == nullptr) {
     SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
-    AudioDeviceManager* device_manager = parent->getAudioDeviceManager();
+    juce::AudioDeviceManager* device_manager = parent->getAudioDeviceManager();
     if (device_manager) {
-      device_selector_ = new AudioDeviceSelectorComponent(*device_manager, 0, 0,
+      device_selector_ = new juce::AudioDeviceSelectorComponent(*device_manager, 0, 0,
                                                           mopo::NUM_CHANNELS, mopo::NUM_CHANNELS,
                                                           true, false, false, false);
       device_selector_->setLookAndFeel(TextLookAndFeel::instance());
       addAndMakeVisible(device_selector_);
-      Rectangle<int> info_rect = getInfoRect();
+      juce::Rectangle<int> info_rect = getInfoRect();
       int y = info_rect.getY() + LOGO_WIDTH + 2 * PADDING_Y;
       device_selector_->setBounds(info_rect.getX(), y,
                                   info_rect.getWidth(), info_rect.getBottom() - y);
@@ -214,7 +214,7 @@ void AboutSection::setVisible(bool should_be_visible) {
   Overlay::setVisible(should_be_visible);
 }
 
-void AboutSection::buttonClicked(Button* clicked_button) {
+void AboutSection::buttonClicked(juce::Button* clicked_button) {
   if (clicked_button == check_for_updates_)
     LoadSave::saveUpdateCheckConfig(check_for_updates_->getToggleState());
   else if (clicked_button == animate_) {
@@ -236,11 +236,11 @@ void AboutSection::buttonClicked(Button* clicked_button) {
     setGuiSize(MULT_EXTRA_LARGE);
 }
 
-Rectangle<int> AboutSection::getInfoRect() {
+juce::Rectangle<int> AboutSection::getInfoRect() {
   int info_height = device_selector_ ? STANDALONE_INFO_HEIGHT : PLUGIN_INFO_HEIGHT;
   int x = (getWidth() - INFO_WIDTH) / 2;
   int y = (getHeight() - info_height) / 2;
-  return Rectangle<int>(x, y, INFO_WIDTH, info_height);
+  return juce::Rectangle<int>(x, y, INFO_WIDTH, info_height);
 }
 
 void AboutSection::setGuiSize(float multiplier) {

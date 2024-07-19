@@ -27,37 +27,37 @@
 #define TEXT_WIDTH 42
 #define SLIDER_WIDTH 36
 
-StepSequencerSection::StepSequencerSection(String name) : SynthSection(name) {
+StepSequencerSection::StepSequencerSection(juce::String name) : SynthSection(name) {
   static const int TEMPO_DRAG_SENSITIVITY = 150;
 
   addAndMakeVisible(step_sequencer_ = new GraphicalStepSequencer());
 
   addSlider(retrigger_ = new RetriggerSelector("step_sequencer_retrigger"));
-  retrigger_->setSliderStyle(Slider::LinearBar);
+  retrigger_->setSliderStyle(juce::Slider::LinearBar);
   retrigger_->setStringLookup(mopo::strings::freq_retrigger_styles);
 
   addSlider(num_steps_ = new SynthSlider("num_steps"));
-  num_steps_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  num_steps_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   num_steps_->setLookAndFeel(TextLookAndFeel::instance());
 
   addSlider(frequency_ = new SynthSlider("step_frequency"));
-  frequency_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  frequency_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   frequency_->setLookAndFeel(TextLookAndFeel::instance());
 
   addSlider(tempo_ = new SynthSlider("step_sequencer_tempo"));
-  tempo_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+  tempo_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   tempo_->setStringLookup(mopo::strings::synced_frequencies);
   tempo_->setLookAndFeel(TextLookAndFeel::instance());
   tempo_->setMouseDragSensitivity(TEMPO_DRAG_SENSITIVITY);
 
   addSlider(sync_ = new TempoSelector("step_sequencer_sync"));
-  sync_->setSliderStyle(Slider::LinearBar);
+  sync_->setSliderStyle(juce::Slider::LinearBar);
   sync_->setTempoSlider(tempo_);
   sync_->setFreeSlider(frequency_);
   sync_->setStringLookup(mopo::strings::freq_sync_styles);
 
   addSlider(smoothing_ = new SynthSlider("step_smoothing"));
-  smoothing_->setSliderStyle(Slider::LinearBar);
+  smoothing_->setSliderStyle(juce::Slider::LinearBar);
 
   addModulationButton(modulation_button_ = new ModulationButton("step_sequencer"));
   modulation_button_->setLookAndFeel(ModulationLookAndFeel::instance());
@@ -73,12 +73,12 @@ StepSequencerSection::~StepSequencerSection() {
   tempo_ = nullptr;
   sync_ = nullptr;
 
-  for (Slider* slider : sequencer_sliders_)
+  for (juce::Slider* slider : sequencer_sliders_)
     delete slider;
 }
 
-void StepSequencerSection::paintBackground(Graphics& g) {
-  static const DropShadow component_shadow(Colour(0x88000000), 2, Point<int>(0, 1));
+void StepSequencerSection::paintBackground(juce::Graphics& g) {
+  static const juce::DropShadow component_shadow(juce::Colour(0x88000000), 2, juce::Point<int>(0, 1));
   int text_height = size_ratio_ * TEXT_HEIGHT;
   float font_size = size_ratio_ * 10.0f;
   int text_buffer = 6;
@@ -90,7 +90,7 @@ void StepSequencerSection::paintBackground(Graphics& g) {
   g.drawText(TRANS("FREQUENCY"),
              retrigger_->getBounds().getX(), frequency_->getBounds().getBottom() + text_buffer,
              frequency_->getBounds().getWidth() + 2 * text_height, font_size,
-             Justification::centred, false);
+             juce::Justification::centred, false);
 
   drawTextForComponent(g, TRANS("SLIDE"), smoothing_, text_buffer);
 
@@ -127,11 +127,11 @@ void StepSequencerSection::resized() {
 
 void StepSequencerSection::createStepSequencerSliders() {
   for (int i = 0; i < num_steps_->getMaximum(); ++i) {
-    String num(i);
+    juce::String num(i);
     if (num.length() == 1)
-      num = String("0") + num;
+      num = juce::String("0") + num;
 
-    SynthSlider* step = new SynthSlider(String("step_seq_") + num);
+    SynthSlider* step = new SynthSlider(juce::String("step_seq_") + num);
     step->snapToValue(true, 0.0);
     addSlider(step);
     sequencer_sliders_.push_back(step);

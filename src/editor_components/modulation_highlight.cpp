@@ -23,8 +23,8 @@ ModulationHighlight::ModulationHighlight() {
 ModulationHighlight::~ModulationHighlight() {
 }
 
-void ModulationHighlight::paint(Graphics& g) {
-  g.setColour(Colour(0x44ffffff));
+void ModulationHighlight::paint(juce::Graphics& g) {
+  g.setColour(juce::Colour(0x44ffffff));
   g.fillEllipse(1, 2, getWidth() - 2, getHeight() - 2);
 }
 

@@ -27,7 +27,7 @@
 #define DYNAMIC_WIDTH 220.0f
 
 SynthesisInterface::SynthesisInterface(
-    mopo::control_map controls, MidiKeyboardState* keyboard_state) : SynthSection("synthesis") {
+    mopo::control_map controls, juce::MidiKeyboardState* keyboard_state) : SynthSection("synthesis") {
   addSubSection(amplitude_envelope_section_ = new EnvelopeSection("AMPLITUDE ENVELOPE", "amp"));
   addSubSection(delay_section_ = new DelaySection("DELAY"));
   addSubSection(dynamic_section_ = new DynamicSection("DYNAMICS"));
@@ -39,7 +39,7 @@ SynthesisInterface::SynthesisInterface(
   addSubSection(formant_section_ = new FormantSection("FORMANT"));
   addSubSection(mono_lfo_1_section_ = new LfoSection("MONO LFO 1", "mono_lfo_1", true, true));
   addSubSection(mono_lfo_2_section_ = new LfoSection("MONO LFO 2", "mono_lfo_2", true, true));
-  keyboard_ = new MidiKeyboard(*keyboard_state, MidiKeyboardComponent::horizontalKeyboard);
+  keyboard_ = new MidiKeyboard(*keyboard_state, juce::MidiKeyboardComponent::horizontalKeyboard);
   addAndMakeVisible(keyboard_);
   keyboard_->setWantsKeyboardFocus(false);
   keyboard_->setMouseClickGrabsKeyboardFocus(false);
@@ -54,13 +54,13 @@ SynthesisInterface::SynthesisInterface(
   addSubSection(sub_section_ = new SubSection("SUB"));
   addSubSection(voice_section_ = new VoiceSection("VOICE"));
 
-  keyboard_->setColour(MidiKeyboardComponent::whiteNoteColourId, Colour(0xff444444));
-  keyboard_->setColour(MidiKeyboardComponent::blackNoteColourId, Colour(0xff222222));
-  keyboard_->setColour(MidiKeyboardComponent::keySeparatorLineColourId, Colour(0x00000000));
-  keyboard_->setColour(MidiKeyboardComponent::shadowColourId, Colour(0x00000000));
-  keyboard_->setColour(MidiKeyboardComponent::upDownButtonBackgroundColourId, Colour(0xff222222));
-  keyboard_->setColour(MidiKeyboardComponent::keyDownOverlayColourId, Colors::audio);
-  keyboard_->setColour(MidiKeyboardComponent::mouseOverKeyOverlayColourId, Colour(0x4403a9f4));
+  keyboard_->setColour(juce::MidiKeyboardComponent::whiteNoteColourId, juce::Colour(0xff444444));
+  keyboard_->setColour(juce::MidiKeyboardComponent::blackNoteColourId, juce::Colour(0xff222222));
+  keyboard_->setColour(juce::MidiKeyboardComponent::keySeparatorLineColourId, juce::Colour(0x00000000));
+  keyboard_->setColour(juce::MidiKeyboardComponent::shadowColourId, juce::Colour(0x00000000));
+  keyboard_->setColour(juce::MidiKeyboardComponent::upDownButtonBackgroundColourId, juce::Colour(0xff222222));
+  keyboard_->setColour(juce::MidiKeyboardComponent::keyDownOverlayColourId, Colors::audio);
+  keyboard_->setColour(juce::MidiKeyboardComponent::mouseOverKeyOverlayColourId, juce::Colour(0x4403a9f4));
   keyboard_->setLowestVisibleKey(36);
 
   setAllValues(controls);
@@ -91,9 +91,9 @@ SynthesisInterface::~SynthesisInterface() {
   voice_section_ = nullptr;
 }
 
-void SynthesisInterface::paintBackground(Graphics& g) {
-  static const DropShadow section_shadow(Colour(0xcc000000), 3, Point<int>(0, 1));
-  static const DropShadow component_shadow(Colour(0xcc000000), 5, Point<int>(0, 1));
+void SynthesisInterface::paintBackground(juce::Graphics& g) {
+  static const juce::DropShadow section_shadow(juce::Colour(0xcc000000), 3, juce::Point<int>(0, 1));
+  static const juce::DropShadow component_shadow(juce::Colour(0xcc000000), 5, juce::Point<int>(0, 1));
 
   section_shadow.drawForRectangle(g, amplitude_envelope_section_->getBounds());
   section_shadow.drawForRectangle(g, delay_section_->getBounds());

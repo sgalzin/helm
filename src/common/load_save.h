@@ -28,7 +28,7 @@ class FileSorterAscending {
 public:
   FileSorterAscending() { }
 
-  static int compareElements(File a, File b) {
+  static int compareElements(juce::File a, juce::File b) {
     if (a.getFileName() == "Factory Presets")
       return -1;
     else if (b.getFileName() == "Factory Presets")
@@ -45,38 +45,38 @@ public:
 
 class LoadSave {
   public:
-    static var stateToVar(SynthBase* synth,
-                          std::map<std::string, String>& save_info,
-                          const CriticalSection& critical_section);
+    static juce::var stateToVar(SynthBase* synth,
+                          std::map<std::string, juce::String>& save_info,
+                          const juce::CriticalSection& critical_section);
 
     static void loadControls(SynthBase* synth,
-                             const NamedValueSet& properties);
+                             const juce::NamedValueSet& properties);
 
     static void loadModulations(SynthBase* synth,
-                                const Array<var>* modulations);
+                                const juce::Array<juce::var>* modulations);
 
-    static void loadSaveState(std::map<std::string, String>& save_info,
-                              const NamedValueSet& properties);
+    static void loadSaveState(std::map<std::string, juce::String>& save_info,
+                              const juce::NamedValueSet& properties);
 
-    static void initSynth(SynthBase* synth, std::map<std::string, String>& save_info);
+    static void initSynth(SynthBase* synth, std::map<std::string, juce::String>& save_info);
   
     static void varToState(SynthBase* synth,
-                           std::map<std::string, String>& save_info,
-                           var state);
+                           std::map<std::string, juce::String>& save_info,
+                           juce::var state);
 
-    static String getAuthor(var state);
-    static String getLicense(var state);
+    static juce::String getAuthor(juce::var state);
+    static juce::String getLicense(juce::var state);
 
-    static File getConfigFile();
-    static var getConfigVar();
+    static juce::File getConfigFile();
+    static juce::var getConfigVar();
     static bool isInstalled();
     static bool wasUpgraded();
     static bool shouldCheckForUpdates();
     static bool shouldAnimateWidgets();
     static float loadWindowSize();
-    static String loadVersion();
+    static juce::String loadVersion();
     static bool shouldAskForPayment();
-    static void saveVarToConfig(var config_state);
+    static void saveVarToConfig(juce::var config_state);
     static void saveLayoutConfig(mopo::StringLayout* layout);
     static void saveVersionConfig();
     static void saveLastAskedForMoney();
@@ -91,21 +91,21 @@ class LoadSave {
     static std::wstring getComputerKeyboardLayout();
     static std::pair<wchar_t, wchar_t> getComputerKeyboardOctaveControls();
 
-    static File getFactoryBankDirectory();
-    static File getBankDirectory();
-    static File getUserBankDirectory();
-    static File getDidPayInitiallyFile();
-    static void exportBank(String bank_name);
+    static juce::File getFactoryBankDirectory();
+    static juce::File getBankDirectory();
+    static juce::File getUserBankDirectory();
+    static juce::File getDidPayInitiallyFile();
+    static void exportBank(juce::String bank_name);
     static void importBank();
-    static int compareVersionStrings(String a, String b);
+    static int compareVersionStrings(juce::String a, juce::String b);
 
     static int getNumPatches();
-    static File getPatchFile(int bank_index, int folder_index, int patch_index);
-    static Array<File> getAllPatches();
-    static File loadPatch(int bank_index, int folder_index, int patch_index,
-                          SynthBase* synth, std::map<std::string, String>& gui_state);
-    static void loadPatchFile(File file, SynthBase* synth,
-                              std::map<std::string, String>& gui_state);
+    static juce::File getPatchFile(int bank_index, int folder_index, int patch_index);
+    static juce::Array<juce::File> getAllPatches();
+    static juce::File loadPatch(int bank_index, int folder_index, int patch_index,
+                          SynthBase* synth, std::map<std::string, juce::String>& gui_state);
+    static void loadPatchFile(juce::File file, SynthBase* synth,
+                              std::map<std::string, juce::String>& gui_state);
 };
 
 #endif  // LOAD_SAVE_H

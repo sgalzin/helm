@@ -22,14 +22,14 @@
 
 class FilterSelector : public SynthSlider {
   public:
-    FilterSelector(String name);
+    FilterSelector(juce::String name);
 
-    void paint(Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
 
-    void mouseEvent(const MouseEvent& e);
-    void mouseDown(const MouseEvent& e) override;
-    void mouseDrag(const MouseEvent& e) override;
+    void mouseEvent(const juce::MouseEvent& e);
+    void mouseDown(const juce::MouseEvent& e) override;
+    void mouseDrag(const juce::MouseEvent& e) override;
 
   private:
     void resizeLowPass(float x, float y, float width, float height);
@@ -40,13 +40,13 @@ class FilterSelector : public SynthSlider {
     void resizeBandShelf(float x, float y, float width, float height);
     void resizeAllPass(float x, float y, float width, float height);
 
-    Path low_pass_;
-    Path high_pass_;
-    Path band_pass_;
-    Path low_shelf_;
-    Path high_shelf_;
-    Path band_shelf_;
-    Path all_pass_;
+    juce::Path low_pass_;
+    juce::Path high_pass_;
+    juce::Path band_pass_;
+    juce::Path low_shelf_;
+    juce::Path high_shelf_;
+    juce::Path band_shelf_;
+    juce::Path all_pass_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FilterSelector)
 };

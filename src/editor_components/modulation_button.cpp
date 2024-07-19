@@ -32,9 +32,9 @@ namespace {
   }
 } // namespace
 
-ModulationButton::ModulationButton(String name) : ToggleButton(name) { }
+ModulationButton::ModulationButton(juce::String name) : ToggleButton(name) { }
 
-void ModulationButton::mouseDown(const MouseEvent& e) {
+void ModulationButton::mouseDown(const juce::MouseEvent& e) {
   if (e.mods.isPopupMenu()) {
     SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
     if (parent == nullptr)
@@ -46,24 +46,24 @@ void ModulationButton::mouseDown(const MouseEvent& e) {
     if (connections.size() == 0)
       return;
 
-    PopupMenu m;
+    juce::PopupMenu m;
     m.setLookAndFeel(DefaultLookAndFeel::instance());
 
-    String disconnect("Disconnect from ");
+    juce::String disconnect("Disconnect from ");
     for (int i = 0; i < connections.size(); ++i)
       m.addItem(kModulationList + i, disconnect + connections[i]->destination);
 
     if (connections.size() > 1)
       m.addItem(kDisconnect, "Disconnect all");
 
-    m.showMenuAsync(PopupMenu::Options(),
-                    ModalCallbackFunction::forComponent(initPatchCallback, this));
+    m.showMenuAsync(juce::PopupMenu::Options(),
+                    juce::ModalCallbackFunction::forComponent(initPatchCallback, this));
   }
   else
     ToggleButton::mouseDown(e);
 }
 
-void ModulationButton::mouseUp(const MouseEvent& e) {
+void ModulationButton::mouseUp(const juce::MouseEvent& e) {
   if (!e.mods.isPopupMenu())
     ToggleButton::mouseUp(e);
 }

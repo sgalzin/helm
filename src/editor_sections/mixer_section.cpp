@@ -24,21 +24,21 @@
 #define SLIDER_WIDTH 30
 #define TEXT_SECTION_WIDTH 18
 
-MixerSection::MixerSection(String name) : SynthSection(name) {
+MixerSection::MixerSection(juce::String name) : SynthSection(name) {
   addSlider(osc_1_ = new SynthSlider("osc_1_volume"));
-  osc_1_->setSliderStyle(Slider::LinearBarVertical);
+  osc_1_->setSliderStyle(juce::Slider::LinearBarVertical);
   osc_1_->flipColoring(true);
 
   addSlider(osc_2_ = new SynthSlider("osc_2_volume"));
-  osc_2_->setSliderStyle(Slider::LinearBarVertical);
+  osc_2_->setSliderStyle(juce::Slider::LinearBarVertical);
   osc_2_->flipColoring(true);
 
   addSlider(sub_ = new SynthSlider("sub_volume"));
-  sub_->setSliderStyle(Slider::LinearBarVertical);
+  sub_->setSliderStyle(juce::Slider::LinearBarVertical);
   sub_->flipColoring(true);
 
   addSlider(noise_ = new SynthSlider("noise_volume"));
-  noise_->setSliderStyle(Slider::LinearBarVertical);
+  noise_->setSliderStyle(juce::Slider::LinearBarVertical);
   noise_->flipColoring(true);
 }
 
@@ -49,8 +49,8 @@ MixerSection::~MixerSection() {
   noise_ = nullptr;
 }
 
-void MixerSection::paintBackground(Graphics& g) {
-  static const DropShadow component_shadow(Colour(0x88000000), 2, Point<int>(0, 1));
+void MixerSection::paintBackground(juce::Graphics& g) {
+  static const juce::DropShadow component_shadow(juce::Colour(0x88000000), 2, juce::Point<int>(0, 1));
   SynthSection::paintBackground(g);
 
   int text_section_width = size_ratio_ * TEXT_SECTION_WIDTH;
@@ -62,19 +62,19 @@ void MixerSection::paintBackground(Graphics& g) {
 
   g.drawText(TRANS("OSC 1"), 0, text_y,
              slider_width, text_section_width,
-             Justification::centred, false);
+             juce::Justification::centred, false);
 
   g.drawText(TRANS("OSC 2"), slider_width + buffer, text_y,
              slider_width, text_section_width,
-             Justification::centred, false);
+             juce::Justification::centred, false);
 
   g.drawText(TRANS("SUB"), 2 * (slider_width + buffer), text_y,
              slider_width, text_section_width,
-             Justification::centred, false);
+             juce::Justification::centred, false);
 
   g.drawText(TRANS("NOISE"), 3 * (slider_width + buffer), text_y,
              slider_width, text_section_width,
-             Justification::centred, false);
+             juce::Justification::centred, false);
 }
 
 void MixerSection::resized() {

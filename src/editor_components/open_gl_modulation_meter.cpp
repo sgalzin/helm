@@ -66,7 +66,7 @@ OpenGLModulationMeter::OpenGLModulationMeter(const mopo::Output* mono_total,
 
 OpenGLModulationMeter::~OpenGLModulationMeter() { }
 
-void OpenGLModulationMeter::paint(Graphics& g) { }
+void OpenGLModulationMeter::paint(juce::Graphics& g) { }
 
 void OpenGLModulationMeter::resized() {
   SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
@@ -92,8 +92,8 @@ void OpenGLModulationMeter::setVisible(bool should_be_visible) {
 }
 
 void OpenGLModulationMeter::setVertices() {
-  Rectangle<int> parent_bounds = getParentComponent()->getBounds();
-  Rectangle<int> bounds = getBounds();
+  juce::Rectangle<int> parent_bounds = getParentComponent()->getBounds();
+  juce::Rectangle<int> bounds = getBounds();
   float left = bounds.getX();
   float right = bounds.getRight();
   float top = parent_bounds.getHeight() - bounds.getY();

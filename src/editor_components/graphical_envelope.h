@@ -22,7 +22,7 @@
 #include "helm_common.h"
 #include "synth_slider.h"
 
-class GraphicalEnvelope : public Component, SynthSlider::SliderListener {
+class GraphicalEnvelope : public juce::Component, SynthSlider::SliderListener {
   public:
     GraphicalEnvelope();
     ~GraphicalEnvelope();
@@ -35,13 +35,13 @@ class GraphicalEnvelope : public Component, SynthSlider::SliderListener {
     void setSustainSlider(SynthSlider* sustain_slider);
     void setReleaseSlider(SynthSlider* release_slider);
 
-    void paint(Graphics& g) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
-    void mouseMove(const MouseEvent& e) override;
-    void mouseExit(const MouseEvent& e) override;
-    void mouseDown(const MouseEvent& e) override;
-    void mouseDrag(const MouseEvent& e) override;
-    void mouseUp(const MouseEvent& e) override;
+    void mouseMove(const juce::MouseEvent& e) override;
+    void mouseExit(const juce::MouseEvent& e) override;
+    void mouseDown(const juce::MouseEvent& e) override;
+    void mouseDrag(const juce::MouseEvent& e) override;
+    void mouseUp(const juce::MouseEvent& e) override;
 
   private:
     float getAttackX();
@@ -59,7 +59,7 @@ class GraphicalEnvelope : public Component, SynthSlider::SliderListener {
     bool sustain_hover_;
     bool release_hover_;
     bool mouse_down_;
-    Path envelope_line_;
+    juce::Path envelope_line_;
 
     SynthSlider* attack_slider_;
     SynthSlider* decay_slider_;

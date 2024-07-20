@@ -170,6 +170,13 @@ bool SynthBase::loadFromFile(juce::File patch) {
     setFolderName(parent.getFileNameWithoutExtension());
     setPatchName(patch.getFileNameWithoutExtension());
 
+    juce::String patch_bank_name = parent.getParentDirectory().getFileName();
+    juce::String patch_folder_name = getFolderName();
+    juce::String patch_name = getPatchName();
+    LoadSave::saveKeyValue("patchBankName", patch_bank_name);
+    LoadSave::saveKeyValue("patchFolderName", patch_folder_name);
+    LoadSave::saveKeyValue("patchName", patch_name);
+
     SynthGuiInterface* gui_interface = getGuiInterface();
     if (gui_interface) {
       gui_interface->updateFullGui();

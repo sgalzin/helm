@@ -31,6 +31,17 @@ HelmEditor::HelmEditor(bool use_gui) : SynthGuiInterface(this, use_gui) {
 
   setAudioChannels(0, mopo::NUM_CHANNELS);
 
+  // set patch to the one saved in config
+  juce::String patch_name = static_cast<juce::String>( LoadSave::getKeyValue( "patchName" ) );
+  if( !patch_name.isEmpty() ) {
+    juce::String patch_bank_name = LoadSave::getKeyValue( "patchBankName" );
+    juce::String patch_folder_name = LoadSave::getKeyValue( "patchFolderName" );
+    juce::String fullPathName = LoadSave::getBankDirectory().getFullPathName() + juce::File::getSeparatorString() + patch_bank_name + juce::File::getSeparatorString() + patch_folder_name + juce::File::getSeparatorString() + patch_name + "." + mopo::PATCH_EXTENSION;
+    juce::File patch = juce::File( fullPathName );
+
+    loadFromFile( patch );
+  }
+
   juce::AudioDeviceManager::AudioDeviceSetup setup;
   deviceManager.getAudioDeviceSetup(setup);
   setup.sampleRate = mopo::DEFAULT_SAMPLE_RATE;

@@ -68,12 +68,30 @@ void MidiManager::midiInput(int channelId, int controllerId, mopo::mopo_float va
     for (auto& control : midi_learn_map_[{channelId, controllerId}]) {
       const mopo::ValueDetails* details = control.second;
       mopo::mopo_float percent = value / (mopo::MIDI_SIZE - 1);
-      if (details->steps) {
-        mopo::mopo_float max_step = details->steps - 1;
-        percent = floor(percent * max_step + 0.5) / max_step;
+      mopo::mopo_float defaultPercent = ( details->default_value - details->min ) / (details->max - details->min);
+      mopo::mopo_float translated;
+      bool preventApproximationOfDefaultValue = false;
+
+      // when there are no steps, ensure discrete MIDI values can return to default value:
+      if ( details->steps == 0 && details->min != details->default_value && details->max != details->default_value) {
+        // if the value's percentage is as close as possible to the default, make it default
+        if(  std::abs( (value - 1) / (mopo::MIDI_SIZE - 1) - defaultPercent ) >= std::abs( percent - defaultPercent )
+          && std::abs( (value + 1) / (mopo::MIDI_SIZE - 1) - defaultPercent ) >= std::abs( percent - defaultPercent ) )
+          preventApproximationOfDefaultValue  = true;
       }
 
-      mopo::mopo_float translated = percent * (details->max - details->min) + details->min;
+      // manage the case where the true default value should be used (rather than an approximation)
+      if ( preventApproximationOfDefaultValue ) {
+        translated = details->default_value;
+      }  else {
+        // this is the general situation in which actual percentages are used for the setting
+        if (details->steps) {
+          mopo::mopo_float max_step = details->steps - 1;
+          percent = floor(percent * max_step + 0.5) / max_step;
+        }
+        translated = percent * (details->max - details->min) + details->min;
+      }
+
       listener_->valueChangedThroughMidi(control.first, translated);
     }
   }

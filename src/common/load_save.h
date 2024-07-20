@@ -80,6 +80,8 @@ class LoadSave {
     static void saveVarToConfig(juce::var config_state);
     static void saveLayoutConfig(mopo::StringLayout* layout);
     static void saveVersionConfig();
+    static juce::var getKeyValue(juce::String key);
+    static void saveKeyValue(juce::String key, juce::var value);
     static void saveLastAskedForMoney();
     static void saveShouldAskForMoney(bool should_ask);
     static void savePaid();

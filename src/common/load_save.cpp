@@ -406,6 +406,33 @@ void LoadSave::saveVersionConfig() {
   saveVarToConfig(config_object);
 }
 
+juce::var LoadSave::getKeyValue(juce::String key)
+{
+  juce::var config_state = getConfigVar();
+  juce::DynamicObject* config_object = config_state.getDynamicObject();
+  if (!config_state.isObject())
+    return false;
+
+  if (config_object->hasProperty(key))
+  {
+    return config_object->getProperty(key);
+  }
+  else
+  {
+    return {};
+  }
+}
+
+void LoadSave::saveKeyValue(juce::String key, juce::var value) {
+  juce::var config_var = getConfigVar();
+  if (!config_var.isObject())
+    config_var = new juce::DynamicObject();
+
+  juce::DynamicObject* config_object = config_var.getDynamicObject();
+  config_object->setProperty(key, value);
+  saveVarToConfig(config_object);
+}
+
 void LoadSave::saveLastAskedForMoney() {
   juce::var config_var = getConfigVar();
   if (!config_var.isObject())

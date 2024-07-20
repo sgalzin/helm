@@ -3,13 +3,35 @@
 ### Release 0.9.1 "rebirth"
 This fork of Helm has the following changes:
 
-* Compiles with JUCE v8.0.0 (using CMake on linux, for other systems mileage may vary).
+* Syntax: compiles with JUCE v8.0.0 (using CMake on linux, for other systems mileage may vary).
+* Feat: enables providing a specific configuration file name "suffix" at startup.
+* Feat: closes About dialog (overlay) when Escape key is pressed.
+* Feat: enables getting and saving (key, value) pairs in the config file.
+* Feat: saves the last patch used for it to be loaded by default at when synth restarts.
+* Feat: enables saving the MIDI channel when assigning a controller via MIDI Learn.
 
 #### Motivation
 
-While trying to add a few things from my wishlist, I encountered difficulties compiling the plugin. My first step is therefore to minimally transform the code
-in order to compile using the current version of JUCE. This was achieved using CMake on Linux. At this point, I am a beginner at all this, so getting this to
-compile in the first place was a challenge, so I do not know if the Projucer or the other building systems configured in the original files still work.
+While trying to add a few things from my wishlist, I encountered difficulties compiling the plugin. My first step was therefore to minimally transform the code
+in order to compile using the current version of JUCE. This was achieved using CMake on Linux. At this point, I am a beginner at all this and getting this to
+compile in the first place was a bit of a challenge. Therefore I do not know if the Projucer or the other building systems configured in the original files still work. My directory is the following:
+<pre>
+├── concurrentqueue
+├── docs
+├── fonts
+├── images
+├── JuceLibraryCode                            [contains changes]
+├── mopo
+├── patches
+├── src                                        [contains changes]
+├── standalone
+├── VST3_SDK
+└── libs -> ~/dev/c++/libs/                    [new (linked) folder]
+    ├── JUCE -> ~/dev/c++/libs/JUCE_v8.0.0
+    ├── JUCE_v8.0.0
+    └── cpm
+</pre>
+The only places in which I made changes are in the JuceLibraryCode folder, which has some updates from running the Projucer from JUCE v8, and in the src folder, to implement the upates for this "rebirth" version.
 
 ---
 

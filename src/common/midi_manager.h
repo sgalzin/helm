@@ -31,7 +31,7 @@ namespace mopo {
 
 class MidiManager : public juce::MidiInputCallback {
   public:
-    typedef std::map<int, std::map<std::string, const mopo::ValueDetails*>> midi_map;
+    typedef std::map<std::pair<int, int>, std::map<std::string, const mopo::ValueDetails*>> midi_map;
 
     class Listener {
       public:
@@ -48,7 +48,7 @@ class MidiManager : public juce::MidiInputCallback {
     void armMidiLearn(std::string name);
     void cancelMidiLearn();
     void clearMidiLearn(const std::string& name);
-    void midiInput(int control, mopo::mopo_float value);
+    void midiInput(int channelId, int controllerId, mopo::mopo_float value);
     void processMidiMessage(const juce::MidiMessage &midi_message, int sample_position = 0);
     bool isMidiMapped(const std::string& name) const;
 

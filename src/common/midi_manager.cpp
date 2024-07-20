@@ -55,17 +55,17 @@ void MidiManager::clearMidiLearn(const std::string& name) {
   }
 }
 
-void MidiManager::midiInput(int midi_id, mopo::mopo_float value) {
+void MidiManager::midiInput(int channelId, int controllerId, mopo::mopo_float value) {
   if (armed_value_) {
-    midi_learn_map_[midi_id][armed_value_->name] = armed_value_;
+    midi_learn_map_[{channelId, controllerId}][armed_value_->name] = armed_value_;
     armed_value_ = nullptr;
 
     // TODO: Probably shouldn't write this config on the audio thread.
     LoadSave::saveMidiMapConfig(this);
   }
 
-  if (midi_learn_map_.count(midi_id)) {
-    for (auto& control : midi_learn_map_[midi_id]) {
+  if (midi_learn_map_.count({channelId, controllerId})) {
+    for (auto& control : midi_learn_map_[{channelId, controllerId}]) {
       const mopo::ValueDetails* details = control.second;
       mopo::mopo_float percent = value / (mopo::MIDI_SIZE - 1);
       if (details->steps) {
@@ -143,7 +143,7 @@ void MidiManager::processMidiMessage(const juce::MidiMessage& midi_message, int 
       current_bank_ = midi_message.getControllerValue();
     else if (controller_number == FOLDER_SELECT_NUMBER)
       current_folder_ = midi_message.getControllerValue();
-    midiInput(midi_message.getControllerNumber(), midi_message.getControllerValue());
+    midiInput(midi_message.getChannel(), midi_message.getControllerNumber(), midi_message.getControllerValue());
   }
 }
 

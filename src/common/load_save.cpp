@@ -529,7 +529,8 @@ void LoadSave::saveMidiMapConfig(MidiManager* midi_manager) {
     juce::DynamicObject* midi_map_object = new juce::DynamicObject();
     juce::Array<juce::var> midi_destinations_object;
 
-    midi_map_object->setProperty("source", midi_mapping.first);
+    midi_map_object->setProperty("sourceChannelId", midi_mapping.first.first);
+    midi_map_object->setProperty("sourceControllerId", midi_mapping.first.second);
 
     for (auto& midi_destination : midi_mapping.second) {
       juce::DynamicObject* midi_destination_object = new juce::DynamicObject();
@@ -573,7 +574,8 @@ void LoadSave::loadConfig(MidiManager* midi_manager, mopo::StringLayout* layout)
 
     for (; midi_source != midi_learn->end(); ++midi_source) {
       juce::DynamicObject* source_object = midi_source->getDynamicObject();
-      int source = source_object->getProperty("source");
+      int sourceChannelId = source_object->getProperty("sourceChannelId");
+      int sourceControllerId = source_object->getProperty("sourceControllerId");
 
       if (source_object->hasProperty("destinations")) {
         juce::Array<juce::var>* destinations = source_object->getProperty("destinations").getArray();
@@ -584,7 +586,7 @@ void LoadSave::loadConfig(MidiManager* midi_manager, mopo::StringLayout* layout)
 
           juce::String destination_name = destination_object->getProperty("destination").toString();
           std::string dest = destination_name.toStdString();
-          midi_learn_map[source][dest] = &mopo::Parameters::getDetails(dest);
+          midi_learn_map[{sourceChannelId, sourceControllerId}][dest] = &mopo::Parameters::getDetails(dest);
         }
       }
     }

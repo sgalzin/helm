@@ -154,7 +154,11 @@ void WaveSelector::mouseEvent(const juce::MouseEvent &e) {
 }
 
 void WaveSelector::mouseDown(const juce::MouseEvent &e) {
-  mouseEvent(e);
+  if (e.mods.isPopupMenu()) { // Add generic SynthSlider functionality for the popup menu (e.g. MIDI assignments)
+    SynthSlider::mouseDown( e );
+  } else {
+    mouseEvent(e);
+  }
 }
 
 void WaveSelector::mouseDrag(const juce::MouseEvent &e) {

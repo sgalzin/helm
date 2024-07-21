@@ -43,7 +43,8 @@ void SynthGuiInterface::updateGuiControl(const std::string& name, mopo::mopo_flo
   if (gui_ == nullptr)
     return;
 
-  gui_->setValue(name, value, juce::NotificationType::dontSendNotification);
+//  gui_->setValue(name, value, juce::NotificationType::dontSendNotification);
+  gui_->setValue(name, value, juce::NotificationType::sendNotificationAsync); // TODO sending a notification might only be useful for WaveSelector components => is there a way to make this react in the same way the FilterSielector (which does not require a notification yet still updates the shape in the viewer) works?
 }
 
 mopo::mopo_float SynthGuiInterface::getControlValue(const std::string& name) {

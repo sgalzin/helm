@@ -9,6 +9,8 @@ This fork of Helm has the following changes:
 * Feat: enables getting and saving (key, value) pairs in the config file.
 * Feat: saves the last patch used for it to be loaded by default at when synth restarts.
 * Feat: enables saving the MIDI channel when assigning a controller via MIDI Learn.
+* Feat: prevents approximations of default values due to discrete MIDI controller values; this also avoids "out of tune" combinations of step parameters (e.g. when setting both OSC1 and OSC2 to a transpose of 12, avoids having different frequencies for both oscillators when approaching the quantity from different directions using a MIDI controller).
+* Feat: adds MIDI Assignment capabilities to certain SynthSlider children which were left out (WaveSelector, TextSLider, FilterSelector, GraphicalStepSequencer).
 
 #### Motivation
 

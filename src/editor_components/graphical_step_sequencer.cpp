@@ -117,8 +117,13 @@ void GraphicalStepSequencer::mouseExit(const juce::MouseEvent& e) {
 
 void GraphicalStepSequencer::mouseDown(const juce::MouseEvent& e) {
   last_edit_position_ = e.getPosition();
-  updateHover(getHoveredStep(e.getPosition()));
-  changeStep(e);
+  int step = getHoveredStep(last_edit_position_);
+  updateHover(step);
+  if (e.mods.isPopupMenu()) { // Add generic SynthSlider functionality for the popup menu (e.g. MIDI assignments)
+    sequence_[step]->mouseDown(e);
+  } else {
+    changeStep(e);
+  }
 }
 
 void GraphicalStepSequencer::mouseDrag(const juce::MouseEvent& e) {
